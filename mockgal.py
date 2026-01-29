@@ -82,6 +82,7 @@ DEFAULT_H0 = 70.0  # km/s/Mpc
 DEFAULT_OM = 0.3
 
 # profit-cli path (can be overridden via CLI or environment variable)
+LIBPROFIT_PATH = os.environ.get('LIBPROFIT_PATH', None)
 PROFIT_CLI_PATH = os.environ.get('PROFIT_CLI_PATH', None)
 
 logging.basicConfig(
@@ -264,6 +265,20 @@ def abs_to_app_mag(abs_mag: float, z: float, k_corr: float = 0.0) -> float:
 # Section 4: Sersic Engine
 # =============================================================================
 
+def _resolve_profit_cli_path(path_value: Optional[str]) -> Optional[str]:
+    """Resolve a profit-cli path that may be a directory or a full path."""
+    if not path_value:
+        return None
+    path = Path(path_value)
+    if path.is_dir():
+        path = path / "profit-cli"
+    if path.is_file():
+        if os.access(path, os.X_OK):
+            return str(path)
+        logger.warning(f"profit-cli found but not executable: {path}")
+    return None
+
+
 def find_profit_cli(custom_path: Optional[str] = None) -> Optional[str]:
     """
     Find the profit-cli executable.
@@ -279,18 +294,17 @@ def find_profit_cli(custom_path: Optional[str] = None) -> Optional[str]:
         Path to profit-cli if found, None otherwise
     """
     # Check custom path first
-    if custom_path:
-        if Path(custom_path).is_file():
-            return custom_path
-        # Maybe it's a directory containing profit-cli
-        cli_in_dir = Path(custom_path) / "profit-cli"
-        if cli_in_dir.is_file():
-            return str(cli_in_dir)
+    resolved = _resolve_profit_cli_path(custom_path)
+    if resolved:
+        return resolved
 
     # Check environment variable
-    if PROFIT_CLI_PATH:
-        if Path(PROFIT_CLI_PATH).is_file():
-            return PROFIT_CLI_PATH
+    resolved = _resolve_profit_cli_path(LIBPROFIT_PATH)
+    if resolved:
+        return resolved
+    resolved = _resolve_profit_cli_path(PROFIT_CLI_PATH)
+    if resolved:
+        return resolved
 
     # Check PATH
     profit_in_path = shutil.which("profit-cli")
@@ -342,12 +356,13 @@ class SersicEngine:
                 logger.warning("profit-cli not found, using astropy")
                 return "astropy"
         elif requested == "libprofit":
-            if not self.profit_cli_path:
-                raise FileNotFoundError(
-                    "libprofit requested but profit-cli not found. "
-                    "Set --profit-cli path or PROFIT_CLI_PATH environment variable."
-                )
-            return "libprofit"
+            if self.profit_cli_path:
+                return "libprofit"
+            logger.warning(
+                "libprofit requested but profit-cli not found. "
+                "Falling back to astropy."
+            )
+            return "astropy"
         elif requested == "astropy":
             return "astropy"
         else:
@@ -614,7 +629,7 @@ class MockImageGenerator:
         for comp, comp_params in zip(galaxy.components, params['components']):
             # For pyprofit, pass PSF for native convolution
             # For astropy, we'll convolve the full image at the end
-            psf_for_render = psf if self.engine.engine == "pyprofit" else None
+            psf_for_render = psf if self.engine.engine == "libprofit" else None
 
             image += self.engine.render(
                 shape=shape,

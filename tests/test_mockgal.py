@@ -25,6 +25,7 @@ from mockgal import (
     SersicComponent,
     SersicEngine,
     abs_to_app_mag,
+    find_profit_cli,
     kpc_to_arcsec,
     parse_huang2013,
     save_fits,
@@ -260,7 +261,7 @@ class TestSersicEngine:
     def test_engine_selection_auto(self):
         """Auto selection should work."""
         engine = SersicEngine(engine="auto")
-        assert engine.engine in ("pyprofit", "astropy")
+        assert engine.engine in ("libprofit", "astropy")
 
     def test_engine_selection_astropy(self):
         """Astropy selection should work."""
@@ -488,6 +489,21 @@ class TestMockImageGenerator:
         image, _ = gen.generate(simple_galaxy)
 
         assert image.shape == (201, 201)
+
+    def test_end_to_end_output_and_engine(self, simple_galaxy, tmp_path):
+        """Generate and save output, verify engine selection."""
+        config = ImageConfig(size_pixels=51, engine="auto")
+        gen = MockImageGenerator(config)
+        image, meta = gen.generate(simple_galaxy)
+
+        outpath = tmp_path / "test_galaxy.fits"
+        save_fits(image, meta, outpath)
+
+        assert outpath.exists()
+        assert meta["engine"] in ("libprofit", "astropy")
+
+        if find_profit_cli() is not None:
+            assert meta["engine"] == "libprofit"
 
 
 # =============================================================================

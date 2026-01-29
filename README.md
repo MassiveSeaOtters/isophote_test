@@ -18,9 +18,9 @@ A Python tool for generating realistic mock galaxy images with Sersic profiles, 
 pip install numpy scipy astropy pyyaml
 ```
 
-For optimal performance, build libprofit and ensure `profit-cli` is available:
+For optimal performance, build libprofit and ensure `profit-cli` is available (set `LIBPROFIT_PATH` or the legacy `PROFIT_CLI_PATH`):
 ```bash
-export PROFIT_CLI_PATH=/path/to/profit-cli
+export LIBPROFIT_PATH=/path/to/profit-cli
 ```
 
 ## Quick Start
