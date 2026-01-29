@@ -1,0 +1,40 @@
+# Test Configuration for Huang2013 galaxies
+# Uses default size_factor with auto-cap at 4001 pixels
+
+image_configs:
+  # 1. Clean (no PSF, no noise)
+  - name: "clean"
+    pixel_scale: 0.3
+    zeropoint: 27.0
+    engine: libprofit
+
+  # 2. With Gaussian PSF
+  - name: "psf_gaussian"
+    pixel_scale: 0.3
+    zeropoint: 27.0
+    engine: libprofit
+    psf_enabled: true
+    psf_type: gaussian
+    psf_fwhm: 1.0
+
+  # 3. With noise (SNR=100)
+  - name: "noisy_snr100"
+    pixel_scale: 0.3
+    zeropoint: 27.0
+    engine: libprofit
+    noise_enabled: true
+    noise_snr: 100
+    noise_seed: 42
+
+  # 4. Realistic (PSF + noise)
+  - name: "realistic"
+    pixel_scale: 0.3
+    zeropoint: 27.0
+    engine: libprofit
+    psf_enabled: true
+    psf_type: moffat
+    psf_fwhm: 0.8
+    psf_moffat_beta: 4.765
+    noise_enabled: true
+    noise_snr: 50
+    noise_seed: 42

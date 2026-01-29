@@ -1,0 +1,83 @@
+# Example Image Configuration File for mockgal.py
+# Contains settings for PSF, sky background, noise, etc.
+#
+# Usage:
+#   python mockgal.py --models models.yaml --config example_image_config.yaml
+
+image_configs:
+  # 1. Clean images (no PSF, no noise) - for algorithm benchmarking
+  - name: "clean"
+    pixel_scale: 0.3          # arcsec/pixel
+    zeropoint: 27.0           # photometric zeropoint
+    size_factor: 15.0         # image half-size = factor * max(Re)
+    engine: auto              # pyprofit if available, else astropy
+
+  # 2. PSF-convolved images (Gaussian PSF)
+  - name: "psf_gaussian"
+    pixel_scale: 0.3
+    zeropoint: 27.0
+    psf_enabled: true
+    psf_type: gaussian
+    psf_fwhm: 1.0             # arcsec
+
+  # 3. PSF-convolved images (Moffat PSF)
+  - name: "psf_moffat"
+    pixel_scale: 0.3
+    zeropoint: 27.0
+    psf_enabled: true
+    psf_type: moffat
+    psf_fwhm: 0.8
+    psf_moffat_beta: 4.765
+
+  # 4. With moderate noise (S/N = 100 at Re)
+  - name: "noisy_snr100"
+    pixel_scale: 0.3
+    zeropoint: 27.0
+    noise_enabled: true
+    noise_snr: 100
+    noise_seed: 42            # for reproducibility
+
+  # 5. PSF + noise (realistic conditions)
+  - name: "realistic"
+    pixel_scale: 0.3
+    zeropoint: 27.0
+    psf_enabled: true
+    psf_type: moffat
+    psf_fwhm: 0.8
+    psf_moffat_beta: 4.765
+    noise_enabled: true
+    noise_snr: 50
+    noise_seed: 42
+
+  # 6. Full realism with sky background
+  - name: "full_realistic"
+    pixel_scale: 0.3
+    zeropoint: 27.0
+    psf_enabled: true
+    psf_type: moffat
+    psf_fwhm: 0.8
+    psf_moffat_beta: 4.765
+    sky_enabled: true
+    sky_type: flat
+    sky_level: 100.0
+    noise_enabled: true
+    noise_snr: 30
+    noise_seed: 42
+
+  # 7. HSC-like configuration
+  - name: "hsc_like"
+    pixel_scale: 0.168        # HSC pixel scale
+    zeropoint: 27.0
+    psf_enabled: true
+    psf_type: moffat
+    psf_fwhm: 0.6             # good seeing
+    psf_moffat_beta: 2.5
+    noise_enabled: true
+    noise_snr: 100
+    noise_seed: 42
+
+  # 8. Fixed size images (for comparison)
+  - name: "fixed_size"
+    pixel_scale: 0.3
+    zeropoint: 27.0
+    size_pixels: 501          # override size_factor

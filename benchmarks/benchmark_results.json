@@ -1,0 +1,188 @@
+{
+  "rendering_speed": [
+    {
+      "n": 1.0,
+      "size": 256,
+      "astropy_s": 0.0011485583148896695,
+      "speedup": null
+    },
+    {
+      "n": 1.0,
+      "size": 512,
+      "astropy_s": 0.004998766607604921,
+      "speedup": null
+    },
+    {
+      "n": 1.0,
+      "size": 1024,
+      "astropy_s": 0.02330354999285191,
+      "speedup": null
+    },
+    {
+      "n": 2.0,
+      "size": 256,
+      "astropy_s": 0.0011650749947875738,
+      "speedup": null
+    },
+    {
+      "n": 2.0,
+      "size": 512,
+      "astropy_s": 0.005873612500727177,
+      "speedup": null
+    },
+    {
+      "n": 2.0,
+      "size": 1024,
+      "astropy_s": 0.025847429200075565,
+      "speedup": null
+    },
+    {
+      "n": 4.0,
+      "size": 256,
+      "astropy_s": 0.001361383288167417,
+      "speedup": null
+    },
+    {
+      "n": 4.0,
+      "size": 512,
+      "astropy_s": 0.005450962507165968,
+      "speedup": null
+    },
+    {
+      "n": 4.0,
+      "size": 1024,
+      "astropy_s": 0.024405587487854062,
+      "speedup": null
+    },
+    {
+      "n": 6.0,
+      "size": 256,
+      "astropy_s": 0.0011631833156570792,
+      "speedup": null
+    },
+    {
+      "n": 6.0,
+      "size": 512,
+      "astropy_s": 0.005685316701419652,
+      "speedup": null
+    },
+    {
+      "n": 6.0,
+      "size": 1024,
+      "astropy_s": 0.023766824998892842,
+      "speedup": null
+    },
+    {
+      "n": 8.0,
+      "size": 256,
+      "astropy_s": 0.0012703290907666088,
+      "speedup": null
+    },
+    {
+      "n": 8.0,
+      "size": 512,
+      "astropy_s": 0.005914970790036023,
+      "speedup": null
+    },
+    {
+      "n": 8.0,
+      "size": 1024,
+      "astropy_s": 0.02630547499284148,
+      "speedup": null
+    }
+  ],
+  "accuracy": [
+    {
+      "n": 1.0,
+      "engine": "astropy",
+      "max_rel_dev": 0.0,
+      "median_rel_dev": 0.0
+    },
+    {
+      "n": 4.0,
+      "engine": "astropy",
+      "max_rel_dev": 0.0,
+      "median_rel_dev": 0.0
+    },
+    {
+      "n": 8.0,
+      "engine": "astropy",
+      "max_rel_dev": 0.0,
+      "median_rel_dev": 0.0
+    }
+  ],
+  "psf_convolution": [
+    {
+      "engine": "astropy",
+      "psf_size": 11,
+      "baseline_ms": 5.523308413103223,
+      "with_psf_ms": 53.30094159580767,
+      "overhead_pct": 865.0183840786287
+    },
+    {
+      "engine": "astropy",
+      "psf_size": 33,
+      "baseline_ms": 5.523308413103223,
+      "with_psf_ms": 360.8378665987402,
+      "overhead_pct": 6433.002316921256
+    },
+    {
+      "engine": "astropy",
+      "psf_size": 65,
+      "baseline_ms": 5.523308413103223,
+      "with_psf_ms": 1288.6763668153435,
+      "overhead_pct": 23231.602554696234
+    }
+  ],
+  "ellipticity_range": [
+    {
+      "engine": "astropy",
+      "ellipticity": 0.0,
+      "axrat": 1.0,
+      "valid": "True",
+      "time_ms": 0.9579160250723362
+    },
+    {
+      "engine": "astropy",
+      "ellipticity": 0.3,
+      "axrat": 0.7,
+      "valid": "True",
+      "time_ms": 0.8726669475436211
+    },
+    {
+      "engine": "astropy",
+      "ellipticity": 0.5,
+      "axrat": 0.5,
+      "valid": "True",
+      "time_ms": 0.7697499822825193
+    },
+    {
+      "engine": "astropy",
+      "ellipticity": 0.7,
+      "axrat": 0.30000000000000004,
+      "valid": "True",
+      "time_ms": 0.7660000119358301
+    },
+    {
+      "engine": "astropy",
+      "ellipticity": 0.8,
+      "axrat": 0.19999999999999996,
+      "valid": "True",
+      "time_ms": 0.7540830411016941
+    },
+    {
+      "engine": "astropy",
+      "ellipticity": 0.9,
+      "axrat": 0.09999999999999998,
+      "valid": "True",
+      "time_ms": 0.7600418757647276
+    },
+    {
+      "engine": "astropy",
+      "ellipticity": 0.95,
+      "axrat": 0.050000000000000044,
+      "valid": "True",
+      "time_ms": 0.7469579577445984
+    }
+  ]
+}

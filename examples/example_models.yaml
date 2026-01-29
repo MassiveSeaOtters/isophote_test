@@ -1,0 +1,92 @@
+# Example Input Model File for mockgal.py
+# Contains galaxy definitions with intrinsic Sersic parameters
+#
+# Usage:
+#   python mockgal.py --models example_models.yaml
+#   python mockgal.py --models example_models.yaml --config example_image_config.yaml
+
+metadata:
+  description: "Example mock galaxy models for testing"
+  author: "mockgal.py example"
+
+galaxies:
+  # Single-component de Vaucouleurs galaxy
+  - name: "deV_galaxy"
+    redshift: 0.01
+    components:
+      - id: "deV_galaxy_bulge"
+        index: 0
+        r_eff_kpc: 2.0
+        abs_mag: -21.0
+        n: 4.0
+        ellipticity: 0.3
+        pa_deg: 45.0
+
+  # Two-component bulge+disk galaxy
+  - name: "bulge_disk"
+    redshift: 0.02
+    components:
+      - id: "bulge_disk_bulge"
+        index: 0
+        r_eff_kpc: 0.5
+        abs_mag: -19.0
+        n: 4.0
+        ellipticity: 0.2
+        pa_deg: 30.0
+      - id: "bulge_disk_disk"
+        index: 1
+        r_eff_kpc: 3.0
+        abs_mag: -21.5
+        n: 1.0
+        ellipticity: 0.6
+        pa_deg: 30.0
+
+  # Three-component elliptical (similar to NGC1399)
+  - name: "elliptical_3comp"
+    redshift: 0.005
+    components:
+      - id: "elliptical_3comp_inner"
+        index: 0
+        r_eff_kpc: 0.3
+        abs_mag: -17.5
+        n: 0.6
+        ellipticity: 0.05
+        pa_deg: 70.0
+      - id: "elliptical_3comp_middle"
+        index: 1
+        r_eff_kpc: 1.0
+        abs_mag: -20.3
+        n: 1.5
+        ellipticity: 0.17
+        pa_deg: 115.0
+      - id: "elliptical_3comp_outer"
+        index: 2
+        r_eff_kpc: 11.0
+        abs_mag: -22.0
+        n: 3.1
+        ellipticity: 0.08
+        pa_deg: 90.0
+
+  # High Sersic index galaxy (for testing edge cases)
+  - name: "high_n_galaxy"
+    redshift: 0.01
+    components:
+      - id: "high_n_comp"
+        index: 0
+        r_eff_kpc: 1.5
+        abs_mag: -20.5
+        n: 8.0
+        ellipticity: 0.4
+        pa_deg: 0.0
+
+  # Highly elongated galaxy (for testing high ellipticity)
+  - name: "elongated_galaxy"
+    redshift: 0.01
+    components:
+      - id: "elongated_comp"
+        index: 0
+        r_eff_kpc: 2.0
+        abs_mag: -20.0
+        n: 1.0
+        ellipticity: 0.75
+        pa_deg: 60.0

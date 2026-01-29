@@ -1,0 +1,3243 @@
+metadata:
+  source: Huang et al. (2013) CGS Survey
+  description: Multi-component Sersic models for nearby elliptical galaxies
+  reference: ApJ, 766, 47
+  assumed_redshift: 0.01
+  n_galaxies: 93
+  notes:
+    a: Edge-on disk-like structure
+    b: Ring-like structure in outskirts
+    c: Merger remnant
+    d: Contaminated by saturated star
+    e: Significant residuals in model
+    f: Central dust lane
+    g: Possible S0 galaxy
+galaxies:
+- name: ESO 185-G054
+  redshift: 0.01
+  components:
+  - id: ESO 185-G054_comp0
+    index: 0
+    r_eff_kpc: 0.93
+    abs_mag: -20.1
+    n: 0.98
+    ellipticity: 0.29
+    pa_deg: 117.9
+    surface_brightness: 18.83
+    lum_fraction: 0.07
+    lopsidedness: 0.02
+  - id: ESO 185-G054_comp1
+    index: 1
+    r_eff_kpc: 2.91
+    abs_mag: -19.9
+    n: 0.41
+    ellipticity: 0.25
+    pa_deg: 119.6
+    surface_brightness: 21.21
+    lum_fraction: 0.06
+    lopsidedness: 0.04
+  - id: ESO 185-G054_comp2
+    index: 2
+    r_eff_kpc: 18.81
+    abs_mag: -22.86
+    n: 2.52
+    ellipticity: 0.27
+    pa_deg: 120.0
+    surface_brightness: 23.05
+    lum_fraction: 0.87
+    lopsidedness: 0.02
+- name: ESO 221-G026
+  redshift: 0.01
+  components:
+  - id: ESO 221-G026_comp0
+    index: 0
+    r_eff_kpc: 0.1
+    abs_mag: -17.37
+    n: 7.84
+    ellipticity: 0.85
+    pa_deg: 5.41
+    surface_brightness: 16.61
+    lum_fraction: 0.07
+    lopsidedness: 0.04
+  - id: ESO 221-G026_comp1
+    index: 1
+    r_eff_kpc: 0.25
+    abs_mag: -17.74
+    n: 1.04
+    ellipticity: 0.47
+    pa_deg: 6.27
+    surface_brightness: 18.58
+    lum_fraction: 0.11
+    lopsidedness: 0.01
+  - id: ESO 221-G026_comp2
+    index: 2
+    r_eff_kpc: 1.82
+    abs_mag: -17.82
+    n: 0.78
+    ellipticity: 0.72
+    pa_deg: 4.07
+    surface_brightness: 21.95
+    lum_fraction: 0.11
+    lopsidedness: 0.03
+  - id: ESO 221-G026_comp3
+    index: 3
+    r_eff_kpc: 3.03
+    abs_mag: -19.81
+    n: 2.63
+    ellipticity: 0.32
+    pa_deg: 178.3
+    surface_brightness: 22.58
+    lum_fraction: 0.71
+    lopsidedness: 0.01
+  flag: a
+- name: IC 1459
+  redshift: 0.01
+  components:
+  - id: IC 1459_comp0
+    index: 0
+    r_eff_kpc: 0.6
+    abs_mag: -20.13
+    n: 1.77
+    ellipticity: 0.25
+    pa_deg: 33.11
+    surface_brightness: 18.03
+    lum_fraction: 0.13
+    lopsidedness: 0.01
+  - id: IC 1459_comp1
+    index: 1
+    r_eff_kpc: 5.69
+    abs_mag: -21.47
+    n: 2.86
+    ellipticity: 0.31
+    pa_deg: 31.48
+    surface_brightness: 21.71
+    lum_fraction: 0.44
+    lopsidedness: 0.01
+  - id: IC 1459_comp2
+    index: 2
+    r_eff_kpc: 10.55
+    abs_mag: -21.45
+    n: 2.53
+    ellipticity: 0.28
+    pa_deg: 59.39
+    surface_brightness: 22.98
+    lum_fraction: 0.43
+    lopsidedness: 0.03
+- name: IC 1633
+  redshift: 0.01
+  components:
+  - id: IC 1633_comp0
+    index: 0
+    r_eff_kpc: 1.94
+    abs_mag: -21.69
+    n: 1.93
+    ellipticity: 0.16
+    pa_deg: 106.7
+    surface_brightness: 19.18
+    lum_fraction: 0.17
+    lopsidedness: 0.0
+  - id: IC 1633_comp1
+    index: 1
+    r_eff_kpc: 8.61
+    abs_mag: -21.34
+    n: 0.75
+    ellipticity: 0.14
+    pa_deg: 144.9
+    surface_brightness: 22.36
+    lum_fraction: 0.12
+    lopsidedness: 0.05
+  - id: IC 1633_comp2
+    index: 2
+    r_eff_kpc: 38.1
+    abs_mag: -23.22
+    n: 1.61
+    ellipticity: 0.3
+    pa_deg: 83.94
+    surface_brightness: 23.78
+    lum_fraction: 0.7
+    lopsidedness: 0.04
+- name: IC 2006
+  redshift: 0.01
+  components:
+  - id: IC 2006_comp0
+    index: 0
+    r_eff_kpc: 0.62
+    abs_mag: -17.0
+    n: 0.48
+    ellipticity: 0.13
+    pa_deg: 42.97
+    surface_brightness: 20.81
+    lum_fraction: 0.06
+    lopsidedness: 0.01
+  - id: IC 2006_comp1
+    index: 1
+    r_eff_kpc: 1.13
+    abs_mag: -19.1
+    n: 4.45
+    ellipticity: 0.1
+    pa_deg: 39.37
+    surface_brightness: 21.09
+    lum_fraction: 0.4
+    lopsidedness: 0.01
+  - id: IC 2006_comp2
+    index: 2
+    r_eff_kpc: 2.2
+    abs_mag: -19.24
+    n: 0.89
+    ellipticity: 0.13
+    pa_deg: 40.38
+    surface_brightness: 21.57
+    lum_fraction: 0.45
+    lopsidedness: 0.0
+  - id: IC 2006_comp3
+    index: 3
+    r_eff_kpc: 9.73
+    abs_mag: -17.5
+    n: 0.13
+    ellipticity: 0.17
+    pa_deg: 49.59
+    surface_brightness: 25.89
+    lum_fraction: 0.09
+    lopsidedness: 0.03
+  flag: b
+- name: IC 2311
+  redshift: 0.01
+  components:
+  - id: IC 2311_comp0
+    index: 0
+    r_eff_kpc: 0.32
+    abs_mag: -18.84
+    n: 3.54
+    ellipticity: 0.12
+    pa_deg: 20.7
+    surface_brightness: 18.92
+    lum_fraction: 0.13
+    lopsidedness: 0.01
+  - id: IC 2311_comp1
+    index: 1
+    r_eff_kpc: 0.46
+    abs_mag: -18.05
+    n: 0.58
+    ellipticity: 0.06
+    pa_deg: 170.6
+    surface_brightness: 19.69
+    lum_fraction: 0.06
+    lopsidedness: 0.01
+  - id: IC 2311_comp2
+    index: 2
+    r_eff_kpc: 1.55
+    abs_mag: -19.76
+    n: 1.04
+    ellipticity: 0.03
+    pa_deg: 45.69
+    surface_brightness: 20.91
+    lum_fraction: 0.3
+    lopsidedness: 0.01
+  - id: IC 2311_comp3
+    index: 3
+    r_eff_kpc: 8.57
+    abs_mag: -20.35
+    n: 1.27
+    ellipticity: 0.05
+    pa_deg: 171.7
+    surface_brightness: 24.11
+    lum_fraction: 0.51
+    lopsidedness: 0.06
+- name: IC 2597
+  redshift: 0.01
+  components:
+  - id: IC 2597_comp0
+    index: 0
+    r_eff_kpc: 0.65
+    abs_mag: -19.23
+    n: 1.63
+    ellipticity: 0.23
+    pa_deg: 10.33
+    surface_brightness: 19.27
+    lum_fraction: 0.13
+    lopsidedness: 0.01
+  - id: IC 2597_comp1
+    index: 1
+    r_eff_kpc: 2.17
+    abs_mag: -17.57
+    n: 0.53
+    ellipticity: 0.09
+    pa_deg: 36.26
+    surface_brightness: 23.24
+    lum_fraction: 0.03
+    lopsidedness: 0.05
+  - id: IC 2597_comp2
+    index: 2
+    r_eff_kpc: 9.43
+    abs_mag: -21.22
+    n: 2.89
+    ellipticity: 0.32
+    pa_deg: 7.96
+    surface_brightness: 23.19
+    lum_fraction: 0.84
+    lopsidedness: 0.01
+- name: IC 3370
+  redshift: 0.01
+  components:
+  - id: IC 3370_comp0
+    index: 0
+    r_eff_kpc: 1.07
+    abs_mag: -19.18
+    n: 1.03
+    ellipticity: 0.15
+    pa_deg: 25.57
+    surface_brightness: 20.39
+    lum_fraction: 0.13
+    lopsidedness: 0.09
+  - id: IC 3370_comp1
+    index: 1
+    r_eff_kpc: 2.5
+    abs_mag: -19.33
+    n: 4.67
+    ellipticity: 0.5
+    pa_deg: 24.07
+    surface_brightness: 22.24
+    lum_fraction: 0.15
+    lopsidedness: 0.03
+  - id: IC 3370_comp2
+    index: 2
+    r_eff_kpc: 5.81
+    abs_mag: -21.02
+    n: 1.85
+    ellipticity: 0.2
+    pa_deg: 73.17
+    surface_brightness: 22.43
+    lum_fraction: 0.72
+    lopsidedness: 0.02
+  flag: c
+- name: IC 3896
+  redshift: 0.01
+  components:
+  - id: IC 3896_comp0
+    index: 0
+    r_eff_kpc: 0.69
+    abs_mag: -19.4
+    n: 2.93
+    ellipticity: 0.29
+    pa_deg: 8.81
+    surface_brightness: 19.97
+    lum_fraction: 0.12
+    lopsidedness: 0.04
+  - id: IC 3896_comp1
+    index: 1
+    r_eff_kpc: 2.0
+    abs_mag: -20.37
+    n: 2.46
+    ellipticity: 0.04
+    pa_deg: 12.69
+    surface_brightness: 21.53
+    lum_fraction: 0.28
+    lopsidedness: 0.02
+  - id: IC 3896_comp2
+    index: 2
+    r_eff_kpc: 10.46
+    abs_mag: -21.18
+    n: 1.62
+    ellipticity: 0.36
+    pa_deg: 6.69
+    surface_brightness: 23.63
+    lum_fraction: 0.6
+    lopsidedness: 0.02
+- name: IC 4296
+  redshift: 0.01
+  components:
+  - id: IC 4296_comp0
+    index: 0
+    r_eff_kpc: 0.84
+    abs_mag: -20.51
+    n: 1.28
+    ellipticity: 0.09
+    pa_deg: 58.39
+    surface_brightness: 18.58
+    lum_fraction: 0.09
+    lopsidedness: 0.01
+  - id: IC 4296_comp1
+    index: 1
+    r_eff_kpc: 5.73
+    abs_mag: -22.14
+    n: 1.67
+    ellipticity: 0.12
+    pa_deg: 60.96
+    surface_brightness: 21.23
+    lum_fraction: 0.4
+    lopsidedness: 0.01
+  - id: IC 4296_comp2
+    index: 2
+    r_eff_kpc: 28.67
+    abs_mag: -22.42
+    n: 1.14
+    ellipticity: 0.08
+    pa_deg: 169.0
+    surface_brightness: 24.18
+    lum_fraction: 0.51
+    lopsidedness: 0.07
+- name: IC 4329
+  redshift: 0.01
+  components:
+  - id: IC 4329_comp0
+    index: 0
+    r_eff_kpc: 0.98
+    abs_mag: -20.52
+    n: 1.71
+    ellipticity: 0.08
+    pa_deg: 67.09
+    surface_brightness: 19.07
+    lum_fraction: 0.07
+    lopsidedness: 0.01
+  - id: IC 4329_comp1
+    index: 1
+    r_eff_kpc: 4.05
+    abs_mag: -19.57
+    n: 0.5
+    ellipticity: 0.17
+    pa_deg: 60.02
+    surface_brightness: 22.43
+    lum_fraction: 0.03
+    lopsidedness: 0.01
+  - id: IC 4329_comp2
+    index: 2
+    r_eff_kpc: 30.49
+    abs_mag: -23.22
+    n: 1.98
+    ellipticity: 0.42
+    pa_deg: 67.41
+    surface_brightness: 23.32
+    lum_fraction: 0.89
+    lopsidedness: 0.01
+- name: IC 4742
+  redshift: 0.01
+  components:
+  - id: IC 4742_comp0
+    index: 0
+    r_eff_kpc: 5.09
+    abs_mag: -21.62
+    n: 4.23
+    ellipticity: 0.18
+    pa_deg: 14.63
+    surface_brightness: 21.98
+    lum_fraction: 0.62
+    lopsidedness: 0.0
+  - id: IC 4742_comp1
+    index: 1
+    r_eff_kpc: 10.86
+    abs_mag: -21.09
+    n: 1.06
+    ellipticity: 0.29
+    pa_deg: 10.37
+    surface_brightness: 23.35
+    lum_fraction: 0.38
+    lopsidedness: 0.1
+  flag: d,e
+- name: IC 4765
+  redshift: 0.01
+  components:
+  - id: IC 4765_comp0
+    index: 0
+    r_eff_kpc: 1.28
+    abs_mag: -19.89
+    n: 1.49
+    ellipticity: 0.26
+    pa_deg: 130.2
+    surface_brightness: 20.08
+    lum_fraction: 0.06
+    lopsidedness: 0.02
+  - id: IC 4765_comp1
+    index: 1
+    r_eff_kpc: 10.5
+    abs_mag: -21.98
+    n: 2.19
+    ellipticity: 0.33
+    pa_deg: 117.7
+    surface_brightness: 22.64
+    lum_fraction: 0.39
+    lopsidedness: 0.04
+  - id: IC 4765_comp2
+    index: 2
+    r_eff_kpc: 50.94
+    abs_mag: -22.36
+    n: 0.89
+    ellipticity: 0.55
+    pa_deg: 118.1
+    surface_brightness: 24.74
+    lum_fraction: 0.55
+    lopsidedness: 0.1
+- name: IC 4797
+  redshift: 0.01
+  components:
+  - id: IC 4797_comp0
+    index: 0
+    r_eff_kpc: 0.88
+    abs_mag: -20.22
+    n: 3.25
+    ellipticity: 0.29
+    pa_deg: 144.1
+    surface_brightness: 19.24
+    lum_fraction: 0.4
+    lopsidedness: 0.01
+  - id: IC 4797_comp1
+    index: 1
+    r_eff_kpc: 1.7
+    abs_mag: -18.16
+    n: 0.38
+    ellipticity: 0.52
+    pa_deg: 138.9
+    surface_brightness: 21.34
+    lum_fraction: 0.06
+    lopsidedness: 0.09
+  - id: IC 4797_comp2
+    index: 2
+    r_eff_kpc: 3.78
+    abs_mag: -19.52
+    n: 0.94
+    ellipticity: 0.53
+    pa_deg: 145.5
+    surface_brightness: 22.04
+    lum_fraction: 0.21
+    lopsidedness: 0.09
+  - id: IC 4797_comp3
+    index: 3
+    r_eff_kpc: 8.98
+    abs_mag: -20.0
+    n: 0.9
+    ellipticity: 0.47
+    pa_deg: 157.1
+    surface_brightness: 23.56
+    lum_fraction: 0.33
+    lopsidedness: 0.05
+  flag: g
+- name: IC 4889
+  redshift: 0.01
+  components:
+  - id: IC 4889_comp0
+    index: 0
+    r_eff_kpc: 1.77
+    abs_mag: -20.6
+    n: 3.55
+    ellipticity: 0.34
+    pa_deg: 177.4
+    surface_brightness: 20.26
+    lum_fraction: 0.61
+    lopsidedness: 0.02
+  - id: IC 4889_comp1
+    index: 1
+    r_eff_kpc: 3.62
+    abs_mag: -19.21
+    n: 0.59
+    ellipticity: 0.5
+    pa_deg: 7.31
+    surface_brightness: 22.04
+    lum_fraction: 0.17
+    lopsidedness: 0.0
+  - id: IC 4889_comp2
+    index: 2
+    r_eff_kpc: 8.51
+    abs_mag: -19.53
+    n: 0.76
+    ellipticity: 0.29
+    pa_deg: 115.3
+    surface_brightness: 24.06
+    lum_fraction: 0.23
+    lopsidedness: 0.01
+- name: IC 5328
+  redshift: 0.01
+  components:
+  - id: IC 5328_comp0
+    index: 0
+    r_eff_kpc: 0.64
+    abs_mag: -19.35
+    n: 2.03
+    ellipticity: 0.35
+    pa_deg: 43.27
+    surface_brightness: 18.87
+    lum_fraction: 0.17
+    lopsidedness: 0.01
+  - id: IC 5328_comp1
+    index: 1
+    r_eff_kpc: 1.54
+    abs_mag: -18.7
+    n: 0.42
+    ellipticity: 0.03
+    pa_deg: 124.6
+    surface_brightness: 21.15
+    lum_fraction: 0.09
+    lopsidedness: 0.01
+  - id: IC 5328_comp2
+    index: 2
+    r_eff_kpc: 6.88
+    abs_mag: -20.98
+    n: 1.75
+    ellipticity: 0.35
+    pa_deg: 42.61
+    surface_brightness: 22.32
+    lum_fraction: 0.74
+    lopsidedness: 0.02
+- name: NGC 1052
+  redshift: 0.01
+  components:
+  - id: NGC 1052_comp0
+    index: 0
+    r_eff_kpc: 1.07
+    abs_mag: -19.87
+    n: 3.77
+    ellipticity: 0.29
+    pa_deg: 116.7
+    surface_brightness: 19.91
+    lum_fraction: 0.34
+    lopsidedness: 0.01
+  - id: NGC 1052_comp1
+    index: 1
+    r_eff_kpc: 2.53
+    abs_mag: -19.34
+    n: 0.92
+    ellipticity: 0.45
+    pa_deg: 120.8
+    surface_brightness: 21.34
+    lum_fraction: 0.21
+    lopsidedness: 0.03
+  - id: NGC 1052_comp2
+    index: 2
+    r_eff_kpc: 6.52
+    abs_mag: -20.17
+    n: 2.37
+    ellipticity: 0.17
+    pa_deg: 139.3
+    surface_brightness: 23.41
+    lum_fraction: 0.45
+    lopsidedness: 0.01
+- name: NGC 1172
+  redshift: 0.01
+  components:
+  - id: NGC 1172_comp0
+    index: 0
+    r_eff_kpc: 0.47
+    abs_mag: -17.8
+    n: 11.38
+    ellipticity: 0.31
+    pa_deg: 15.73
+    surface_brightness: 21.18
+    lum_fraction: 0.08
+    lopsidedness: 0.4
+  - id: NGC 1172_comp1
+    index: 1
+    r_eff_kpc: 0.65
+    abs_mag: -18.69
+    n: 1.81
+    ellipticity: 0.05
+    pa_deg: 69.77
+    surface_brightness: 20.07
+    lum_fraction: 0.18
+    lopsidedness: 0.06
+  - id: NGC 1172_comp2
+    index: 2
+    r_eff_kpc: 7.02
+    abs_mag: -20.25
+    n: 1.39
+    ellipticity: 0.35
+    pa_deg: 23.67
+    surface_brightness: 23.14
+    lum_fraction: 0.74
+    lopsidedness: 0.02
+  flag: f
+- name: NGC 1199
+  redshift: 0.01
+  components:
+  - id: NGC 1199_comp0
+    index: 0
+    r_eff_kpc: 1.17
+    abs_mag: -19.99
+    n: 2.97
+    ellipticity: 0.3
+    pa_deg: 57.42
+    surface_brightness: 19.94
+    lum_fraction: 0.33
+    lopsidedness: 0.02
+  - id: NGC 1199_comp1
+    index: 1
+    r_eff_kpc: 2.18
+    abs_mag: -18.11
+    n: 0.49
+    ellipticity: 0.27
+    pa_deg: 53.54
+    surface_brightness: 22.39
+    lum_fraction: 0.06
+    lopsidedness: 0.02
+  - id: NGC 1199_comp2
+    index: 2
+    r_eff_kpc: 7.2
+    abs_mag: -20.66
+    n: 1.56
+    ellipticity: 0.18
+    pa_deg: 60.63
+    surface_brightness: 23.07
+    lum_fraction: 0.61
+    lopsidedness: 0.01
+  flag: f
+- name: NGC 1209
+  redshift: 0.01
+  components:
+  - id: NGC 1209_comp0
+    index: 0
+    r_eff_kpc: 0.93
+    abs_mag: -20.17
+    n: 2.6
+    ellipticity: 0.39
+    pa_deg: 82.37
+    surface_brightness: 19.01
+    lum_fraction: 0.36
+    lopsidedness: 0.0
+  - id: NGC 1209_comp1
+    index: 1
+    r_eff_kpc: 3.18
+    abs_mag: -19.46
+    n: 1.06
+    ellipticity: 0.68
+    pa_deg: 80.98
+    surface_brightness: 21.24
+    lum_fraction: 0.19
+    lopsidedness: 0.02
+  - id: NGC 1209_comp2
+    index: 2
+    r_eff_kpc: 10.88
+    abs_mag: -20.4
+    n: 1.23
+    ellipticity: 0.54
+    pa_deg: 88.38
+    surface_brightness: 23.41
+    lum_fraction: 0.45
+    lopsidedness: 0.02
+- name: NGC 1339
+  redshift: 0.01
+  components:
+  - id: NGC 1339_comp0
+    index: 0
+    r_eff_kpc: 0.13
+    abs_mag: -17.56
+    n: 2.38
+    ellipticity: 0.24
+    pa_deg: 1.46
+    surface_brightness: 17.52
+    lum_fraction: 0.12
+    lopsidedness: 0.01
+  - id: NGC 1339_comp1
+    index: 1
+    r_eff_kpc: 1.92
+    abs_mag: -17.96
+    n: 1.22
+    ellipticity: 0.55
+    pa_deg: 0.25
+    surface_brightness: 22.01
+    lum_fraction: 0.17
+    lopsidedness: 0.01
+  - id: NGC 1339_comp2
+    index: 2
+    r_eff_kpc: 1.94
+    abs_mag: -19.5
+    n: 2.8
+    ellipticity: 0.19
+    pa_deg: 178.1
+    surface_brightness: 21.52
+    lum_fraction: 0.71
+    lopsidedness: 0.01
+  flag: e
+- name: NGC 1340
+  redshift: 0.01
+  components:
+  - id: NGC 1340_comp0
+    index: 0
+    r_eff_kpc: 0.84
+    abs_mag: -19.67
+    n: 2.25
+    ellipticity: 0.29
+    pa_deg: 167.4
+    surface_brightness: 19.28
+    lum_fraction: 0.3
+    lopsidedness: 0.03
+  - id: NGC 1340_comp1
+    index: 1
+    r_eff_kpc: 2.84
+    abs_mag: -19.8
+    n: 0.76
+    ellipticity: 0.41
+    pa_deg: 166.5
+    surface_brightness: 21.08
+    lum_fraction: 0.34
+    lopsidedness: 0.01
+  - id: NGC 1340_comp2
+    index: 2
+    r_eff_kpc: 8.28
+    abs_mag: -19.85
+    n: 0.6
+    ellipticity: 0.35
+    pa_deg: 159.9
+    surface_brightness: 23.36
+    lum_fraction: 0.36
+    lopsidedness: 0.02
+- name: NGC 1374
+  redshift: 0.01
+  components:
+  - id: NGC 1374_comp0
+    index: 0
+    r_eff_kpc: 0.53
+    abs_mag: -18.92
+    n: 3.78
+    ellipticity: 0.1
+    pa_deg: 127.6
+    surface_brightness: 19.57
+    lum_fraction: 0.27
+    lopsidedness: 0.0
+  - id: NGC 1374_comp1
+    index: 1
+    r_eff_kpc: 1.43
+    abs_mag: -18.93
+    n: 1.09
+    ellipticity: 0.12
+    pa_deg: 123.4
+    surface_brightness: 21.07
+    lum_fraction: 0.27
+    lopsidedness: 0.0
+  - id: NGC 1374_comp2
+    index: 2
+    r_eff_kpc: 4.52
+    abs_mag: -19.48
+    n: 1.04
+    ellipticity: 0.06
+    pa_deg: 126.9
+    surface_brightness: 23.05
+    lum_fraction: 0.46
+    lopsidedness: 0.01
+- name: NGC 1379
+  redshift: 0.01
+  components:
+  - id: NGC 1379_comp0
+    index: 0
+    r_eff_kpc: 1.05
+    abs_mag: -18.55
+    n: 6.93
+    ellipticity: 0.01
+    pa_deg: 70.45
+    surface_brightness: 21.79
+    lum_fraction: 0.2
+    lopsidedness: 0.01
+  - id: NGC 1379_comp1
+    index: 1
+    r_eff_kpc: 1.06
+    abs_mag: -18.84
+    n: 1.06
+    ellipticity: 0.04
+    pa_deg: 174.7
+    surface_brightness: 20.58
+    lum_fraction: 0.26
+    lopsidedness: 0.0
+  - id: NGC 1379_comp2
+    index: 2
+    r_eff_kpc: 3.39
+    abs_mag: -19.6
+    n: 0.88
+    ellipticity: 0.03
+    pa_deg: 37.64
+    surface_brightness: 22.26
+    lum_fraction: 0.53
+    lopsidedness: 0.0
+- name: NGC 1395
+  redshift: 0.01
+  components:
+  - id: NGC 1395_comp0
+    index: 0
+    r_eff_kpc: 0.48
+    abs_mag: -19.15
+    n: 1.49
+    ellipticity: 0.09
+    pa_deg: 81.61
+    surface_brightness: 18.67
+    lum_fraction: 0.07
+    lopsidedness: 0.02
+  - id: NGC 1395_comp1
+    index: 1
+    r_eff_kpc: 3.23
+    abs_mag: -21.25
+    n: 2.1
+    ellipticity: 0.22
+    pa_deg: 92.85
+    surface_brightness: 20.72
+    lum_fraction: 0.48
+    lopsidedness: 0.01
+  - id: NGC 1395_comp2
+    index: 2
+    r_eff_kpc: 20.44
+    abs_mag: -21.19
+    n: 1.7
+    ellipticity: 0.26
+    pa_deg: 146.8
+    surface_brightness: 24.29
+    lum_fraction: 0.45
+    lopsidedness: 0.02
+- name: NGC 1399
+  redshift: 0.01
+  components:
+  - id: NGC 1399_comp0
+    index: 0
+    r_eff_kpc: 0.26
+    abs_mag: -17.32
+    n: 0.59
+    ellipticity: 0.05
+    pa_deg: 69.86
+    surface_brightness: 18.78
+    lum_fraction: 0.01
+    lopsidedness: 0.01
+  - id: NGC 1399_comp1
+    index: 1
+    r_eff_kpc: 0.9
+    abs_mag: -20.26
+    n: 1.45
+    ellipticity: 0.17
+    pa_deg: 116.8
+    surface_brightness: 18.8
+    lum_fraction: 0.16
+    lopsidedness: 0.0
+  - id: NGC 1399_comp2
+    index: 2
+    r_eff_kpc: 10.93
+    abs_mag: -22.01
+    n: 3.13
+    ellipticity: 0.08
+    pa_deg: 88.63
+    surface_brightness: 22.7
+    lum_fraction: 0.82
+    lopsidedness: 0.01
+- name: NGC 1404
+  redshift: 0.01
+  components:
+  - id: NGC 1404_comp0
+    index: 0
+    r_eff_kpc: 0.57
+    abs_mag: -18.64
+    n: 0.89
+    ellipticity: 0.0
+    pa_deg: 87.2
+    surface_brightness: 19.4
+    lum_fraction: 0.07
+    lopsidedness: 0.02
+  - id: NGC 1404_comp1
+    index: 1
+    r_eff_kpc: 2.71
+    abs_mag: -21.45
+    n: 3.54
+    ellipticity: 0.15
+    pa_deg: 166.0
+    surface_brightness: 20.45
+    lum_fraction: 0.93
+    lopsidedness: 0.01
+  flag: d,e
+- name: NGC 1407
+  redshift: 0.01
+  components:
+  - id: NGC 1407_comp0
+    index: 0
+    r_eff_kpc: 0.68
+    abs_mag: -20.0
+    n: 1.15
+    ellipticity: 0.05
+    pa_deg: 66.38
+    surface_brightness: 18.65
+    lum_fraction: 0.1
+    lopsidedness: 0.0
+  - id: NGC 1407_comp1
+    index: 1
+    r_eff_kpc: 2.63
+    abs_mag: -20.27
+    n: 0.65
+    ellipticity: 0.05
+    pa_deg: 63.9
+    surface_brightness: 21.08
+    lum_fraction: 0.13
+    lopsidedness: 0.01
+  - id: NGC 1407_comp2
+    index: 2
+    r_eff_kpc: 14.87
+    abs_mag: -22.22
+    n: 1.79
+    ellipticity: 0.05
+    pa_deg: 56.54
+    surface_brightness: 23.15
+    lum_fraction: 0.77
+    lopsidedness: 0.01
+- name: NGC 1426
+  redshift: 0.01
+  components:
+  - id: NGC 1426_comp0
+    index: 0
+    r_eff_kpc: 0.4
+    abs_mag: -18.5
+    n: 2.17
+    ellipticity: 0.26
+    pa_deg: 104.8
+    surface_brightness: 18.89
+    lum_fraction: 0.18
+    lopsidedness: 0.01
+  - id: NGC 1426_comp1
+    index: 1
+    r_eff_kpc: 1.38
+    abs_mag: -17.69
+    n: 0.69
+    ellipticity: 0.47
+    pa_deg: 102.1
+    surface_brightness: 21.48
+    lum_fraction: 0.09
+    lopsidedness: 0.03
+  - id: NGC 1426_comp2
+    index: 2
+    r_eff_kpc: 5.12
+    abs_mag: -20.01
+    n: 2.13
+    ellipticity: 0.35
+    pa_deg: 106.7
+    surface_brightness: 22.73
+    lum_fraction: 0.73
+    lopsidedness: 0.01
+- name: NGC 1427
+  redshift: 0.01
+  components:
+  - id: NGC 1427_comp0
+    index: 0
+    r_eff_kpc: 1.21
+    abs_mag: -19.66
+    n: 4.65
+    ellipticity: 0.3
+    pa_deg: 80.28
+    surface_brightness: 20.43
+    lum_fraction: 0.35
+    lopsidedness: 0.01
+  - id: NGC 1427_comp1
+    index: 1
+    r_eff_kpc: 2.77
+    abs_mag: -17.77
+    n: 0.57
+    ellipticity: 0.44
+    pa_deg: 80.47
+    surface_brightness: 22.88
+    lum_fraction: 0.06
+    lopsidedness: 0.01
+  - id: NGC 1427_comp2
+    index: 2
+    r_eff_kpc: 6.09
+    abs_mag: -20.23
+    n: 2.3
+    ellipticity: 0.27
+    pa_deg: 77.16
+    surface_brightness: 23.02
+    lum_fraction: 0.59
+    lopsidedness: 0.01
+- name: NGC 1439
+  redshift: 0.01
+  components:
+  - id: NGC 1439_comp0
+    index: 0
+    r_eff_kpc: 0.1
+    abs_mag: -17.1
+    n: 3.93
+    ellipticity: 0.3
+    pa_deg: 47.36
+    surface_brightness: 17.58
+    lum_fraction: 0.04
+    lopsidedness: 0.1
+  - id: NGC 1439_comp1
+    index: 1
+    r_eff_kpc: 1.35
+    abs_mag: -19.44
+    n: 3.61
+    ellipticity: 0.12
+    pa_deg: 33.84
+    surface_brightness: 21.08
+    lum_fraction: 0.31
+    lopsidedness: 0.0
+  - id: NGC 1439_comp2
+    index: 2
+    r_eff_kpc: 5.79
+    abs_mag: -20.28
+    n: 1.46
+    ellipticity: 0.04
+    pa_deg: 54.62
+    surface_brightness: 23.03
+    lum_fraction: 0.66
+    lopsidedness: 0.01
+- name: NGC 1453
+  redshift: 0.01
+  components:
+  - id: NGC 1453_comp0
+    index: 0
+    r_eff_kpc: 0.84
+    abs_mag: -20.2
+    n: 1.46
+    ellipticity: 0.19
+    pa_deg: 21.62
+    surface_brightness: 18.98
+    lum_fraction: 0.09
+    lopsidedness: 0.02
+  - id: NGC 1453_comp1
+    index: 1
+    r_eff_kpc: 14.15
+    abs_mag: -22.76
+    n: 4.31
+    ellipticity: 0.16
+    pa_deg: 34.15
+    surface_brightness: 23.02
+    lum_fraction: 0.91
+    lopsidedness: 0.02
+  flag: e
+- name: NGC 1521
+  redshift: 0.01
+  components:
+  - id: NGC 1521_comp0
+    index: 0
+    r_eff_kpc: 1.14
+    abs_mag: -20.33
+    n: 1.6
+    ellipticity: 0.38
+    pa_deg: 29.31
+    surface_brightness: 19.07
+    lum_fraction: 0.15
+    lopsidedness: 0.01
+  - id: NGC 1521_comp1
+    index: 1
+    r_eff_kpc: 4.62
+    abs_mag: -21.11
+    n: 1.82
+    ellipticity: 0.14
+    pa_deg: 14.54
+    surface_brightness: 21.73
+    lum_fraction: 0.3
+    lopsidedness: 0.01
+  - id: NGC 1521_comp2
+    index: 2
+    r_eff_kpc: 27.2
+    abs_mag: -21.75
+    n: 1.63
+    ellipticity: 0.5
+    pa_deg: 9.83
+    surface_brightness: 24.24
+    lum_fraction: 0.55
+    lopsidedness: 0.01
+- name: NGC 1549
+  redshift: 0.01
+  components:
+  - id: NGC 1549_comp0
+    index: 0
+    r_eff_kpc: 0.59
+    abs_mag: -19.78
+    n: 2.58
+    ellipticity: 0.19
+    pa_deg: 103.1
+    surface_brightness: 0.0
+    lum_fraction: 0.23
+    lopsidedness: 0.0
+  - id: NGC 1549_comp1
+    index: 1
+    r_eff_kpc: 3.51
+    abs_mag: -20.73
+    n: 1.17
+    ellipticity: 0.15
+    pa_deg: 139.1
+    surface_brightness: 0.0
+    lum_fraction: 0.55
+    lopsidedness: 0.01
+  - id: NGC 1549_comp2
+    index: 2
+    r_eff_kpc: 13.78
+    abs_mag: -19.69
+    n: 0.98
+    ellipticity: 0.33
+    pa_deg: 23.93
+    surface_brightness: 0.0
+    lum_fraction: 0.21
+    lopsidedness: 0.2
+  flag: d
+- name: NGC 1600
+  redshift: 0.01
+  components:
+  - id: NGC 1600_comp0
+    index: 0
+    r_eff_kpc: 2.74
+    abs_mag: -21.28
+    n: 1.5
+    ellipticity: 0.35
+    pa_deg: 9.49
+    surface_brightness: 20.06
+    lum_fraction: 0.29
+    lopsidedness: 0.0
+  - id: NGC 1600_comp1
+    index: 1
+    r_eff_kpc: 8.8
+    abs_mag: -20.81
+    n: 0.5
+    ellipticity: 0.22
+    pa_deg: 7.76
+    surface_brightness: 22.76
+    lum_fraction: 0.19
+    lopsidedness: 0.01
+  - id: NGC 1600_comp2
+    index: 2
+    r_eff_kpc: 29.77
+    abs_mag: -21.88
+    n: 0.92
+    ellipticity: 0.4
+    pa_deg: 9.77
+    surface_brightness: 24.24
+    lum_fraction: 0.51
+    lopsidedness: 0.01
+- name: NGC 1700
+  redshift: 0.01
+  components:
+  - id: NGC 1700_comp0
+    index: 0
+    r_eff_kpc: 0.38
+    abs_mag: -19.24
+    n: 4.75
+    ellipticity: 0.32
+    pa_deg: 87.56
+    surface_brightness: 18.44
+    lum_fraction: 0.09
+    lopsidedness: 0.07
+  - id: NGC 1700_comp1
+    index: 1
+    r_eff_kpc: 3.28
+    abs_mag: -21.52
+    n: 2.74
+    ellipticity: 0.29
+    pa_deg: 89.48
+    surface_brightness: 20.59
+    lum_fraction: 0.72
+    lopsidedness: 0.0
+  - id: NGC 1700_comp2
+    index: 2
+    r_eff_kpc: 13.8
+    abs_mag: -20.07
+    n: 0.5
+    ellipticity: 0.46
+    pa_deg: 117.3
+    surface_brightness: 24.07
+    lum_fraction: 0.19
+    lopsidedness: 0.06
+- name: NGC 2305
+  redshift: 0.01
+  components:
+  - id: NGC 2305_comp0
+    index: 0
+    r_eff_kpc: 0.69
+    abs_mag: -19.68
+    n: 2.07
+    ellipticity: 0.24
+    pa_deg: 141.5
+    surface_brightness: 19.07
+    lum_fraction: 0.21
+    lopsidedness: 0.0
+  - id: NGC 2305_comp1
+    index: 1
+    r_eff_kpc: 1.51
+    abs_mag: -18.08
+    n: 0.32
+    ellipticity: 0.01
+    pa_deg: 61.7
+    surface_brightness: 21.91
+    lum_fraction: 0.05
+    lopsidedness: 0.2
+  - id: NGC 2305_comp2
+    index: 2
+    r_eff_kpc: 7.47
+    abs_mag: -21.06
+    n: 2.09
+    ellipticity: 0.3
+    pa_deg: 130.8
+    surface_brightness: 22.79
+    lum_fraction: 0.74
+    lopsidedness: 0.01
+  flag: d
+- name: NGC 2325
+  redshift: 0.01
+  components:
+  - id: NGC 2325_comp0
+    index: 0
+    r_eff_kpc: 0.57
+    abs_mag: -18.05
+    n: 1.06
+    ellipticity: 0.19
+    pa_deg: 172.3
+    surface_brightness: 20.2
+    lum_fraction: 0.06
+    lopsidedness: 0.01
+  - id: NGC 2325_comp1
+    index: 1
+    r_eff_kpc: 1.89
+    abs_mag: -19.01
+    n: 0.87
+    ellipticity: 0.38
+    pa_deg: 4.77
+    surface_brightness: 21.44
+    lum_fraction: 0.16
+    lopsidedness: 0.01
+  - id: NGC 2325_comp2
+    index: 2
+    r_eff_kpc: 8.46
+    abs_mag: -20.76
+    n: 1.67
+    ellipticity: 0.39
+    pa_deg: 6.7
+    surface_brightness: 23.2
+    lum_fraction: 0.78
+    lopsidedness: 0.02
+- name: NGC 2434
+  redshift: 0.01
+  components:
+  - id: NGC 2434_comp0
+    index: 0
+    r_eff_kpc: 0.84
+    abs_mag: -19.79
+    n: 2.62
+    ellipticity: 0.09
+    pa_deg: 134.5
+    surface_brightness: 20.29
+    lum_fraction: 0.3
+    lopsidedness: 0.01
+  - id: NGC 2434_comp1
+    index: 1
+    r_eff_kpc: 1.89
+    abs_mag: -17.07
+    n: 0.13
+    ellipticity: 0.09
+    pa_deg: 154.6
+    surface_brightness: 23.64
+    lum_fraction: 0.02
+    lopsidedness: 0.01
+  - id: NGC 2434_comp2
+    index: 2
+    r_eff_kpc: 6.17
+    abs_mag: -20.69
+    n: 1.71
+    ellipticity: 0.1
+    pa_deg: 126.6
+    surface_brightness: 23.47
+    lum_fraction: 0.68
+    lopsidedness: 0.01
+  flag: e
+- name: NGC 2663
+  redshift: 0.01
+  components:
+  - id: NGC 2663_comp0
+    index: 0
+    r_eff_kpc: 0.47
+    abs_mag: -19.47
+    n: 1.88
+    ellipticity: 0.06
+    pa_deg: 111.8
+    surface_brightness: 19.6
+    lum_fraction: 0.05
+    lopsidedness: 0.02
+  - id: NGC 2663_comp1
+    index: 1
+    r_eff_kpc: 2.06
+    abs_mag: -20.34
+    n: 1.63
+    ellipticity: 0.5
+    pa_deg: 109.9
+    surface_brightness: 21.19
+    lum_fraction: 0.1
+    lopsidedness: 0.02
+  - id: NGC 2663_comp2
+    index: 2
+    r_eff_kpc: 10.58
+    abs_mag: -22.66
+    n: 2.08
+    ellipticity: 0.3
+    pa_deg: 109.7
+    surface_brightness: 22.84
+    lum_fraction: 0.85
+    lopsidedness: 0.01
+- name: NGC 2865
+  redshift: 0.01
+  components:
+  - id: NGC 2865_comp0
+    index: 0
+    r_eff_kpc: 0.12
+    abs_mag: -18.51
+    n: 1.21
+    ellipticity: 0.33
+    pa_deg: 164.1
+    surface_brightness: 16.03
+    lum_fraction: 0.08
+    lopsidedness: 0.06
+  - id: NGC 2865_comp1
+    index: 1
+    r_eff_kpc: 2.42
+    abs_mag: -20.83
+    n: 2.67
+    ellipticity: 0.27
+    pa_deg: 158.6
+    surface_brightness: 20.77
+    lum_fraction: 0.67
+    lopsidedness: 0.01
+  - id: NGC 2865_comp2
+    index: 2
+    r_eff_kpc: 9.56
+    abs_mag: -19.76
+    n: 0.95
+    ellipticity: 0.26
+    pa_deg: 115.5
+    surface_brightness: 24.33
+    lum_fraction: 0.25
+    lopsidedness: 0.04
+  flag: c,e
+- name: NGC 2986
+  redshift: 0.01
+  components:
+  - id: NGC 2986_comp0
+    index: 0
+    r_eff_kpc: 1.23
+    abs_mag: -20.76
+    n: 2.47
+    ellipticity: 0.17
+    pa_deg: 30.51
+    surface_brightness: 19.39
+    lum_fraction: 0.26
+    lopsidedness: 0.0
+  - id: NGC 2986_comp1
+    index: 1
+    r_eff_kpc: 4.45
+    abs_mag: -20.46
+    n: 0.74
+    ellipticity: 0.11
+    pa_deg: 39.98
+    surface_brightness: 21.98
+    lum_fraction: 0.2
+    lopsidedness: 0.02
+  - id: NGC 2986_comp2
+    index: 2
+    r_eff_kpc: 14.78
+    abs_mag: -21.57
+    n: 0.94
+    ellipticity: 0.18
+    pa_deg: 33.66
+    surface_brightness: 23.47
+    lum_fraction: 0.55
+    lopsidedness: 0.04
+- name: NGC 3078
+  redshift: 0.01
+  components:
+  - id: NGC 3078_comp0
+    index: 0
+    r_eff_kpc: 0.77
+    abs_mag: -20.23
+    n: 2.48
+    ellipticity: 0.24
+    pa_deg: 3.06
+    surface_brightness: 18.86
+    lum_fraction: 0.24
+    lopsidedness: 0.01
+  - id: NGC 3078_comp1
+    index: 1
+    r_eff_kpc: 1.13
+    abs_mag: -18.24
+    n: 0.52
+    ellipticity: 0.21
+    pa_deg: 2.9
+    surface_brightness: 20.98
+    lum_fraction: 0.04
+    lopsidedness: 0.01
+  - id: NGC 3078_comp2
+    index: 2
+    r_eff_kpc: 3.14
+    abs_mag: -19.41
+    n: 0.8
+    ellipticity: 0.38
+    pa_deg: 6.28
+    surface_brightness: 21.95
+    lum_fraction: 0.11
+    lopsidedness: 0.0
+  - id: NGC 3078_comp3
+    index: 3
+    r_eff_kpc: 8.45
+    abs_mag: -21.25
+    n: 1.64
+    ellipticity: 0.18
+    pa_deg: 176.6
+    surface_brightness: 22.9
+    lum_fraction: 0.61
+    lopsidedness: 0.01
+- name: NGC 3087
+  redshift: 0.01
+  components:
+  - id: NGC 3087_comp0
+    index: 0
+    r_eff_kpc: 0.74
+    abs_mag: -18.72
+    n: 1.44
+    ellipticity: 0.15
+    pa_deg: 175.1
+    surface_brightness: 20.23
+    lum_fraction: 0.05
+    lopsidedness: 0.04
+  - id: NGC 3087_comp1
+    index: 1
+    r_eff_kpc: 3.87
+    abs_mag: -21.14
+    n: 5.2
+    ellipticity: 0.21
+    pa_deg: 39.36
+    surface_brightness: 21.96
+    lum_fraction: 0.46
+    lopsidedness: 0.03
+  - id: NGC 3087_comp2
+    index: 2
+    r_eff_kpc: 9.7
+    abs_mag: -21.21
+    n: 2.92
+    ellipticity: 0.07
+    pa_deg: 50.2
+    surface_brightness: 23.73
+    lum_fraction: 0.49
+    lopsidedness: 0.03
+- name: NGC 3091
+  redshift: 0.01
+  components:
+  - id: NGC 3091_comp0
+    index: 0
+    r_eff_kpc: 0.51
+    abs_mag: -18.28
+    n: 0.71
+    ellipticity: 0.27
+    pa_deg: 143.2
+    surface_brightness: 19.17
+    lum_fraction: 0.02
+    lopsidedness: 0.0
+  - id: NGC 3091_comp1
+    index: 1
+    r_eff_kpc: 4.31
+    abs_mag: -21.8
+    n: 3.34
+    ellipticity: 0.25
+    pa_deg: 149.9
+    surface_brightness: 21.07
+    lum_fraction: 0.57
+    lopsidedness: 0.01
+  - id: NGC 3091_comp2
+    index: 2
+    r_eff_kpc: 22.12
+    abs_mag: -21.45
+    n: 1.25
+    ellipticity: 0.49
+    pa_deg: 136.6
+    surface_brightness: 24.02
+    lum_fraction: 0.41
+    lopsidedness: 0.02
+- name: NGC 3136
+  redshift: 0.01
+  components:
+  - id: NGC 3136_comp0
+    index: 0
+    r_eff_kpc: 0.74
+    abs_mag: -20.24
+    n: 2.41
+    ellipticity: 0.26
+    pa_deg: 34.9
+    surface_brightness: 19.28
+    lum_fraction: 0.18
+    lopsidedness: 0.02
+  - id: NGC 3136_comp1
+    index: 1
+    r_eff_kpc: 2.33
+    abs_mag: -19.52
+    n: 0.58
+    ellipticity: 0.25
+    pa_deg: 22.43
+    surface_brightness: 21.81
+    lum_fraction: 0.09
+    lopsidedness: 0.01
+  - id: NGC 3136_comp2
+    index: 2
+    r_eff_kpc: 12.07
+    abs_mag: -21.77
+    n: 1.53
+    ellipticity: 0.3
+    pa_deg: 44.03
+    surface_brightness: 23.42
+    lum_fraction: 0.73
+    lopsidedness: 0.03
+  flag: f
+- name: NGC 3250
+  redshift: 0.01
+  components:
+  - id: NGC 3250_comp0
+    index: 0
+    r_eff_kpc: 1.2
+    abs_mag: -20.5
+    n: 1.98
+    ellipticity: 0.25
+    pa_deg: 136.9
+    surface_brightness: 19.51
+    lum_fraction: 0.17
+    lopsidedness: 0.0
+  - id: NGC 3250_comp1
+    index: 1
+    r_eff_kpc: 4.9
+    abs_mag: -21.63
+    n: 1.79
+    ellipticity: 0.3
+    pa_deg: 138.0
+    surface_brightness: 21.32
+    lum_fraction: 0.49
+    lopsidedness: 0.0
+  - id: NGC 3250_comp2
+    index: 2
+    r_eff_kpc: 17.76
+    abs_mag: -21.2
+    n: 0.79
+    ellipticity: 0.13
+    pa_deg: 76.93
+    surface_brightness: 24.38
+    lum_fraction: 0.33
+    lopsidedness: 0.02
+- name: NGC 3258
+  redshift: 0.01
+  components:
+  - id: NGC 3258_comp0
+    index: 0
+    r_eff_kpc: 0.6
+    abs_mag: -19.26
+    n: 0.98
+    ellipticity: 0.26
+    pa_deg: 75.61
+    surface_brightness: 18.83
+    lum_fraction: 0.07
+    lopsidedness: 0.06
+  - id: NGC 3258_comp1
+    index: 1
+    r_eff_kpc: 2.77
+    abs_mag: -20.99
+    n: 1.62
+    ellipticity: 0.08
+    pa_deg: 75.58
+    surface_brightness: 20.9
+    lum_fraction: 0.33
+    lopsidedness: 0.01
+  - id: NGC 3258_comp2
+    index: 2
+    r_eff_kpc: 23.02
+    abs_mag: -21.63
+    n: 1.01
+    ellipticity: 0.31
+    pa_deg: 54.58
+    surface_brightness: 24.27
+    lum_fraction: 0.6
+    lopsidedness: 0.02
+- name: NGC 3268
+  redshift: 0.01
+  components:
+  - id: NGC 3268_comp0
+    index: 0
+    r_eff_kpc: 0.52
+    abs_mag: -18.01
+    n: 0.35
+    ellipticity: 0.24
+    pa_deg: 75.8
+    surface_brightness: 19.62
+    lum_fraction: 0.02
+    lopsidedness: 0.3
+  - id: NGC 3268_comp1
+    index: 1
+    r_eff_kpc: 1.84
+    abs_mag: -20.45
+    n: 1.86
+    ellipticity: 0.2
+    pa_deg: 74.29
+    surface_brightness: 20.55
+    lum_fraction: 0.2
+    lopsidedness: 0.07
+  - id: NGC 3268_comp2
+    index: 2
+    r_eff_kpc: 18.53
+    abs_mag: -21.9
+    n: 1.77
+    ellipticity: 0.23
+    pa_deg: 66.34
+    surface_brightness: 23.96
+    lum_fraction: 0.77
+    lopsidedness: 0.04
+- name: NGC 3557
+  redshift: 0.01
+  components:
+  - id: NGC 3557_comp0
+    index: 0
+    r_eff_kpc: 0.48
+    abs_mag: -19.31
+    n: 0.72
+    ellipticity: 0.23
+    pa_deg: 34.8
+    surface_brightness: 18.23
+    lum_fraction: 0.05
+    lopsidedness: 0.03
+  - id: NGC 3557_comp1
+    index: 1
+    r_eff_kpc: 1.39
+    abs_mag: -20.38
+    n: 1.19
+    ellipticity: 0.26
+    pa_deg: 31.69
+    surface_brightness: 19.68
+    lum_fraction: 0.12
+    lopsidedness: 0.02
+  - id: NGC 3557_comp2
+    index: 2
+    r_eff_kpc: 10.78
+    abs_mag: -22.45
+    n: 2.49
+    ellipticity: 0.24
+    pa_deg: 34.41
+    surface_brightness: 22.39
+    lum_fraction: 0.83
+    lopsidedness: 0.01
+- name: NGC 3585
+  redshift: 0.01
+  components:
+  - id: NGC 3585_comp0
+    index: 0
+    r_eff_kpc: 0.11
+    abs_mag: -17.61
+    n: 2.08
+    ellipticity: 0.26
+    pa_deg: 105.9
+    surface_brightness: 17.15
+    lum_fraction: 0.02
+    lopsidedness: 0.0
+  - id: NGC 3585_comp1
+    index: 1
+    r_eff_kpc: 0.86
+    abs_mag: -18.96
+    n: 0.98
+    ellipticity: 0.65
+    pa_deg: 104.5
+    surface_brightness: 19.07
+    lum_fraction: 0.08
+    lopsidedness: 0.01
+  - id: NGC 3585_comp2
+    index: 2
+    r_eff_kpc: 8.37
+    abs_mag: -21.55
+    n: 3.87
+    ellipticity: 0.41
+    pa_deg: 105.0
+    surface_brightness: 22.46
+    lum_fraction: 0.89
+    lopsidedness: 0.01
+  flag: a
+- name: NGC 3904
+  redshift: 0.01
+  components:
+  - id: NGC 3904_comp0
+    index: 0
+    r_eff_kpc: 0.39
+    abs_mag: -19.33
+    n: 2.18
+    ellipticity: 0.19
+    pa_deg: 17.96
+    surface_brightness: 18.46
+    lum_fraction: 0.14
+    lopsidedness: 0.01
+  - id: NGC 3904_comp1
+    index: 1
+    r_eff_kpc: 1.04
+    abs_mag: -19.45
+    n: 0.77
+    ellipticity: 0.28
+    pa_deg: 17.05
+    surface_brightness: 19.83
+    lum_fraction: 0.16
+    lopsidedness: 0.01
+  - id: NGC 3904_comp2
+    index: 2
+    r_eff_kpc: 3.69
+    abs_mag: -20.43
+    n: 0.69
+    ellipticity: 0.31
+    pa_deg: 15.72
+    surface_brightness: 21.49
+    lum_fraction: 0.4
+    lopsidedness: 0.01
+  - id: NGC 3904_comp3
+    index: 3
+    r_eff_kpc: 11.05
+    abs_mag: -20.11
+    n: 0.68
+    ellipticity: 0.16
+    pa_deg: 10.54
+    surface_brightness: 24.4
+    lum_fraction: 0.3
+    lopsidedness: 0.02
+  flag: g
+- name: NGC 3923
+  redshift: 0.01
+  components:
+  - id: NGC 3923_comp0
+    index: 0
+    r_eff_kpc: 0.27
+    abs_mag: -17.71
+    n: 0.79
+    ellipticity: 0.12
+    pa_deg: 138.9
+    surface_brightness: 18.75
+    lum_fraction: 0.02
+    lopsidedness: 0.02
+  - id: NGC 3923_comp1
+    index: 1
+    r_eff_kpc: 1.57
+    abs_mag: -20.46
+    n: 1.63
+    ellipticity: 0.42
+    pa_deg: 48.1
+    surface_brightness: 19.7
+    lum_fraction: 0.21
+    lopsidedness: 0.0
+  - id: NGC 3923_comp2
+    index: 2
+    r_eff_kpc: 10.36
+    abs_mag: -21.86
+    n: 1.67
+    ellipticity: 0.3
+    pa_deg: 47.05
+    surface_brightness: 22.53
+    lum_fraction: 0.77
+    lopsidedness: 0.02
+- name: NGC 3962
+  redshift: 0.01
+  components:
+  - id: NGC 3962_comp0
+    index: 0
+    r_eff_kpc: 1.55
+    abs_mag: -20.53
+    n: 3.25
+    ellipticity: 0.19
+    pa_deg: 10.23
+    surface_brightness: 20.19
+    lum_fraction: 0.28
+    lopsidedness: 0.03
+  - id: NGC 3962_comp1
+    index: 1
+    r_eff_kpc: 1.81
+    abs_mag: -19.0
+    n: 0.51
+    ellipticity: 0.16
+    pa_deg: 22.99
+    surface_brightness: 21.23
+    lum_fraction: 0.07
+    lopsidedness: 0.04
+  - id: NGC 3962_comp2
+    index: 2
+    r_eff_kpc: 10.64
+    abs_mag: -21.44
+    n: 1.46
+    ellipticity: 0.23
+    pa_deg: 9.93
+    surface_brightness: 22.98
+    lum_fraction: 0.65
+    lopsidedness: 0.02
+- name: NGC 4033
+  redshift: 0.01
+  components:
+  - id: NGC 4033_comp0
+    index: 0
+    r_eff_kpc: 0.06
+    abs_mag: -16.68
+    n: 1.57
+    ellipticity: 0.4
+    pa_deg: 50.29
+    surface_brightness: 16.41
+    lum_fraction: 0.05
+    lopsidedness: 0.01
+  - id: NGC 4033_comp1
+    index: 1
+    r_eff_kpc: 0.59
+    abs_mag: -18.78
+    n: 1.06
+    ellipticity: 0.5
+    pa_deg: 49.03
+    surface_brightness: 18.75
+    lum_fraction: 0.32
+    lopsidedness: 0.0
+  - id: NGC 4033_comp2
+    index: 2
+    r_eff_kpc: 2.88
+    abs_mag: -18.95
+    n: 1.51
+    ellipticity: 0.36
+    pa_deg: 45.77
+    surface_brightness: 22.48
+    lum_fraction: 0.37
+    lopsidedness: 0.01
+  - id: NGC 4033_comp3
+    index: 3
+    r_eff_kpc: 3.35
+    abs_mag: -18.6
+    n: 0.71
+    ellipticity: 0.65
+    pa_deg: 49.38
+    surface_brightness: 22.15
+    lum_fraction: 0.27
+    lopsidedness: 0.02
+  flag: g
+- name: NGC 4696
+  redshift: 0.01
+  components:
+  - id: NGC 4696_comp0
+    index: 0
+    r_eff_kpc: 0.38
+    abs_mag: -17.51
+    n: 0.54
+    ellipticity: 0.15
+    pa_deg: 104.6
+    surface_brightness: 19.7
+    lum_fraction: 0.01
+    lopsidedness: 0.3
+  - id: NGC 4696_comp1
+    index: 1
+    r_eff_kpc: 9.7
+    abs_mag: -22.44
+    n: 2.24
+    ellipticity: 0.15
+    pa_deg: 97.43
+    surface_brightness: 22.32
+    lum_fraction: 0.64
+    lopsidedness: 0.02
+  - id: NGC 4696_comp2
+    index: 2
+    r_eff_kpc: 40.87
+    abs_mag: -21.8
+    n: 1.19
+    ellipticity: 0.52
+    pa_deg: 91.28
+    surface_brightness: 24.88
+    lum_fraction: 0.35
+    lopsidedness: 0.02
+- name: NGC 4697
+  redshift: 0.01
+  components:
+  - id: NGC 4697_comp0
+    index: 0
+    r_eff_kpc: 1.18
+    abs_mag: -19.81
+    n: 2.76
+    ellipticity: 0.41
+    pa_deg: 65.58
+    surface_brightness: 19.84
+    lum_fraction: 0.32
+    lopsidedness: 0.04
+  - id: NGC 4697_comp1
+    index: 1
+    r_eff_kpc: 2.3
+    abs_mag: -17.9
+    n: 0.63
+    ellipticity: 0.69
+    pa_deg: 65.84
+    surface_brightness: 21.79
+    lum_fraction: 0.05
+    lopsidedness: 0.06
+  - id: NGC 4697_comp2
+    index: 2
+    r_eff_kpc: 2.6
+    abs_mag: -18.7
+    n: 0.48
+    ellipticity: 0.3
+    pa_deg: 67.2
+    surface_brightness: 22.05
+    lum_fraction: 0.11
+    lopsidedness: 0.01
+  - id: NGC 4697_comp3
+    index: 3
+    r_eff_kpc: 8.25
+    abs_mag: -20.34
+    n: 1.09
+    ellipticity: 0.25
+    pa_deg: 66.77
+    surface_brightness: 23.18
+    lum_fraction: 0.52
+    lopsidedness: 0.0
+  flag: g
+- name: NGC 4709
+  redshift: 0.01
+  components:
+  - id: NGC 4709_comp0
+    index: 0
+    r_eff_kpc: 0.88
+    abs_mag: -19.84
+    n: 2.12
+    ellipticity: 0.21
+    pa_deg: 90.85
+    surface_brightness: 19.64
+    lum_fraction: 0.11
+    lopsidedness: 0.01
+  - id: NGC 4709_comp1
+    index: 1
+    r_eff_kpc: 6.34
+    abs_mag: -21.25
+    n: 1.73
+    ellipticity: 0.08
+    pa_deg: 79.9
+    surface_brightness: 22.58
+    lum_fraction: 0.4
+    lopsidedness: 0.02
+  - id: NGC 4709_comp2
+    index: 2
+    r_eff_kpc: 33.91
+    abs_mag: -21.47
+    n: 1.87
+    ellipticity: 0.38
+    pa_deg: 121.1
+    surface_brightness: 25.32
+    lum_fraction: 0.49
+    lopsidedness: 0.07
+- name: NGC 4742
+  redshift: 0.01
+  components:
+  - id: NGC 4742_comp0
+    index: 0
+    r_eff_kpc: 0.05
+    abs_mag: -17.28
+    n: 5.43
+    ellipticity: 0.65
+    pa_deg: 82.2
+    surface_brightness: 15.3
+    lum_fraction: 0.1
+    lopsidedness: 0.03
+  - id: NGC 4742_comp1
+    index: 1
+    r_eff_kpc: 0.14
+    abs_mag: -18.04
+    n: 1.02
+    ellipticity: 0.39
+    pa_deg: 75.82
+    surface_brightness: 16.56
+    lum_fraction: 0.19
+    lopsidedness: 0.01
+  - id: NGC 4742_comp2
+    index: 2
+    r_eff_kpc: 1.57
+    abs_mag: -19.45
+    n: 2.54
+    ellipticity: 0.4
+    pa_deg: 75.51
+    surface_brightness: 20.83
+    lum_fraction: 0.71
+    lopsidedness: 0.0
+  flag: e
+- name: NGC 4760
+  redshift: 0.01
+  components:
+  - id: NGC 4760_comp0
+    index: 0
+    r_eff_kpc: 0.82
+    abs_mag: -19.48
+    n: 0.9
+    ellipticity: 0.12
+    pa_deg: 8.43
+    surface_brightness: 19.3
+    lum_fraction: 0.07
+    lopsidedness: 0.04
+  - id: NGC 4760_comp1
+    index: 1
+    r_eff_kpc: 2.56
+    abs_mag: -20.12
+    n: 1.38
+    ellipticity: 0.03
+    pa_deg: 104.2
+    surface_brightness: 21.44
+    lum_fraction: 0.13
+    lopsidedness: 0.02
+  - id: NGC 4760_comp2
+    index: 2
+    r_eff_kpc: 14.7
+    abs_mag: -22.11
+    n: 1.84
+    ellipticity: 0.22
+    pa_deg: 10.91
+    surface_brightness: 23.12
+    lum_fraction: 0.8
+    lopsidedness: 0.01
+- name: NGC 4767
+  redshift: 0.01
+  components:
+  - id: NGC 4767_comp0
+    index: 0
+    r_eff_kpc: 1.7
+    abs_mag: -20.59
+    n: 3.65
+    ellipticity: 0.31
+    pa_deg: 128.8
+    surface_brightness: 20.43
+    lum_fraction: 0.38
+    lopsidedness: 0.01
+  - id: NGC 4767_comp1
+    index: 1
+    r_eff_kpc: 4.18
+    abs_mag: -20.16
+    n: 1.13
+    ellipticity: 0.55
+    pa_deg: 130.0
+    surface_brightness: 21.75
+    lum_fraction: 0.25
+    lopsidedness: 0.01
+  - id: NGC 4767_comp2
+    index: 2
+    r_eff_kpc: 16.49
+    abs_mag: -20.56
+    n: 1.44
+    ellipticity: 0.48
+    pa_deg: 127.9
+    surface_brightness: 24.58
+    lum_fraction: 0.37
+    lopsidedness: 0.02
+- name: NGC 4786
+  redshift: 0.01
+  components:
+  - id: NGC 4786_comp0
+    index: 0
+    r_eff_kpc: 0.53
+    abs_mag: -19.85
+    n: 1.34
+    ellipticity: 0.22
+    pa_deg: 161.9
+    surface_brightness: 18.0
+    lum_fraction: 0.09
+    lopsidedness: 0.02
+  - id: NGC 4786_comp1
+    index: 1
+    r_eff_kpc: 1.68
+    abs_mag: -20.0
+    n: 0.51
+    ellipticity: 0.2
+    pa_deg: 161.7
+    surface_brightness: 19.97
+    lum_fraction: 0.1
+    lopsidedness: 0.01
+  - id: NGC 4786_comp2
+    index: 2
+    r_eff_kpc: 4.91
+    abs_mag: -21.04
+    n: 0.9
+    ellipticity: 0.27
+    pa_deg: 164.6
+    surface_brightness: 21.41
+    lum_fraction: 0.26
+    lopsidedness: 0.01
+  - id: NGC 4786_comp3
+    index: 3
+    r_eff_kpc: 15.46
+    abs_mag: -21.86
+    n: 2.16
+    ellipticity: 0.21
+    pa_deg: 163.0
+    surface_brightness: 23.56
+    lum_fraction: 0.55
+    lopsidedness: 0.01
+- name: NGC 4936
+  redshift: 0.01
+  components:
+  - id: NGC 4936_comp0
+    index: 0
+    r_eff_kpc: 0.64
+    abs_mag: -18.52
+    n: 1.89
+    ellipticity: 0.46
+    pa_deg: 140.3
+    surface_brightness: 20.12
+    lum_fraction: 0.04
+    lopsidedness: 0.5
+  - id: NGC 4936_comp1
+    index: 1
+    r_eff_kpc: 3.47
+    abs_mag: -21.24
+    n: 2.26
+    ellipticity: 0.16
+    pa_deg: 163.3
+    surface_brightness: 21.21
+    lum_fraction: 0.44
+    lopsidedness: 0.01
+  - id: NGC 4936_comp2
+    index: 2
+    r_eff_kpc: 20.65
+    abs_mag: -21.44
+    n: 1.24
+    ellipticity: 0.27
+    pa_deg: 11.39
+    surface_brightness: 24.3
+    lum_fraction: 0.53
+    lopsidedness: 0.1
+- name: NGC 4976
+  redshift: 0.01
+  components:
+  - id: NGC 4976_comp0
+    index: 0
+    r_eff_kpc: 0.05
+    abs_mag: -16.71
+    n: 1.21
+    ellipticity: 0.11
+    pa_deg: 177.9
+    surface_brightness: 16.44
+    lum_fraction: 0.02
+    lopsidedness: 0.1
+  - id: NGC 4976_comp1
+    index: 1
+    r_eff_kpc: 0.76
+    abs_mag: -19.7
+    n: 2.88
+    ellipticity: 0.24
+    pa_deg: 159.2
+    surface_brightness: 19.78
+    lum_fraction: 0.32
+    lopsidedness: 0.01
+  - id: NGC 4976_comp2
+    index: 2
+    r_eff_kpc: 4.76
+    abs_mag: -20.5
+    n: 1.27
+    ellipticity: 0.42
+    pa_deg: 161.3
+    surface_brightness: 22.26
+    lum_fraction: 0.66
+    lopsidedness: 0.04
+- name: NGC 5011
+  redshift: 0.01
+  components:
+  - id: NGC 5011_comp0
+    index: 0
+    r_eff_kpc: 0.71
+    abs_mag: -18.83
+    n: 1.74
+    ellipticity: 0.26
+    pa_deg: 58.09
+    surface_brightness: 19.95
+    lum_fraction: 0.06
+    lopsidedness: 0.05
+  - id: NGC 5011_comp1
+    index: 1
+    r_eff_kpc: 3.14
+    abs_mag: -17.81
+    n: 0.15
+    ellipticity: 0.07
+    pa_deg: 146.6
+    surface_brightness: 23.56
+    lum_fraction: 0.02
+    lopsidedness: 0.02
+  - id: NGC 5011_comp2
+    index: 2
+    r_eff_kpc: 10.23
+    abs_mag: -21.86
+    n: 4.82
+    ellipticity: 0.21
+    pa_deg: 154.8
+    surface_brightness: 23.19
+    lum_fraction: 0.92
+    lopsidedness: 0.01
+  flag: e
+- name: NGC 5018
+  redshift: 0.01
+  components:
+  - id: NGC 5018_comp0
+    index: 0
+    r_eff_kpc: 3.4
+    abs_mag: -22.12
+    n: 4.27
+    ellipticity: 0.36
+    pa_deg: 91.77
+    surface_brightness: 20.35
+    lum_fraction: 0.68
+    lopsidedness: 0.05
+  - id: NGC 5018_comp1
+    index: 1
+    r_eff_kpc: 8.86
+    abs_mag: -21.29
+    n: 2.11
+    ellipticity: 0.26
+    pa_deg: 125.2
+    surface_brightness: 23.08
+    lum_fraction: 0.32
+    lopsidedness: 0.1
+  flag: c
+- name: NGC 5044
+  redshift: 0.01
+  components:
+  - id: NGC 5044_comp0
+    index: 0
+    r_eff_kpc: 1.39
+    abs_mag: -19.95
+    n: 1.24
+    ellipticity: 0.1
+    pa_deg: 169.2
+    surface_brightness: 20.25
+    lum_fraction: 0.13
+    lopsidedness: 0.02
+  - id: NGC 5044_comp1
+    index: 1
+    r_eff_kpc: 6.99
+    abs_mag: -21.59
+    n: 1.45
+    ellipticity: 0.07
+    pa_deg: 35.92
+    surface_brightness: 22.22
+    lum_fraction: 0.59
+    lopsidedness: 0.0
+  - id: NGC 5044_comp2
+    index: 2
+    r_eff_kpc: 26.62
+    abs_mag: -20.78
+    n: 0.59
+    ellipticity: 0.32
+    pa_deg: 50.07
+    surface_brightness: 25.1
+    lum_fraction: 0.28
+    lopsidedness: 0.07
+- name: NGC 5061
+  redshift: 0.01
+  components:
+  - id: NGC 5061_comp0
+    index: 0
+    r_eff_kpc: 1.25
+    abs_mag: -20.94
+    n: 4.84
+    ellipticity: 0.07
+    pa_deg: 16.11
+    surface_brightness: 19.74
+    lum_fraction: 0.39
+    lopsidedness: 0.01
+  - id: NGC 5061_comp1
+    index: 1
+    r_eff_kpc: 3.74
+    abs_mag: -18.92
+    n: 0.29
+    ellipticity: 0.16
+    pa_deg: 75.7
+    surface_brightness: 22.76
+    lum_fraction: 0.06
+    lopsidedness: 0.08
+  - id: NGC 5061_comp2
+    index: 2
+    r_eff_kpc: 10.52
+    abs_mag: -21.33
+    n: 3.23
+    ellipticity: 0.3
+    pa_deg: 113.0
+    surface_brightness: 23.33
+    lum_fraction: 0.55
+    lopsidedness: 0.02
+  flag: d,e
+- name: NGC 5077
+  redshift: 0.01
+  components:
+  - id: NGC 5077_comp0
+    index: 0
+    r_eff_kpc: 2.69
+    abs_mag: -21.62
+    n: 3.16
+    ellipticity: 0.32
+    pa_deg: 10.18
+    surface_brightness: 20.11
+    lum_fraction: 0.65
+    lopsidedness: 0.02
+  - id: NGC 5077_comp1
+    index: 1
+    r_eff_kpc: 12.29
+    abs_mag: -20.93
+    n: 1.06
+    ellipticity: 0.14
+    pa_deg: 168.2
+    surface_brightness: 23.81
+    lum_fraction: 0.35
+    lopsidedness: 0.07
+- name: NGC 5328
+  redshift: 0.01
+  components:
+  - id: NGC 5328_comp0
+    index: 0
+    r_eff_kpc: 0.91
+    abs_mag: -20.34
+    n: 1.84
+    ellipticity: 0.38
+    pa_deg: 87.64
+    surface_brightness: 18.69
+    lum_fraction: 0.19
+    lopsidedness: 0.01
+  - id: NGC 5328_comp1
+    index: 1
+    r_eff_kpc: 4.56
+    abs_mag: -21.1
+    n: 1.34
+    ellipticity: 0.29
+    pa_deg: 83.32
+    surface_brightness: 21.43
+    lum_fraction: 0.38
+    lopsidedness: 0.01
+  - id: NGC 5328_comp2
+    index: 2
+    r_eff_kpc: 18.81
+    abs_mag: -21.23
+    n: 0.97
+    ellipticity: 0.22
+    pa_deg: 69.98
+    surface_brightness: 24.33
+    lum_fraction: 0.43
+    lopsidedness: 0.09
+- name: NGC 5419
+  redshift: 0.01
+  components:
+  - id: NGC 5419_comp0
+    index: 0
+    r_eff_kpc: 1.14
+    abs_mag: -20.21
+    n: 1.22
+    ellipticity: 0.24
+    pa_deg: 94.64
+    surface_brightness: 19.39
+    lum_fraction: 0.08
+    lopsidedness: 0.01
+  - id: NGC 5419_comp1
+    index: 1
+    r_eff_kpc: 8.52
+    abs_mag: -22.32
+    n: 2.11
+    ellipticity: 0.19
+    pa_deg: 79.81
+    surface_brightness: 21.97
+    lum_fraction: 0.54
+    lopsidedness: 0.01
+  - id: NGC 5419_comp2
+    index: 2
+    r_eff_kpc: 39.46
+    abs_mag: -21.92
+    n: 0.85
+    ellipticity: 0.4
+    pa_deg: 67.57
+    surface_brightness: 24.79
+    lum_fraction: 0.38
+    lopsidedness: 0.01
+- name: NGC 5791
+  redshift: 0.01
+  components:
+  - id: NGC 5791_comp0
+    index: 0
+    r_eff_kpc: 0.71
+    abs_mag: -19.56
+    n: 2.85
+    ellipticity: 0.17
+    pa_deg: 161.4
+    surface_brightness: 19.6
+    lum_fraction: 0.19
+    lopsidedness: 0.01
+  - id: NGC 5791_comp1
+    index: 1
+    r_eff_kpc: 4.47
+    abs_mag: -20.78
+    n: 1.75
+    ellipticity: 0.53
+    pa_deg: 162.9
+    surface_brightness: 21.51
+    lum_fraction: 0.6
+    lopsidedness: 0.01
+  - id: NGC 5791_comp2
+    index: 2
+    r_eff_kpc: 14.73
+    abs_mag: -19.64
+    n: 1.56
+    ellipticity: 0.09
+    pa_deg: 172.6
+    surface_brightness: 25.84
+    lum_fraction: 0.21
+    lopsidedness: 0.03
+- name: NGC 5796
+  redshift: 0.01
+  components:
+  - id: NGC 5796_comp0
+    index: 0
+    r_eff_kpc: 1.38
+    abs_mag: -18.02
+    n: 0.41
+    ellipticity: 0.08
+    pa_deg: 82.74
+    surface_brightness: 21.81
+    lum_fraction: 0.03
+    lopsidedness: 0.02
+  - id: NGC 5796_comp1
+    index: 1
+    r_eff_kpc: 2.16
+    abs_mag: -21.01
+    n: 4.18
+    ellipticity: 0.15
+    pa_deg: 106.2
+    surface_brightness: 20.81
+    lum_fraction: 0.53
+    lopsidedness: 0.0
+  - id: NGC 5796_comp2
+    index: 2
+    r_eff_kpc: 6.07
+    abs_mag: -20.14
+    n: 0.92
+    ellipticity: 0.22
+    pa_deg: 89.17
+    surface_brightness: 23.08
+    lum_fraction: 0.24
+    lopsidedness: 0.01
+  - id: NGC 5796_comp3
+    index: 3
+    r_eff_kpc: 18.85
+    abs_mag: -19.93
+    n: 0.7
+    ellipticity: 0.39
+    pa_deg: 32.83
+    surface_brightness: 25.36
+    lum_fraction: 0.2
+    lopsidedness: 0.05
+- name: NGC 5812
+  redshift: 0.01
+  components:
+  - id: NGC 5812_comp0
+    index: 0
+    r_eff_kpc: 0.42
+    abs_mag: -18.58
+    n: 3.4
+    ellipticity: 0.21
+    pa_deg: 146.1
+    surface_brightness: 19.43
+    lum_fraction: 0.08
+    lopsidedness: 0.01
+  - id: NGC 5812_comp1
+    index: 1
+    r_eff_kpc: 0.88
+    abs_mag: -19.89
+    n: 1.6
+    ellipticity: 0.07
+    pa_deg: 62.17
+    surface_brightness: 19.54
+    lum_fraction: 0.28
+    lopsidedness: 0.0
+  - id: NGC 5812_comp2
+    index: 2
+    r_eff_kpc: 6.3
+    abs_mag: -20.76
+    n: 1.48
+    ellipticity: 0.09
+    pa_deg: 60.51
+    surface_brightness: 22.87
+    lum_fraction: 0.63
+    lopsidedness: 0.01
+- name: NGC 584
+  redshift: 0.01
+  components:
+  - id: NGC 584_comp0
+    index: 0
+    r_eff_kpc: 0.08
+    abs_mag: -17.18
+    n: 1.41
+    ellipticity: 0.46
+    pa_deg: 59.38
+    surface_brightness: 16.23
+    lum_fraction: 0.02
+    lopsidedness: 0.01
+  - id: NGC 584_comp1
+    index: 1
+    r_eff_kpc: 0.66
+    abs_mag: -19.86
+    n: 1.57
+    ellipticity: 0.13
+    pa_deg: 60.13
+    surface_brightness: 18.71
+    lum_fraction: 0.28
+    lopsidedness: 0.0
+  - id: NGC 584_comp2
+    index: 2
+    r_eff_kpc: 2.79
+    abs_mag: -19.99
+    n: 1.6
+    ellipticity: 0.57
+    pa_deg: 59.61
+    surface_brightness: 20.96
+    lum_fraction: 0.31
+    lopsidedness: 0.01
+  - id: NGC 584_comp3
+    index: 3
+    r_eff_kpc: 5.6
+    abs_mag: -20.25
+    n: 1.13
+    ellipticity: 0.27
+    pa_deg: 85.06
+    surface_brightness: 22.61
+    lum_fraction: 0.39
+    lopsidedness: 0.01
+  flag: g
+- name: NGC 5898
+  redshift: 0.01
+  components:
+  - id: NGC 5898_comp0
+    index: 0
+    r_eff_kpc: 0.49
+    abs_mag: -19.26
+    n: 2.14
+    ellipticity: 0.26
+    pa_deg: 5.71
+    surface_brightness: 19.0
+    lum_fraction: 0.13
+    lopsidedness: 0.03
+  - id: NGC 5898_comp1
+    index: 1
+    r_eff_kpc: 1.4
+    abs_mag: -19.97
+    n: 1.55
+    ellipticity: 0.19
+    pa_deg: 104.7
+    surface_brightness: 20.48
+    lum_fraction: 0.25
+    lopsidedness: 0.03
+  - id: NGC 5898_comp2
+    index: 2
+    r_eff_kpc: 6.35
+    abs_mag: -21.0
+    n: 1.34
+    ellipticity: 0.15
+    pa_deg: 36.86
+    surface_brightness: 22.73
+    lum_fraction: 0.63
+    lopsidedness: 0.01
+- name: NGC 5903
+  redshift: 0.01
+  components:
+  - id: NGC 5903_comp0
+    index: 0
+    r_eff_kpc: 1.1
+    abs_mag: -20.17
+    n: 2.1
+    ellipticity: 0.24
+    pa_deg: 165.1
+    surface_brightness: 19.86
+    lum_fraction: 0.23
+    lopsidedness: 0.01
+  - id: NGC 5903_comp1
+    index: 1
+    r_eff_kpc: 3.92
+    abs_mag: -20.02
+    n: 0.73
+    ellipticity: 0.15
+    pa_deg: 163.0
+    surface_brightness: 22.39
+    lum_fraction: 0.2
+    lopsidedness: 0.01
+  - id: NGC 5903_comp2
+    index: 2
+    r_eff_kpc: 12.92
+    abs_mag: -21.12
+    n: 1.11
+    ellipticity: 0.3
+    pa_deg: 169.6
+    surface_brightness: 23.83
+    lum_fraction: 0.56
+    lopsidedness: 0.01
+- name: NGC 596
+  redshift: 0.01
+  components:
+  - id: NGC 596_comp0
+    index: 0
+    r_eff_kpc: 0.63
+    abs_mag: -19.51
+    n: 3.09
+    ellipticity: 0.1
+    pa_deg: 107.9
+    surface_brightness: 19.31
+    lum_fraction: 0.33
+    lopsidedness: 0.01
+  - id: NGC 596_comp1
+    index: 1
+    r_eff_kpc: 1.16
+    abs_mag: -16.87
+    n: 0.22
+    ellipticity: 0.24
+    pa_deg: 110.4
+    surface_brightness: 21.97
+    lum_fraction: 0.03
+    lopsidedness: 0.02
+  - id: NGC 596_comp2
+    index: 2
+    r_eff_kpc: 4.85
+    abs_mag: -20.23
+    n: 1.54
+    ellipticity: 0.29
+    pa_deg: 42.91
+    surface_brightness: 22.42
+    lum_fraction: 0.64
+    lopsidedness: 0.0
+- name: NGC 636
+  redshift: 0.01
+  components:
+  - id: NGC 636_comp0
+    index: 0
+    r_eff_kpc: 0.39
+    abs_mag: -19.03
+    n: 2.33
+    ellipticity: 0.08
+    pa_deg: 80.39
+    surface_brightness: 18.61
+    lum_fraction: 0.21
+    lopsidedness: 0.0
+  - id: NGC 636_comp1
+    index: 1
+    r_eff_kpc: 1.46
+    abs_mag: -17.74
+    n: 0.52
+    ellipticity: 0.35
+    pa_deg: 70.79
+    surface_brightness: 21.68
+    lum_fraction: 0.06
+    lopsidedness: 0.03
+  - id: NGC 636_comp2
+    index: 2
+    r_eff_kpc: 5.55
+    abs_mag: -20.38
+    n: 2.01
+    ellipticity: 0.14
+    pa_deg: 32.19
+    surface_brightness: 22.85
+    lum_fraction: 0.73
+    lopsidedness: 0.01
+- name: NGC 6673
+  redshift: 0.01
+  components:
+  - id: NGC 6673_comp0
+    index: 0
+    r_eff_kpc: 0.23
+    abs_mag: -18.09
+    n: 2.05
+    ellipticity: 0.27
+    pa_deg: 28.29
+    surface_brightness: 18.34
+    lum_fraction: 0.32
+    lopsidedness: 0.0
+  - id: NGC 6673_comp1
+    index: 1
+    r_eff_kpc: 0.49
+    abs_mag: -15.51
+    n: 0.26
+    ellipticity: 0.37
+    pa_deg: 69.87
+    surface_brightness: 21.56
+    lum_fraction: 0.03
+    lopsidedness: 0.02
+  - id: NGC 6673_comp2
+    index: 2
+    r_eff_kpc: 1.72
+    abs_mag: -18.12
+    n: 0.64
+    ellipticity: 0.61
+    pa_deg: 23.98
+    surface_brightness: 21.49
+    lum_fraction: 0.33
+    lopsidedness: 0.01
+  - id: NGC 6673_comp3
+    index: 3
+    r_eff_kpc: 2.31
+    abs_mag: -18.1
+    n: 0.83
+    ellipticity: 0.36
+    pa_deg: 22.86
+    surface_brightness: 22.81
+    lum_fraction: 0.32
+    lopsidedness: 0.01
+  flag: g
+- name: NGC 6851
+  redshift: 0.01
+  components:
+  - id: NGC 6851_comp0
+    index: 0
+    r_eff_kpc: 0.44
+    abs_mag: -18.78
+    n: 2.24
+    ellipticity: 0.3
+    pa_deg: 4.77
+    surface_brightness: 18.89
+    lum_fraction: 0.14
+    lopsidedness: 0.09
+  - id: NGC 6851_comp1
+    index: 1
+    r_eff_kpc: 1.82
+    abs_mag: -19.82
+    n: 1.74
+    ellipticity: 0.39
+    pa_deg: 157.5
+    surface_brightness: 20.63
+    lum_fraction: 0.37
+    lopsidedness: 0.01
+  - id: NGC 6851_comp2
+    index: 2
+    r_eff_kpc: 5.98
+    abs_mag: -20.1
+    n: 1.9
+    ellipticity: 0.15
+    pa_deg: 24.98
+    surface_brightness: 23.33
+    lum_fraction: 0.48
+    lopsidedness: 0.01
+- name: NGC 6868
+  redshift: 0.01
+  components:
+  - id: NGC 6868_comp0
+    index: 0
+    r_eff_kpc: 0.57
+    abs_mag: -19.42
+    n: 1.04
+    ellipticity: 0.16
+    pa_deg: 80.73
+    surface_brightness: 18.67
+    lum_fraction: 0.09
+    lopsidedness: 0.07
+  - id: NGC 6868_comp1
+    index: 1
+    r_eff_kpc: 3.1
+    abs_mag: -21.13
+    n: 1.66
+    ellipticity: 0.19
+    pa_deg: 76.1
+    surface_brightness: 20.78
+    lum_fraction: 0.44
+    lopsidedness: 0.01
+  - id: NGC 6868_comp2
+    index: 2
+    r_eff_kpc: 15.71
+    abs_mag: -21.21
+    n: 0.76
+    ellipticity: 0.21
+    pa_deg: 75.81
+    surface_brightness: 23.81
+    lum_fraction: 0.47
+    lopsidedness: 0.01
+- name: NGC 6876
+  redshift: 0.01
+  components:
+  - id: NGC 6876_comp0
+    index: 0
+    r_eff_kpc: 2.77
+    abs_mag: -20.52
+    n: 0.91
+    ellipticity: 0.28
+    pa_deg: 71.61
+    surface_brightness: 20.71
+    lum_fraction: 0.19
+    lopsidedness: 0.01
+  - id: NGC 6876_comp1
+    index: 1
+    r_eff_kpc: 4.54
+    abs_mag: -19.84
+    n: 5.53
+    ellipticity: 0.42
+    pa_deg: 75.67
+    surface_brightness: 23.15
+    lum_fraction: 0.1
+    lopsidedness: 0.2
+  - id: NGC 6876_comp2
+    index: 2
+    r_eff_kpc: 13.99
+    abs_mag: -21.95
+    n: 1.56
+    ellipticity: 0.18
+    pa_deg: 140.3
+    surface_brightness: 23.16
+    lum_fraction: 0.71
+    lopsidedness: 0.02
+- name: NGC 6909
+  redshift: 0.01
+  components:
+  - id: NGC 6909_comp0
+    index: 0
+    r_eff_kpc: 0.62
+    abs_mag: -18.88
+    n: 6.93
+    ellipticity: 0.28
+    pa_deg: 65.51
+    surface_brightness: 20.1
+    lum_fraction: 0.17
+    lopsidedness: 0.03
+  - id: NGC 6909_comp1
+    index: 1
+    r_eff_kpc: 2.35
+    abs_mag: -19.6
+    n: 0.94
+    ellipticity: 0.46
+    pa_deg: 69.69
+    surface_brightness: 20.95
+    lum_fraction: 0.33
+    lopsidedness: 0.01
+  - id: NGC 6909_comp2
+    index: 2
+    r_eff_kpc: 9.51
+    abs_mag: -20.05
+    n: 1.36
+    ellipticity: 0.53
+    pa_deg: 67.28
+    surface_brightness: 23.55
+    lum_fraction: 0.5
+    lopsidedness: 0.03
+- name: NGC 6958
+  redshift: 0.01
+  components:
+  - id: NGC 6958_comp0
+    index: 0
+    r_eff_kpc: 0.56
+    abs_mag: -19.96
+    n: 1.66
+    ellipticity: 0.13
+    pa_deg: 113.0
+    surface_brightness: 18.3
+    lum_fraction: 0.29
+    lopsidedness: 0.05
+  - id: NGC 6958_comp1
+    index: 1
+    r_eff_kpc: 2.5
+    abs_mag: -19.69
+    n: 0.66
+    ellipticity: 0.18
+    pa_deg: 114.4
+    surface_brightness: 21.32
+    lum_fraction: 0.23
+    lopsidedness: 0.04
+  - id: NGC 6958_comp2
+    index: 2
+    r_eff_kpc: 8.47
+    abs_mag: -20.53
+    n: 1.05
+    ellipticity: 0.27
+    pa_deg: 79.47
+    surface_brightness: 23.2
+    lum_fraction: 0.49
+    lopsidedness: 0.04
+- name: NGC 7029
+  redshift: 0.01
+  components:
+  - id: NGC 7029_comp0
+    index: 0
+    r_eff_kpc: 0.23
+    abs_mag: -18.13
+    n: 2.41
+    ellipticity: 0.61
+    pa_deg: 65.73
+    surface_brightness: 17.46
+    lum_fraction: 0.06
+    lopsidedness: 0.04
+  - id: NGC 7029_comp1
+    index: 1
+    r_eff_kpc: 0.9
+    abs_mag: -19.6
+    n: 2.46
+    ellipticity: 0.07
+    pa_deg: 61.68
+    surface_brightness: 19.91
+    lum_fraction: 0.22
+    lopsidedness: 0.01
+  - id: NGC 7029_comp2
+    index: 2
+    r_eff_kpc: 2.31
+    abs_mag: -17.51
+    n: 0.47
+    ellipticity: 0.81
+    pa_deg: 67.12
+    surface_brightness: 21.58
+    lum_fraction: 0.03
+    lopsidedness: 0.02
+  - id: NGC 7029_comp3
+    index: 3
+    r_eff_kpc: 5.4
+    abs_mag: -20.82
+    n: 1.51
+    ellipticity: 0.41
+    pa_deg: 68.48
+    surface_brightness: 21.86
+    lum_fraction: 0.69
+    lopsidedness: 0.01
+  flag: a
+- name: NGC 7144
+  redshift: 0.01
+  components:
+  - id: NGC 7144_comp0
+    index: 0
+    r_eff_kpc: 1.05
+    abs_mag: -19.26
+    n: 1.24
+    ellipticity: 0.03
+    pa_deg: 34.04
+    surface_brightness: 20.23
+    lum_fraction: 0.19
+    lopsidedness: 0.0
+  - id: NGC 7144_comp1
+    index: 1
+    r_eff_kpc: 1.97
+    abs_mag: -19.4
+    n: 6.99
+    ellipticity: 0.01
+    pa_deg: 21.14
+    surface_brightness: 22.33
+    lum_fraction: 0.21
+    lopsidedness: 0.0
+  - id: NGC 7144_comp2
+    index: 2
+    r_eff_kpc: 3.61
+    abs_mag: -19.06
+    n: 0.38
+    ellipticity: 0.06
+    pa_deg: 178.9
+    surface_brightness: 22.59
+    lum_fraction: 0.15
+    lopsidedness: 0.01
+  - id: NGC 7144_comp3
+    index: 3
+    r_eff_kpc: 8.78
+    abs_mag: -20.21
+    n: 0.74
+    ellipticity: 0.03
+    pa_deg: 63.78
+    surface_brightness: 23.67
+    lum_fraction: 0.45
+    lopsidedness: 0.03
+  flag: g
+- name: NGC 7145
+  redshift: 0.01
+  components:
+  - id: NGC 7145_comp0
+    index: 0
+    r_eff_kpc: 0.19
+    abs_mag: -17.55
+    n: 2.05
+    ellipticity: 0.03
+    pa_deg: 162.9
+    surface_brightness: 18.47
+    lum_fraction: 0.06
+    lopsidedness: 0.0
+  - id: NGC 7145_comp1
+    index: 1
+    r_eff_kpc: 0.6
+    abs_mag: -18.19
+    n: 0.71
+    ellipticity: 0.05
+    pa_deg: 124.2
+    surface_brightness: 19.82
+    lum_fraction: 0.11
+    lopsidedness: 0.0
+  - id: NGC 7145_comp2
+    index: 2
+    r_eff_kpc: 2.0
+    abs_mag: -18.95
+    n: 0.71
+    ellipticity: 0.07
+    pa_deg: 114.6
+    surface_brightness: 21.65
+    lum_fraction: 0.22
+    lopsidedness: 0.02
+  - id: NGC 7145_comp3
+    index: 3
+    r_eff_kpc: 6.93
+    abs_mag: -20.02
+    n: 1.3
+    ellipticity: 0.05
+    pa_deg: 178.6
+    surface_brightness: 23.57
+    lum_fraction: 0.6
+    lopsidedness: 0.01
+  flag: g
+- name: NGC 7192
+  redshift: 0.01
+  components:
+  - id: NGC 7192_comp0
+    index: 0
+    r_eff_kpc: 0.52
+    abs_mag: -19.39
+    n: 1.69
+    ellipticity: 0.01
+    pa_deg: 14.6
+    surface_brightness: 18.82
+    lum_fraction: 0.14
+    lopsidedness: 0.01
+  - id: NGC 7192_comp1
+    index: 1
+    r_eff_kpc: 1.39
+    abs_mag: -19.21
+    n: 0.44
+    ellipticity: 0.01
+    pa_deg: 2.98
+    surface_brightness: 20.53
+    lum_fraction: 0.12
+    lopsidedness: 0.02
+  - id: NGC 7192_comp2
+    index: 2
+    r_eff_kpc: 3.7
+    abs_mag: -20.09
+    n: 0.48
+    ellipticity: 0.04
+    pa_deg: 7.04
+    surface_brightness: 21.77
+    lum_fraction: 0.26
+    lopsidedness: 0.0
+  - id: NGC 7192_comp3
+    index: 3
+    r_eff_kpc: 11.95
+    abs_mag: -20.75
+    n: 0.87
+    ellipticity: 0.01
+    pa_deg: 91.84
+    surface_brightness: 23.93
+    lum_fraction: 0.48
+    lopsidedness: 0.01
+  flag: g
+- name: NGC 7196
+  redshift: 0.01
+  components:
+  - id: NGC 7196_comp0
+    index: 0
+    r_eff_kpc: 0.14
+    abs_mag: -18.74
+    n: 2.55
+    ellipticity: 0.79
+    pa_deg: 43.85
+    surface_brightness: 16.9
+    lum_fraction: 0.05
+    lopsidedness: 0.8
+  - id: NGC 7196_comp1
+    index: 1
+    r_eff_kpc: 1.11
+    abs_mag: -19.39
+    n: 0.58
+    ellipticity: 0.31
+    pa_deg: 46.17
+    surface_brightness: 19.53
+    lum_fraction: 0.09
+    lopsidedness: 0.01
+  - id: NGC 7196_comp2
+    index: 2
+    r_eff_kpc: 2.99
+    abs_mag: -20.91
+    n: 1.27
+    ellipticity: 0.22
+    pa_deg: 46.01
+    surface_brightness: 20.65
+    lum_fraction: 0.38
+    lopsidedness: 0.02
+  - id: NGC 7196_comp3
+    index: 3
+    r_eff_kpc: 12.6
+    abs_mag: -21.16
+    n: 1.4
+    ellipticity: 0.15
+    pa_deg: 59.22
+    surface_brightness: 23.66
+    lum_fraction: 0.48
+    lopsidedness: 0.04
+- name: NGC 720
+  redshift: 0.01
+  components:
+  - id: NGC 720_comp0
+    index: 0
+    r_eff_kpc: 0.46
+    abs_mag: -18.64
+    n: 0.63
+    ellipticity: 0.18
+    pa_deg: 146.0
+    surface_brightness: 18.56
+    lum_fraction: 0.06
+    lopsidedness: 0.01
+  - id: NGC 720_comp1
+    index: 1
+    r_eff_kpc: 1.38
+    abs_mag: -19.81
+    n: 1.04
+    ellipticity: 0.38
+    pa_deg: 146.5
+    surface_brightness: 19.71
+    lum_fraction: 0.16
+    lopsidedness: 0.0
+  - id: NGC 720_comp2
+    index: 2
+    r_eff_kpc: 8.18
+    abs_mag: -21.5
+    n: 2.4
+    ellipticity: 0.46
+    pa_deg: 148.0
+    surface_brightness: 22.08
+    lum_fraction: 0.78
+    lopsidedness: 0.0
+- name: NGC 7507
+  redshift: 0.01
+  components:
+  - id: NGC 7507_comp0
+    index: 0
+    r_eff_kpc: 0.4
+    abs_mag: -20.35
+    n: 2.27
+    ellipticity: 0.05
+    pa_deg: 108.3
+    surface_brightness: 17.43
+    lum_fraction: 0.14
+    lopsidedness: 0.0
+  - id: NGC 7507_comp1
+    index: 1
+    r_eff_kpc: 0.75
+    abs_mag: -19.08
+    n: 0.37
+    ellipticity: 0.05
+    pa_deg: 107.7
+    surface_brightness: 19.27
+    lum_fraction: 0.04
+    lopsidedness: 0.03
+  - id: NGC 7507_comp2
+    index: 2
+    r_eff_kpc: 2.54
+    abs_mag: -21.43
+    n: 1.06
+    ellipticity: 0.04
+    pa_deg: 101.0
+    surface_brightness: 20.0
+    lum_fraction: 0.38
+    lopsidedness: 0.01
+  - id: NGC 7507_comp3
+    index: 3
+    r_eff_kpc: 12.98
+    abs_mag: -21.59
+    n: 1.06
+    ellipticity: 0.06
+    pa_deg: 122.1
+    surface_brightness: 23.26
+    lum_fraction: 0.44
+    lopsidedness: 0.02
+- name: NGC 7796
+  redshift: 0.01
+  components:
+  - id: NGC 7796_comp0
+    index: 0
+    r_eff_kpc: 1.09
+    abs_mag: -20.44
+    n: 2.44
+    ellipticity: 0.21
+    pa_deg: 162.9
+    surface_brightness: 19.23
+    lum_fraction: 0.21
+    lopsidedness: 0.0
+  - id: NGC 7796_comp1
+    index: 1
+    r_eff_kpc: 2.56
+    abs_mag: -18.88
+    n: 0.38
+    ellipticity: 0.05
+    pa_deg: 163.7
+    surface_brightness: 22.01
+    lum_fraction: 0.05
+    lopsidedness: 0.01
+  - id: NGC 7796_comp2
+    index: 2
+    r_eff_kpc: 10.4
+    abs_mag: -21.82
+    n: 1.92
+    ellipticity: 0.13
+    pa_deg: 165.9
+    surface_brightness: 22.71
+    lum_fraction: 0.74
+    lopsidedness: 0.0
