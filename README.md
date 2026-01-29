@@ -56,6 +56,38 @@ python mockgal.py --single \
     -o output/
 ```
 
+### Direct API Usage
+
+Generate a mock image directly from Python:
+
+```python
+from mockgal import SersicComponent, ImageConfig, generate_mock_image
+
+components = [
+    SersicComponent(r_eff_kpc=1.0, abs_mag=-20.0, n=4.0, ellipticity=0.2, pa_deg=30.0)
+]
+config = ImageConfig(size_pixels=51, engine="auto")
+
+image, metadata = generate_mock_image(
+    name="api_demo",
+    redshift=0.01,
+    components=components,
+    config=config,
+)
+```
+
+Generate a mock image from a model file:
+
+```python
+from mockgal import generate_mock_image_from_model
+
+image, metadata = generate_mock_image_from_model(
+    model_path="examples/example_models.yaml",
+    galaxy_name="NGC_1399",
+    config={"size_pixels": 51, "engine": "auto"},
+)
+```
+
 ### Batch Mode with Model Files
 
 Process multiple galaxies from a YAML model file:
@@ -188,6 +220,10 @@ To prevent memory issues, image dimensions are automatically capped at 4001 pixe
 ```
 WARNING - Computed image size 9171x9171 exceeds maximum (4001). Capping to 4001x4001 pixels.
 ```
+
+### libprofit PSF Convolution
+
+On some systems, `profit-cli` fails to load PSF FITS files (e.g., "less data found than expected"). In this case, PSF convolution is applied in Python after the libprofit render, which keeps results consistent across engines.
 
 ### Memory-Limited Systems
 

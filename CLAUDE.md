@@ -90,6 +90,7 @@ MockGal is a mock galaxy image generator for testing isophote fitting algorithms
 - `process_single_job()`: Process one galaxy+config combination
 - `save_fits()`: Save image with metadata headers
 - `save_npy()`: Save image as numpy array with JSON metadata
+- `generate_mock_image()`: Convenience API for direct image generation
 - `visualize_galaxy()`: Create PNG visualization with arcsinh scaling and contours
 - `parse_huang2013()`: Parse Huang 2013 ASCII catalog (for testing)
 

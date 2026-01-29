@@ -5,6 +5,8 @@ Run with: pytest tests/test_mockgal.py -v
 """
 
 import json
+import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -26,6 +28,8 @@ from mockgal import (
     SersicEngine,
     abs_to_app_mag,
     find_profit_cli,
+    generate_mock_image,
+    generate_mock_image_from_model,
     kpc_to_arcsec,
     parse_huang2013,
     save_fits,
@@ -93,6 +97,12 @@ def default_config():
 def huang_catalog_path():
     """Path to Huang 2013 catalog."""
     return Path(__file__).parent.parent / "examples" / "huang2013_cgs_model.txt"
+
+
+@pytest.fixture
+def psf_image_path():
+    """Path to a test PSF FITS file."""
+    return Path(__file__).parent / "psf_gaussian.fits"
 
 
 # =============================================================================
@@ -408,6 +418,24 @@ class TestMockImageGenerator:
         # PSF convolution should reduce peak value
         assert image_psf.max() < image_no_psf.max()
 
+    def test_generate_with_psf_image_file(self, simple_galaxy, psf_image_path):
+        """Generate image with PSF from a FITS file."""
+        if not psf_image_path.exists():
+            pytest.skip("Test PSF FITS file not found")
+
+        config = ImageConfig(
+            size_pixels=101,
+            psf_enabled=True,
+            psf_type="image",
+            psf_file=str(psf_image_path),
+        )
+        gen = MockImageGenerator(config)
+        image, meta = gen.generate(simple_galaxy)
+
+        assert image.max() > 0
+        assert meta["psf_enabled"] is True
+        assert meta["psf_type"] == "image"
+
     def test_generate_with_flat_sky(self, simple_galaxy):
         """Generate image with flat sky background."""
         sky_level = 100.0
@@ -504,6 +532,94 @@ class TestMockImageGenerator:
 
         if find_profit_cli() is not None:
             assert meta["engine"] == "libprofit"
+
+    def test_generate_mock_image_api(self):
+        """Direct API should generate image and metadata."""
+        image, meta = generate_mock_image(
+            name="api_test",
+            redshift=0.01,
+            components=[
+                {
+                    "r_eff_kpc": 1.0,
+                    "abs_mag": -20.0,
+                    "n": 4.0,
+                    "ellipticity": 0.2,
+                    "pa_deg": 30.0,
+                }
+            ],
+            config={"size_pixels": 51, "engine": "auto"},
+        )
+
+        assert image.shape == (51, 51)
+        assert image.max() > 0
+        assert meta["engine"] in ("libprofit", "astropy")
+
+        if find_profit_cli() is not None:
+            assert meta["engine"] == "libprofit"
+
+    def test_generate_mock_image_from_model(self):
+        """Generate image via model file helper."""
+        model_path = Path(__file__).parent.parent / "examples" / "example_models.yaml"
+        if not model_path.exists():
+            pytest.skip("Model file not found")
+
+        image, meta = generate_mock_image_from_model(
+            model_path=model_path,
+            galaxy_name="deV_galaxy",
+            config={"size_pixels": 51, "engine": "auto"},
+        )
+
+        assert image.shape == (51, 51)
+        assert image.max() > 0
+        assert meta["name"] == "deV_galaxy"
+
+
+class TestCLI:
+    """CLI-level tests."""
+
+    def test_cli_single_generates_output(self, tmp_path):
+        """CLI should generate a FITS file in single mode."""
+        repo_root = Path(__file__).parent.parent
+        output_dir = tmp_path / "cli_output"
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        env = os.environ.copy()
+        env["MPLCONFIGDIR"] = str(tmp_path / "mplconfig")
+        env["XDG_CACHE_HOME"] = str(tmp_path / "xdgcache")
+
+        cmd = [
+            sys.executable,
+            "mockgal.py",
+            "--single",
+            "--name",
+            "cli_test",
+            "-z",
+            "0.01",
+            "--r-eff",
+            "1.0",
+            "--abs-mag",
+            "-20.0",
+            "--sersic-n",
+            "4.0",
+            "--size",
+            "51",
+            "--engine",
+            "auto",
+            "-o",
+            str(output_dir),
+        ]
+
+        result = subprocess.run(
+            cmd,
+            cwd=repo_root,
+            env=env,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        assert result.returncode == 0, result.stderr
+        assert (output_dir / "cli_test.fits").exists()
 
 
 # =============================================================================

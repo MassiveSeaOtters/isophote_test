@@ -32,7 +32,6 @@ import os
 import shutil
 import subprocess
 import sys
-import tempfile
 from dataclasses import dataclass, field
 from multiprocessing import Pool, cpu_count
 from pathlib import Path
@@ -457,15 +456,11 @@ class SersicEngine:
             "-t"  # Output as text to stdout
         ]
 
-        # Handle PSF if provided
-        psf_file = None
         if psf is not None:
-            # Write PSF to temporary FITS file
-            psf_file = tempfile.NamedTemporaryFile(suffix='.fits', delete=False)
-            psf_hdu = fits.PrimaryHDU(psf.astype(np.float32))
-            psf_hdu.writeto(psf_file.name, overwrite=True)
-            psf_file.close()
-            cmd.extend(["-P", psf_file.name])
+            logger.warning(
+                "profit-cli PSF loading is not supported here; "
+                "ignoring PSF in libprofit render."
+            )
 
         try:
             # Run profit-cli
@@ -511,12 +506,7 @@ class SersicEngine:
             raise RuntimeError(f"profit-cli execution failed: {e.stderr}")
 
         finally:
-            # Clean up temporary PSF file
-            if psf_file is not None:
-                try:
-                    os.unlink(psf_file.name)
-                except OSError:
-                    pass
+            pass
 
     def _render_astropy(
         self,
@@ -627,10 +617,6 @@ class MockImageGenerator:
         ycen = shape[0] / 2.0
 
         for comp, comp_params in zip(galaxy.components, params['components']):
-            # For pyprofit, pass PSF for native convolution
-            # For astropy, we'll convolve the full image at the end
-            psf_for_render = psf if self.engine.engine == "libprofit" else None
-
             image += self.engine.render(
                 shape=shape,
                 xcen=xcen,
@@ -641,11 +627,11 @@ class MockImageGenerator:
                 axrat=comp.axrat,
                 ang=comp.pa_deg,
                 zeropoint=self.config.zeropoint,
-                psf=psf_for_render
+                psf=None
             )
 
-        # 5. Apply PSF for astropy engine (done per-component for pyprofit)
-        if self.config.psf_enabled and self.engine.engine == "astropy":
+        # 5. Apply PSF to the combined image (consistent across engines)
+        if self.config.psf_enabled:
             image = convolve(image, psf, mode='constant')
 
         # 6. Add sky background
@@ -794,6 +780,108 @@ class MockImageGenerator:
 # =============================================================================
 # Section 6: Model File Loader
 # =============================================================================
+
+def generate_mock_image(
+    name: str = "mock_galaxy",
+    redshift: float = DEFAULT_REDSHIFT,
+    components: Optional[List[Union[SersicComponent, dict]]] = None,
+    config: Optional[Union[ImageConfig, dict]] = None,
+    return_metadata: bool = True
+) -> Union[np.ndarray, Tuple[np.ndarray, dict]]:
+    """
+    Convenience API to generate a mock image directly.
+
+    Parameters
+    ----------
+    name : str
+        Galaxy name
+    redshift : float
+        Galaxy redshift
+    components : list
+        List of SersicComponent or dicts with component fields
+    config : ImageConfig or dict, optional
+        ImageConfig instance or dict of ImageConfig fields
+    return_metadata : bool
+        If True, return (image, metadata); otherwise return image only
+
+    Returns
+    -------
+    ndarray or (ndarray, dict)
+        Generated image and optional metadata
+    """
+    if not components:
+        raise ValueError("components must be provided")
+
+    built_components: List[SersicComponent] = []
+    for comp in components:
+        if isinstance(comp, SersicComponent):
+            built_components.append(comp)
+        elif isinstance(comp, dict):
+            built_components.append(SersicComponent(**comp))
+        else:
+            raise TypeError("components must be SersicComponent or dict")
+
+    if config is None:
+        image_config = ImageConfig()
+    elif isinstance(config, ImageConfig):
+        image_config = config
+    elif isinstance(config, dict):
+        image_config = ImageConfig(**config)
+    else:
+        raise TypeError("config must be ImageConfig or dict")
+
+    galaxy = MockGalaxy(
+        name=name,
+        redshift=redshift,
+        components=built_components
+    )
+
+    gen = MockImageGenerator(image_config)
+    image, metadata = gen.generate(galaxy)
+
+    if return_metadata:
+        return image, metadata
+    return image
+
+
+def generate_mock_image_from_model(
+    model_path: Union[str, Path],
+    galaxy_name: str,
+    config: Optional[Union[ImageConfig, dict]] = None,
+    return_metadata: bool = True
+) -> Union[np.ndarray, Tuple[np.ndarray, dict]]:
+    """
+    Generate a mock image from a model file for a single galaxy.
+
+    Parameters
+    ----------
+    model_path : str or Path
+        Path to YAML/JSON model file
+    galaxy_name : str
+        Galaxy name to select from the model file
+    config : ImageConfig or dict, optional
+        ImageConfig instance or dict of ImageConfig fields
+    return_metadata : bool
+        If True, return (image, metadata); otherwise return image only
+
+    Returns
+    -------
+    ndarray or (ndarray, dict)
+        Generated image and optional metadata
+    """
+    galaxies = load_model_file(str(model_path), galaxy_names=[galaxy_name])
+    if not galaxies:
+        raise ValueError(f"Galaxy '{galaxy_name}' not found in {model_path}")
+
+    galaxy = galaxies[0]
+    components = galaxy.components
+    return generate_mock_image(
+        name=galaxy.name,
+        redshift=galaxy.redshift,
+        components=components,
+        config=config,
+        return_metadata=return_metadata,
+    )
 
 def load_file(filepath: str) -> dict:
     """Load YAML or JSON file."""
