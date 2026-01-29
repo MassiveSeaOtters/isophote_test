@@ -29,13 +29,21 @@ image_configs:
     psf_fwhm: 0.8
     psf_moffat_beta: 4.765
 
-  # 4. With moderate noise (S/N = 100 at Re)
+  # 4. With moderate noise (S/N = 100 at Re) [deprecated]
   - name: "noisy_snr100"
     pixel_scale: 0.3
     zeropoint: 27.0
     noise_enabled: true
     noise_snr: 100
     noise_seed: 42            # for reproducibility
+
+  # 4b. With moderate background-limited Gaussian noise (5-sigma SB limit)
+  - name: "noisy_sb_limit"
+    pixel_scale: 0.3
+    zeropoint: 27.0
+    noise_enabled: true
+    sky_sb_limit: 27.0
+    noise_seed: 42
 
   # 5. PSF + noise (realistic conditions)
   - name: "realistic"
@@ -46,7 +54,7 @@ image_configs:
     psf_fwhm: 0.8
     psf_moffat_beta: 4.765
     noise_enabled: true
-    noise_snr: 50
+    sky_sb_limit: 27.0
     noise_seed: 42
 
   # 6. Full realism with sky background
@@ -59,9 +67,9 @@ image_configs:
     psf_moffat_beta: 4.765
     sky_enabled: true
     sky_type: flat
-    sky_level: 100.0
+    sky_sb_value: 22.0
     noise_enabled: true
-    noise_snr: 30
+    gain: 4.0
     noise_seed: 42
 
   # 7. HSC-like configuration
@@ -73,7 +81,7 @@ image_configs:
     psf_fwhm: 0.6             # good seeing
     psf_moffat_beta: 2.5
     noise_enabled: true
-    noise_snr: 100
+    sky_sb_limit: 27.0
     noise_seed: 42
 
   # 8. Fixed size images (for comparison)

@@ -73,6 +73,9 @@ DEFAULT_SIZE_PIXELS = 2001 # default fixed size for large galaxies
 DEFAULT_PSF_FWHM = 1.0     # arcsec
 DEFAULT_MOFFAT_BETA = 4.765
 DEFAULT_REDSHIFT = 0.01
+DEFAULT_SKY_SB_VALUE = 22.0
+DEFAULT_SKY_SB_LIMIT = 27.0
+DEFAULT_GAIN = 4.0
 MAX_SERSIC_INDEX = 8.0
 MAX_IMAGE_SIZE = 4001      # maximum image dimension to avoid memory issues
 
@@ -163,12 +166,15 @@ class ImageConfig:
     sky_type: str = "flat"  # flat | tilted
     sky_level: float = 0.0
     sky_coeffs: List[float] = field(default_factory=lambda: [0.0])
+    sky_sb_value: Optional[float] = None  # mag/arcsec^2
 
     # Noise configuration
     noise_enabled: bool = False
     noise_sigma: Optional[float] = None
     noise_snr: Optional[float] = None
     noise_seed: Optional[int] = None
+    sky_sb_limit: Optional[float] = None  # mag/arcsec^2
+    gain: Optional[float] = DEFAULT_GAIN
 
     # Engine selection
     engine: str = "auto"  # libprofit | astropy | auto
@@ -183,6 +189,8 @@ class ImageConfig:
             raise ValueError(f"sky_type must be flat|tilted, got {self.sky_type}")
         if self.engine not in ("libprofit", "astropy", "auto"):
             raise ValueError(f"engine must be libprofit|astropy|auto, got {self.engine}")
+        if self.gain is not None and self.gain <= 0:
+            raise ValueError(f"gain must be positive, got {self.gain}")
 
 
 # =============================================================================
@@ -258,6 +266,57 @@ def abs_to_app_mag(abs_mag: float, z: float, k_corr: float = 0.0) -> float:
     cosmo = get_cosmology()
     dist_mod = cosmo.distmod(z).value
     return abs_mag + dist_mod + k_corr
+
+
+def sb_mag_to_flux_per_pixel(
+    sb_mag: float,
+    pixel_scale: float,
+    zeropoint: float
+) -> float:
+    """
+    Convert surface brightness (mag/arcsec^2) to flux per pixel.
+
+    Parameters
+    ----------
+    sb_mag : float
+        Surface brightness in mag/arcsec^2
+    pixel_scale : float
+        Pixel scale in arcsec/pixel
+    zeropoint : float
+        Photometric zeropoint
+
+    Returns
+    -------
+    float
+        Flux per pixel
+    """
+    return 10 ** (-0.4 * (sb_mag - zeropoint)) * (pixel_scale ** 2)
+
+
+def sb_limit_to_sigma(
+    sb_limit_mag: float,
+    pixel_scale: float,
+    zeropoint: float
+) -> float:
+    """
+    Convert 5-sigma surface brightness limit (mag/arcsec^2) to per-pixel sigma.
+
+    Parameters
+    ----------
+    sb_limit_mag : float
+        5-sigma surface brightness limit in mag/arcsec^2
+    pixel_scale : float
+        Pixel scale in arcsec/pixel
+    zeropoint : float
+        Photometric zeropoint
+
+    Returns
+    -------
+    float
+        Gaussian sigma per pixel
+    """
+    flux_5sigma = sb_mag_to_flux_per_pixel(sb_limit_mag, pixel_scale, zeropoint)
+    return flux_5sigma / 5.0
 
 
 # =============================================================================
@@ -720,6 +779,16 @@ class MockImageGenerator:
 
     def _make_sky(self, shape: Tuple[int, int]) -> np.ndarray:
         """Generate sky background."""
+        if self.config.sky_sb_value is not None:
+            if self.config.sky_type != "flat":
+                logger.warning("sky_sb_value provided; forcing flat sky background")
+            sky_level = sb_mag_to_flux_per_pixel(
+                self.config.sky_sb_value,
+                self.config.pixel_scale,
+                self.config.zeropoint
+            )
+            return np.full(shape, sky_level, dtype=np.float64)
+
         if self.config.sky_type == "flat":
             return np.full(shape, self.config.sky_level, dtype=np.float64)
 
@@ -737,9 +806,32 @@ class MockImageGenerator:
         """Add Gaussian noise to the image."""
         rng = np.random.default_rng(self.config.noise_seed)
 
-        if self.config.noise_sigma is not None:
+        if self.config.sky_sb_value is not None and self.config.sky_sb_limit is not None:
+            logger.warning(
+                "Both sky_sb_value and sky_sb_limit provided; using sky_sb_value path."
+            )
+
+        if self.config.sky_sb_value is not None:
+            gain = self.config.gain if self.config.gain is not None else DEFAULT_GAIN
+            if gain <= 0:
+                raise ValueError("gain must be positive for Poisson noise")
+            image_e = image * gain
+            if np.any(image_e < 0):
+                logger.warning("Negative values found before Poisson draw; clipping to 0")
+                image_e = np.clip(image_e, 0, None)
+            noisy = rng.poisson(image_e) / gain
+            return noisy
+
+        if self.config.sky_sb_limit is not None:
+            sigma = sb_limit_to_sigma(
+                self.config.sky_sb_limit,
+                self.config.pixel_scale,
+                self.config.zeropoint
+            )
+        elif self.config.noise_sigma is not None:
             sigma = self.config.noise_sigma
         elif self.config.noise_snr is not None:
+            logger.warning("noise_snr is deprecated; consider sky_sb_limit instead.")
             # Compute sigma from target S/N at Re of largest component
             max_re_pix = params['max_re_pix']
             center_y = image.shape[0] // 2
@@ -771,7 +863,10 @@ class MockImageGenerator:
             'psf_type': self.config.psf_type if self.config.psf_enabled else None,
             'psf_fwhm': self.config.psf_fwhm if self.config.psf_enabled else None,
             'sky_enabled': self.config.sky_enabled,
+            'sky_sb_value': self.config.sky_sb_value,
             'noise_enabled': self.config.noise_enabled,
+            'sky_sb_limit': self.config.sky_sb_limit,
+            'gain': self.config.gain,
             'components': params['components'],
             'config_name': self.config.name
         }
@@ -1135,10 +1230,13 @@ def load_image_configs(
             sky_type=cfg_dict.get('sky_type', 'flat'),
             sky_level=cfg_dict.get('sky_level', 0.0),
             sky_coeffs=cfg_dict.get('sky_coeffs', [0.0]),
+            sky_sb_value=cfg_dict.get('sky_sb_value'),
             noise_enabled=cfg_dict.get('noise_enabled', False),
             noise_sigma=cfg_dict.get('noise_sigma'),
             noise_snr=cfg_dict.get('noise_snr'),
             noise_seed=cfg_dict.get('noise_seed'),
+            sky_sb_limit=cfg_dict.get('sky_sb_limit'),
+            gain=cfg_dict.get('gain', DEFAULT_GAIN),
             engine=cfg_dict.get('engine', 'auto'),
             profit_cli_path=profit_cli_path
         ))
@@ -1184,6 +1282,12 @@ def save_fits(image: np.ndarray, metadata: dict, filepath: Union[str, Path]) -> 
     # Sky and noise
     header['SKY'] = metadata.get('sky_enabled', False)
     header['NOISE'] = metadata.get('noise_enabled', False)
+    if metadata.get('sky_sb_value') is not None:
+        header['SKY_SBV'] = (metadata.get('sky_sb_value', 0.0), 'mag/arcsec^2')
+    if metadata.get('sky_sb_limit') is not None:
+        header['SKY_SBL'] = (metadata.get('sky_sb_limit', 0.0), 'mag/arcsec^2 (5-sigma)')
+    if metadata.get('gain') is not None:
+        header['GAIN'] = (metadata.get('gain', 0.0), 'e-/ADU')
 
     # Component info
     n_comp = len(metadata.get('components', []))
@@ -1562,14 +1666,20 @@ def create_parser() -> argparse.ArgumentParser:
                      help="Flat sky level (enables sky background)")
     sky.add_argument("--sky-tilted", type=float, nargs="+", metavar="COEFF",
                      help="Tilted sky polynomial coefficients [a, b, c, d, e, f]")
+    sky.add_argument("--sky-sb-value", type=float, metavar="MAG",
+                     help="Sky surface brightness (mag/arcsec^2)")
 
     # Noise parameters
     noise = parser.add_argument_group("Noise")
     noise.add_argument("--noise-sigma", type=float, metavar="SIGMA",
                        help="Gaussian noise sigma (enables noise)")
     noise.add_argument("--snr", type=float, metavar="SNR",
-                       help="Target S/N at effective radius (enables noise)")
+                       help="Target S/N at effective radius (deprecated)")
     noise.add_argument("--seed", type=int, help="Random seed for noise")
+    noise.add_argument("--sky-sb-limit", type=float, metavar="MAG",
+                       help="5-sigma surface brightness limit (mag/arcsec^2)")
+    noise.add_argument("--gain", type=float, metavar="GAIN",
+                       default=DEFAULT_GAIN, help="Detector gain (e-/ADU)")
 
     # Engine selection
     engine_group = parser.add_argument_group("Engine")
@@ -1625,14 +1735,22 @@ def main():
             psf_fwhm=args.psf_fwhm,
             psf_moffat_beta=args.moffat_beta,
             psf_file=args.psf_file,
-            sky_enabled=(args.sky is not None or args.sky_tilted is not None),
+            sky_enabled=(args.sky is not None or args.sky_tilted is not None or args.sky_sb_value is not None),
             sky_type="tilted" if args.sky_tilted else "flat",
             sky_level=args.sky if args.sky else 0.0,
             sky_coeffs=args.sky_tilted if args.sky_tilted else [0.0],
-            noise_enabled=(args.noise_sigma is not None or args.snr is not None),
+            sky_sb_value=args.sky_sb_value,
+            noise_enabled=(
+                args.noise_sigma is not None
+                or args.snr is not None
+                or args.sky_sb_limit is not None
+                or args.sky_sb_value is not None
+            ),
             noise_sigma=args.noise_sigma,
             noise_snr=args.snr,
             noise_seed=args.seed,
+            sky_sb_limit=args.sky_sb_limit,
+            gain=args.gain,
             engine=args.engine,
             profit_cli_path=profit_cli
         )

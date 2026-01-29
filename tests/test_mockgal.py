@@ -33,6 +33,8 @@ from mockgal import (
     kpc_to_arcsec,
     parse_huang2013,
     save_fits,
+    sb_limit_to_sigma,
+    sb_mag_to_flux_per_pixel,
 )
 
 
@@ -144,6 +146,20 @@ class TestCosmology:
         app1 = abs_to_app_mag(-20.0, z=0.01, k_corr=0.0)
         app2 = abs_to_app_mag(-20.0, z=0.01, k_corr=0.5)
         assert np.isclose(app2 - app1, 0.5, rtol=1e-10)
+
+
+class TestSurfaceBrightnessConversions:
+    """Test surface brightness conversion helpers."""
+
+    def test_sb_mag_to_flux_per_pixel(self):
+        """SB=ZP at 1 arcsec/pixel should give flux=1."""
+        flux = sb_mag_to_flux_per_pixel(27.0, pixel_scale=1.0, zeropoint=27.0)
+        assert np.isclose(flux, 1.0, rtol=1e-10)
+
+    def test_sb_limit_to_sigma(self):
+        """5-sigma SB limit converts to sigma=flux/5."""
+        sigma = sb_limit_to_sigma(27.0, pixel_scale=1.0, zeropoint=27.0)
+        assert np.isclose(sigma, 0.2, rtol=1e-10)
 
 
 # =============================================================================
@@ -487,6 +503,38 @@ class TestMockImageGenerator:
 
         # Different seeds should give different results
         assert not np.allclose(image1, image2)
+
+    def test_generate_with_sky_sb_limit_noise(self, simple_galaxy):
+        """Generate image with Gaussian noise from SB limit."""
+        config = ImageConfig(
+            size_pixels=101,
+            noise_enabled=True,
+            sky_sb_limit=27.0,
+            noise_seed=42,
+        )
+        gen = MockImageGenerator(config)
+        image, _ = gen.generate(simple_galaxy)
+
+        assert image.max() > 0
+        assert np.isfinite(image).all()
+
+    def test_generate_with_sky_sb_value_poisson(self, simple_galaxy):
+        """Generate image with Poisson noise from sky SB value."""
+        config = ImageConfig(
+            size_pixels=101,
+            sky_enabled=True,
+            sky_sb_value=22.0,
+            noise_enabled=True,
+            gain=4.0,
+            noise_seed=42,
+        )
+        gen = MockImageGenerator(config)
+        image1, _ = gen.generate(simple_galaxy)
+        image2, _ = gen.generate(simple_galaxy)
+
+        assert image1.max() > 0
+        assert np.isfinite(image1).all()
+        np.testing.assert_array_equal(image1, image2)
 
     def test_generate_multi_component(self, multi_component_galaxy, default_config):
         """Generate multi-component galaxy."""

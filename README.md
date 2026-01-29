@@ -201,6 +201,9 @@ usage: mockgal.py [-h] (--models FILE | --single) [--config FILE]
 | `--size PIXELS` | Fixed image size (overrides size_factor) |
 | `-o DIR` | Output directory |
 | `-v` | Verbose output |
+| `--sky-sb-value MAG` | Sky surface brightness (mag/arcsec^2) for sky background |
+| `--sky-sb-limit MAG` | 5-sigma surface brightness limit (mag/arcsec^2) for Gaussian noise |
+| `--gain GAIN` | Detector gain (e-/ADU) for Poisson noise |
 
 ## Output
 
@@ -224,6 +227,16 @@ WARNING - Computed image size 9171x9171 exceeds maximum (4001). Capping to 4001x
 ### libprofit PSF Convolution
 
 On some systems, `profit-cli` fails to load PSF FITS files (e.g., "less data found than expected"). In this case, PSF convolution is applied in Python after the libprofit render, which keeps results consistent across engines.
+
+### Background-Dominated Noise
+
+Two background-dominated noise modes are supported:
+
+1. **SB limit (Gaussian)**: Provide a 5-sigma surface brightness limit (`sky_sb_limit`, mag/arcsec^2). The per-pixel sigma is derived as:
+   `sigma = 10**(-0.4 * (sky_sb_limit - zeropoint)) * pixel_scale**2 / 5`
+2. **Sky SB + gain (Poisson)**: Provide `sky_sb_value` (mag/arcsec^2) and `gain` (e-/ADU). A flat sky image is added to the galaxy, then Poisson noise is drawn on the combined image.
+
+If both `sky_sb_value` and `sky_sb_limit` are provided, `sky_sb_value` takes precedence (a warning is logged).
 
 ### Memory-Limited Systems
 
