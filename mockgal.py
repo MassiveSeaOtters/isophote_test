@@ -1436,9 +1436,24 @@ def visualize_galaxy(
     # Display image with arcsinh scaling
     im = ax.imshow(scaled_image, origin='lower', cmap=cmap, interpolation='nearest')
 
-    # Add colorbar
+    # Add colorbar with surface-brightness labels
     cbar = plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
-    cbar.set_label('arcsinh(Flux)', fontsize=12)
+    pixel_scale = meta.get('pixel_scale', DEFAULT_PIXEL_SCALE)
+    zeropoint = meta.get('zeropoint', DEFAULT_ZEROPOINT)
+    positive = image[np.isfinite(image) & (image > 0)]
+    if positive.size > 0:
+        fmin = np.nanpercentile(positive, 10)
+        fmax = np.nanpercentile(positive, 99.5)
+        if fmax <= fmin:
+            fmax = fmin * 1.1
+        flux_ticks = np.geomspace(fmin, fmax, num=5)
+        scaled_ticks = np.arcsinh(flux_ticks / scale)
+        mu_ticks = zeropoint - 2.5 * np.log10(flux_ticks / (pixel_scale ** 2))
+        cbar.set_ticks(scaled_ticks)
+        cbar.set_ticklabels([f"{mu:.1f}" for mu in mu_ticks])
+        cbar.set_label('Surface brightness (mag/arcsec^2)', fontsize=12)
+    else:
+        cbar.set_label('arcsinh(Flux)', fontsize=12)
 
     # Generate smoothed version for contours
     smoothed = gaussian_filter(image, sigma=sigma_smooth)
@@ -1470,7 +1485,6 @@ def visualize_galaxy(
     ax.set_title(title, fontsize=16, fontweight='bold', pad=10)
 
     # Add axis labels
-    pixel_scale = meta.get('pixel_scale', DEFAULT_PIXEL_SCALE)
     ax.set_xlabel(f'X [pixels] ({pixel_scale:.2f}"/pix)', fontsize=12)
     ax.set_ylabel(f'Y [pixels] ({pixel_scale:.2f}"/pix)', fontsize=12)
 

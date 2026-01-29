@@ -8,7 +8,7 @@ A Python tool for generating realistic mock galaxy images with Sersic profiles, 
 - Support for libprofit (fast C++) and astropy (pure Python) backends
 - PSF convolution (Gaussian, Moffat, or custom image)
 - Realistic sky background (flat or tilted polynomial)
-- Noise injection (fixed sigma or SNR-based)
+- Noise injection (fixed sigma or sky-SB-limited)
 - Batch processing with optional parallelization
 - FITS output with complete metadata headers
 
@@ -36,7 +36,7 @@ python mockgal.py --single \
     --abs-mag -21.0 \
     --sersic-n 4.0 \
     --psf --psf-fwhm 0.8 \
-    --snr 100 \
+    --sky-sb-limit 27.0 \
     -o output/
 ```
 
@@ -52,7 +52,7 @@ python mockgal.py --single \
     --ellip 0.2 0.5 \
     --pa 45 45 \
     --psf --psf-fwhm 1.0 \
-    --snr 50 \
+    --sky-sb-limit 27.5 \
     -o output/
 ```
 
@@ -149,7 +149,7 @@ image_configs:
     psf_fwhm: 0.8
     psf_moffat_beta: 4.765
     noise_enabled: true
-    noise_snr: 50
+    sky_sb_limit: 27.0
     noise_seed: 42
 ```
 
@@ -182,7 +182,7 @@ usage: mockgal.py [-h] (--models FILE | --single) [--config FILE]
                   [--psf] [--psf-fwhm PSF_FWHM] [--psf-type {gaussian,moffat,image}]
                   [--psf-file FILE] [--moffat-beta MOFFAT_BETA]
                   [--sky LEVEL] [--sky-tilted COEFF [COEFF ...]]
-                  [--noise-sigma SIGMA] [--snr SNR] [--seed SEED]
+                  [--noise-sigma SIGMA] [--seed SEED]
                   [--engine {libprofit,astropy,auto}] [--profit-cli PATH]
                   [-o DIR] [--format {fits,npy}]
                   [--galaxy NAME [NAME ...]] [--workers WORKERS] [-v]
@@ -211,7 +211,7 @@ FITS files include comprehensive headers with:
 - Galaxy parameters (name, redshift, components)
 - Image settings (pixel scale, zeropoint, size)
 - PSF configuration (type, FWHM, beta)
-- Noise parameters (sigma, SNR, seed)
+- Noise parameters (sigma, sky SB limit, seed)
 - Component details (Re, magnitude, Sersic n, ellipticity, PA)
 
 ## Notes
@@ -228,7 +228,11 @@ WARNING - Computed image size 9171x9171 exceeds maximum (4001). Capping to 4001x
 
 On some systems, `profit-cli` fails to load PSF FITS files (e.g., "less data found than expected"). In this case, PSF convolution is applied in Python after the libprofit render, which keeps results consistent across engines.
 
-### Background-Dominated Noise
+### Noise Model (current)
+
+MockGal uses sky-surface-brightness–based noise. The recommended path is `--sky-sb-limit`, which interprets the provided value as a 5-sigma surface brightness limit (mag/arcsec^2) and derives a per-pixel Gaussian sigma using the pixel scale and zeropoint. For Poisson noise with a sky background, provide `--sky-sb-value` (mag/arcsec^2) and `--gain` (e-/ADU).
+
+### Background-Dominated Noise (current)
 
 Two background-dominated noise modes are supported:
 
