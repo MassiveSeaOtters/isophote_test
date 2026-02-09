@@ -442,7 +442,7 @@ class TestMockImageGenerator:
         config = ImageConfig(
             size_pixels=101,
             psf_enabled=True,
-            psf_type="image",
+            psf_type="file",
             psf_file=str(psf_image_path),
         )
         gen = MockImageGenerator(config)
@@ -450,7 +450,7 @@ class TestMockImageGenerator:
 
         assert image.max() > 0
         assert meta["psf_enabled"] is True
-        assert meta["psf_type"] == "image"
+        assert meta["psf_type"] == "file"
 
     def test_generate_with_flat_sky(self, simple_galaxy):
         """Generate image with flat sky background."""

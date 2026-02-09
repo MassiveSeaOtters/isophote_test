@@ -6,7 +6,7 @@ A Python tool for generating realistic mock galaxy images with Sersic profiles, 
 
 - Multi-component Sersic profile rendering
 - Support for libprofit (fast C++) and astropy (pure Python) backends
-- PSF convolution (Gaussian, Moffat, or custom image)
+- PSF convolution (Gaussian, Moffat, file, or array)
 - Realistic sky background (flat or tilted polynomial)
 - Noise injection (fixed sigma or sky-SB-limited)
 - Batch processing with optional parallelization
@@ -21,8 +21,9 @@ pip install numpy scipy astropy pyyaml
 For optimal performance, build libprofit and ensure `profit-cli` is available (set `LIBPROFIT_PATH` or the legacy `PROFIT_CLI_PATH`):
 ```bash
 export LIBPROFIT_PATH=/path/to/profit-cli
-```
+```pwd
 
+****
 ## Quick Start
 
 ### Single Galaxy Mode
@@ -179,7 +180,7 @@ usage: mockgal.py [-h] (--models FILE | --single) [--config FILE]
                   [--ellip ELLIP [ELLIP ...]] [--pa PA [PA ...]]
                   [--pixel-scale PIXEL_SCALE] [--zeropoint ZEROPOINT]
                   [--size-factor SIZE_FACTOR] [--size PIXELS]
-                  [--psf] [--psf-fwhm PSF_FWHM] [--psf-type {gaussian,moffat,image}]
+                  [--psf] [--psf-fwhm PSF_FWHM] [--psf-type {gaussian,moffat,file,array}]
                   [--psf-file FILE] [--moffat-beta MOFFAT_BETA]
                   [--sky LEVEL] [--sky-tilted COEFF [COEFF ...]]
                   [--noise-sigma SIGMA] [--seed SEED]

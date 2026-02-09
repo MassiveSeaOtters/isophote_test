@@ -83,8 +83,12 @@ MAX_IMAGE_SIZE = 4001      # maximum image dimension to avoid memory issues
 DEFAULT_H0 = 70.0  # km/s/Mpc
 DEFAULT_OM = 0.3
 
+
 # profit-cli path (can be overridden via CLI or environment variable)
+os.environ["LIBPROFIT_PATH"] = "/Users/denekow/Documents/Research/xx_package/libprofit/build/profit-cli"
+os.environ["PATH"] = os.environ["LIBPROFIT_PATH"] + ":" + os.environ["PATH"]
 LIBPROFIT_PATH = os.environ.get('LIBPROFIT_PATH', None)
+
 PROFIT_CLI_PATH = os.environ.get('PROFIT_CLI_PATH', None)
 
 logging.basicConfig(
@@ -156,10 +160,11 @@ class ImageConfig:
 
     # PSF configuration
     psf_enabled: bool = False
-    psf_type: str = "gaussian"  # gaussian | moffat | image
+    psf_type: str = "gaussian"  # gaussian | moffat | file | array
     psf_fwhm: float = DEFAULT_PSF_FWHM
     psf_moffat_beta: float = DEFAULT_MOFFAT_BETA
     psf_file: Optional[str] = None
+    psf_array: Optional[np.ndarray] = None  # Direct PSF array input
 
     # Sky configuration
     sky_enabled: bool = False
@@ -183,8 +188,8 @@ class ImageConfig:
     def __post_init__(self):
         if self.pixel_scale <= 0:
             raise ValueError(f"pixel_scale must be positive, got {self.pixel_scale}")
-        if self.psf_type not in ("gaussian", "moffat", "image"):
-            raise ValueError(f"psf_type must be gaussian|moffat|image, got {self.psf_type}")
+        if self.psf_type not in ("gaussian", "moffat", "file", "array"):
+            raise ValueError(f"psf_type must be gaussian|moffat|file|array, got {self.psf_type}")
         if self.sky_type not in ("flat", "tilted"):
             raise ValueError(f"sky_type must be flat|tilted, got {self.sky_type}")
         if self.engine not in ("libprofit", "astropy", "auto"):
@@ -351,6 +356,7 @@ def find_profit_cli(custom_path: Optional[str] = None) -> Optional[str]:
     str or None
         Path to profit-cli if found, None otherwise
     """
+    logging.info(f"LIBPROFIT_PATH: {LIBPROFIT_PATH}")
     # Check custom path first
     resolved = _resolve_profit_cli_path(custom_path)
     if resolved:
@@ -755,11 +761,20 @@ class MockImageGenerator:
 
     def _make_psf(self) -> np.ndarray:
         """Generate or load PSF image."""
-        if self.config.psf_type == "image":
+        # Priority 1: Use direct array input if provided
+        if self.config.psf_type == "array":
+            if self.config.psf_array is None:
+                raise ValueError("psf_array required when psf_type='array'")
+            psf = self.config.psf_array.astype(np.float64)
+            return psf / psf.sum()  # Normalize to unity
+        
+        # Priority 2: Load from file
+        if self.config.psf_type == "file":
             if self.config.psf_file is None:
-                raise ValueError("psf_file required when psf_type='image'")
+                raise ValueError("psf_file required when psf_type='file'")
             return fits.getdata(self.config.psf_file).astype(np.float64)
 
+        # Priority 3: Generate analytical PSF (Gaussian or Moffat)
         fwhm_pix = self.config.psf_fwhm / self.config.pixel_scale
         size = int(10 * fwhm_pix) | 1  # Odd size, at least 10x FWHM
         size = max(size, 11)  # Minimum size
@@ -1670,7 +1685,7 @@ def create_parser() -> argparse.ArgumentParser:
     psf.add_argument("--psf-type", choices=["gaussian", "moffat", "image"],
                      default="gaussian", help="PSF type")
     psf.add_argument("--psf-file", metavar="FILE",
-                     help="PSF image file (for --psf-type image)")
+                     help="PSF image file (for --psf-type file)")
     psf.add_argument("--moffat-beta", type=float, default=DEFAULT_MOFFAT_BETA,
                      help="Moffat beta parameter")
 
