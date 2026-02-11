@@ -1,8 +1,8 @@
-# Examples Directory
+# Inputs Directory
 
 This directory contains input data files (galaxy models and image configurations) and utility scripts for MockGal.
 
-> **Note:** This directory will be renamed to `inputs/` to better reflect its purpose as input data rather than example code. See `MIGRATION.md` for details.
+> **Note:** This directory was renamed from `examples/` to `inputs/` to better reflect its purpose as input data rather than example code. See `../MIGRATION.md` for migration details.
 
 ## Directory Contents
 
@@ -60,6 +60,7 @@ Original data format with columns: Name, Distance, VMag, Re_V, etc.
 | File | Purpose | Input | Output |
 |------|---------|-------|--------|
 | `convert_huang2013.py` | Convert ASCII catalog to YAML | `huang2013_cgs_model.txt` | `huang2013_models.yaml` |
+| `generate_huang2013_mocks.py` | **Generate systematic mock images for all 93 Huang2013 galaxies** | `huang2013_models.yaml` | 372 FITS files (4 mocks × 93 galaxies) |
 | `api_call_demo.py` | Demonstrate Python API usage | - | Demo images |
 | `demo_visualization.py` | Demonstrate visualization features | Model + config files | PNG visualizations |
 | `huang2013_noise_sblimit_demo.py` | Demo sky background and noise simulation | Huang2013 models | Noisy galaxy images |
@@ -115,6 +116,97 @@ python examples/demo_visualization.py
 python examples/huang2013_noise_sblimit_demo.py
 python examples/huang2013_noise_sbvalue_demo.py
 ```
+
+### Systematic Mock Generation for Huang2013 Sample
+
+The `generate_huang2013_mocks.py` script creates a complete set of mock images for all 93 Huang2013 galaxies with standardized configurations. This is useful for systematic testing of isophote fitting algorithms at different redshifts and noise levels.
+
+#### Mock Configurations
+
+The script generates **4 mock versions** of each galaxy:
+
+| Mock | Redshift | Pixel Scale | PSF | Noise | Purpose |
+|------|----------|-------------|-----|-------|---------|
+| **mock1** | z=0.05 | HSC (0.168"/pix) | FWHM=0.7" | None | Clean, nearby galaxy baseline |
+| **mock2** | z=0.05 | HSC (0.168"/pix) | FWHM=0.7" | sky_sb_limit=24.0 | Nearby with realistic noise |
+| **mock3** | z=0.20 | HSC (0.168"/pix) | FWHM=0.7" | sky_sb_limit=24.0 | Intermediate redshift |
+| **mock4** | z=0.50 | HSC (0.168"/pix) | FWHM=0.7" | sky_sb_limit=24.0 | High redshift, fainter |
+
+**What each mock means:**
+
+- **Mock 1** (z=0.05, no noise): Best-case scenario for nearby galaxies. Use this to establish ground truth for isophote fitting algorithms without noise complications.
+
+- **Mock 2** (z=0.05, noisy): Realistic nearby galaxy observation with HSC-like depth (24 mag/arcsec² at 5σ). Tests algorithm robustness to noise at high S/N.
+
+- **Mock 3** (z=0.20, noisy): Galaxies appear smaller and fainter (~4× lower surface brightness than mock2). Tests performance on intermediate-redshift galaxies where surface brightness dimming becomes significant.
+
+- **Mock 4** (z=0.50, noisy): Challenging regime where galaxies are significantly smaller and fainter (~20× lower surface brightness than mock2). Tests algorithm limits and determines the effective redshift range for reliable fitting.
+
+**Key Parameters:**
+- **HSC pixel scale**: 0.168 arcsec/pixel (Hyper Suprime-Cam on Subaru Telescope)
+- **PSF**: Gaussian with FWHM=0.7 arcsec (typical good seeing)
+- **Image size**: Maximum 4000×4000 pixels (enforced to prevent memory issues)
+- **Noise model**: Sky-background-dominated Gaussian noise (sky_sb_limit = 5σ depth)
+- **Zeropoint**: 27.0 mag (typical for modern surveys)
+
+#### Usage
+
+**Generate all 93 galaxies (recommended for full datasets):**
+```bash
+python inputs/generate_huang2013_mocks.py --output /path/to/output
+```
+
+**Generate specific galaxies for testing:**
+```bash
+python inputs/generate_huang2013_mocks.py --output /path/to/output \
+    --galaxies "NGC 3923" "IC 1459" "NGC 1399"
+```
+
+**Test with first 2 galaxies:**
+```bash
+python inputs/generate_huang2013_mocks.py --output /path/to/output --test
+```
+
+**Get help:**
+```bash
+python inputs/generate_huang2013_mocks.py --help
+```
+
+#### Output Structure
+
+```
+output_dir/
+└── huang2013/
+    ├── ESO185-G054/
+    │   ├── ESO185-G054_mock1.fits  # z=0.05, no noise
+    │   ├── ESO185-G054_mock2.fits  # z=0.05, with noise
+    │   ├── ESO185-G054_mock3.fits  # z=0.20, with noise
+    │   └── ESO185-G054_mock4.fits  # z=0.50, with noise
+    ├── NGC3923/
+    │   ├── NGC3923_mock1.fits
+    │   ├── NGC3923_mock2.fits
+    │   ├── NGC3923_mock3.fits
+    │   └── NGC3923_mock4.fits
+    └── ... (91 more galaxies)
+```
+
+Each galaxy gets its own subdirectory with 4 FITS files (one per mock configuration).
+
+#### Performance and Output Size
+
+- **Processing time**: ~23 seconds per galaxy × 4 mocks = ~92 sec/galaxy
+- **Full dataset**: 93 galaxies × ~92 sec ≈ **35 minutes**
+- **File size**: ~61 MB per FITS file (4000×4000 pixels)
+- **Per-galaxy output**: 4 files × 61 MB ≈ **244 MB**
+- **Total output**: 372 files ≈ **23 GB**
+
+#### Use Cases
+
+1. **Algorithm benchmarking**: Compare isophote fitting performance across the 4 redshifts
+2. **Noise robustness testing**: Mock1 vs Mock2 shows impact of noise at fixed redshift
+3. **Redshift scaling**: Mock2/3/4 show how galaxy size and S/N change with redshift
+4. **Training data**: Use for machine learning algorithms that need diverse galaxy images
+5. **Systematic validation**: Ensure isophote fitting works across the full Huang2013 sample
 
 ## File Relationships
 
