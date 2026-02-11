@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Benchmark comparing pyprofit and astropy Sersic rendering engines.
+Benchmark comparing libprofit and astropy Sersic rendering engines.
 
 Run with: python benchmarks/bench_engines.py
 
@@ -11,6 +11,7 @@ Tests:
 """
 
 import json
+import platform
 import sys
 import time
 from pathlib import Path
@@ -21,7 +22,114 @@ from scipy.special import gammaincinv
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from mockgal import SersicEngine, HAS_PYPROFIT
+from mockgal import SersicEngine
+
+# Check if libprofit is available
+try:
+    from mockgal import find_profit_cli
+    HAS_LIBPROFIT = find_profit_cli() is not None
+except (ImportError, Exception):
+    HAS_LIBPROFIT = False
+
+
+def get_system_info() -> dict:
+    """
+    Collect system information for benchmark context.
+
+    Returns
+    -------
+    dict
+        System information including CPU, memory, OS, Python version
+    """
+    info = {
+        'platform': platform.platform(),
+        'os': platform.system(),
+        'os_version': platform.version(),
+        'architecture': platform.machine(),
+        'processor': platform.processor(),
+        'python_version': sys.version,
+        'python_implementation': platform.python_implementation(),
+    }
+
+    # Add memory info if psutil available (optional dependency)
+    try:
+        import psutil
+        mem = psutil.virtual_memory()
+        info['total_memory_gb'] = round(mem.total / (1024**3), 2)
+        info['available_memory_gb'] = round(mem.available / (1024**3), 2)
+        info['cpu_count'] = psutil.cpu_count(logical=False)
+        info['cpu_count_logical'] = psutil.cpu_count(logical=True)
+    except ImportError:
+        info['memory_note'] = 'psutil not available (install for detailed memory info)'
+
+    return info
+
+
+def generate_summary_report(results: dict, output_path: Path) -> None:
+    """
+    Generate human-readable markdown summary of benchmark results.
+
+    Parameters
+    ----------
+    results : dict
+        Benchmark results dictionary with system_info and benchmark data
+    output_path : Path
+        Output markdown file path
+    """
+    with open(output_path, 'w') as f:
+        f.write("# MockGal Benchmark Results\n\n")
+
+        # System info
+        f.write("## System Information\n\n")
+        f.write(f"**Date:** {results['timestamp']}\n\n")
+        for key, value in results['system_info'].items():
+            f.write(f"- **{key.replace('_', ' ').title()}:** {value}\n")
+
+        # Rendering speed summary
+        f.write("\n## Rendering Speed Summary\n\n")
+        f.write("| Sersic Index | Image Size | Astropy (ms) | Libprofit (ms) | Faster |\n")
+        f.write("|--------------|------------|--------------|----------------|--------|\n")
+        for entry in results['rendering_speed']:
+            astropy_ms = entry['astropy_s'] * 1000
+            libprofit_ms = entry.get('libprofit_s', 0) * 1000 if entry.get('libprofit_s') else None
+
+            if libprofit_ms:
+                # Calculate which is faster
+                if astropy_ms < libprofit_ms:
+                    ratio = libprofit_ms / astropy_ms
+                    faster = f"astropy ({ratio:.1f}x)"
+                else:
+                    ratio = astropy_ms / libprofit_ms
+                    faster = f"libprofit ({ratio:.1f}x)"
+                f.write(f"| {entry['n']:.1f} | {entry['size']} | {astropy_ms:.2f} | {libprofit_ms:.2f} | {faster} |\n")
+            else:
+                f.write(f"| {entry['n']:.1f} | {entry['size']} | {astropy_ms:.2f} | - | - |\n")
+
+        # PSF overhead summary
+        f.write("\n## PSF Convolution Overhead\n\n")
+        f.write("| PSF Size | Engine | Time (ms) | Overhead |\n")
+        f.write("|----------|--------|-----------|----------|\n")
+        for entry in results['psf_convolution']:
+            time_ms = entry['with_psf_ms']
+            overhead = entry['overhead_pct']
+            f.write(f"| {entry['psf_size']}x{entry['psf_size']} | {entry['engine']} | {time_ms:.2f} | {overhead:.0f}% |\n")
+
+        # Profile consistency summary
+        f.write("\n## Profile Consistency\n\n")
+        f.write("Comparison against point-evaluation Sersic formula. **Note:** This test favors astropy's \n")
+        f.write("point-evaluation method. Libprofit uses pixel integration which is more physically accurate \n")
+        f.write("but shows \"deviation\" from simple point formulas.\n\n")
+        f.write("| Sersic Index | Engine | Max Deviation | Median Deviation | Method |\n")
+        f.write("|--------------|--------|---------------|------------------|--------|\n")
+        for entry in results['accuracy']:
+            method = "Point eval" if entry['engine'] == 'astropy' else "Pixel integration"
+            f.write(f"| {entry['n']:.1f} | {entry['engine']} | {entry['max_rel_dev']:.4f} | {entry['median_rel_dev']:.4f} | {method} |\n")
+
+        f.write("\n## Notes\n\n")
+        f.write("- Complete data available in `benchmark_results.json`\n")
+        f.write("- Times are averaged over multiple iterations\n")
+        f.write("- \"Deviation\" measures consistency with point-evaluation formula, not accuracy\n")
+        f.write("- Libprofit's pixel integration is more accurate physically but differs from point formulas\n")
 
 
 def benchmark_rendering_speed(n_iterations: int = 10):
@@ -43,10 +151,10 @@ def benchmark_rendering_speed(n_iterations: int = 10):
     image_sizes = [256, 512, 1024]
     engines_to_test = ["astropy"]
 
-    if HAS_PYPROFIT:
-        engines_to_test.append("pyprofit")
+    if HAS_LIBPROFIT:
+        engines_to_test.append("libprofit")
     else:
-        print("Note: pyprofit not available, benchmarking astropy only")
+        print("Note: libprofit not available, benchmarking astropy only")
 
     for n in sersic_indices:
         for size in image_sizes:
@@ -84,8 +192,8 @@ def benchmark_rendering_speed(n_iterations: int = 10):
                     row[f'{engine_name}_s'] = None
 
             # Compute speedup if both available
-            if HAS_PYPROFIT and row.get('pyprofit_s') and row.get('astropy_s'):
-                row['speedup'] = row['astropy_s'] / row['pyprofit_s']
+            if HAS_LIBPROFIT and row.get('libprofit_s') and row.get('astropy_s'):
+                row['speedup'] = row['astropy_s'] / row['libprofit_s']
             else:
                 row['speedup'] = None
 
@@ -93,13 +201,13 @@ def benchmark_rendering_speed(n_iterations: int = 10):
 
             # Print result
             astropy_time = row.get('astropy_s', 0) * 1000
-            pyprofit_time = row.get('pyprofit_s', 0) * 1000 if row.get('pyprofit_s') else None
+            libprofit_time = row.get('libprofit_s', 0) * 1000 if row.get('libprofit_s') else None
             speedup = row.get('speedup', '')
 
-            if pyprofit_time is not None:
+            if libprofit_time is not None:
                 print(f"n={n:.1f}, size={size:4d}: "
                       f"astropy={astropy_time:6.2f}ms, "
-                      f"pyprofit={pyprofit_time:6.2f}ms, "
+                      f"libprofit={libprofit_time:6.2f}ms, "
                       f"speedup={speedup:.1f}x")
             else:
                 print(f"n={n:.1f}, size={size:4d}: astropy={astropy_time:6.2f}ms")
@@ -109,15 +217,19 @@ def benchmark_rendering_speed(n_iterations: int = 10):
 
 def benchmark_accuracy():
     """
-    Compare rendered profiles against analytical 1D Sersic profile.
+    Compare rendering methods between engines.
+
+    Note: This compares against a point-evaluation Sersic formula, which
+    favors astropy's point-evaluation method. Libprofit uses pixel integration
+    which is more physically accurate but shows deviation from point formulas.
 
     Returns
     -------
     list of dict
-        Results with accuracy metrics
+        Results with consistency metrics
     """
     print("\n" + "=" * 60)
-    print("Benchmark: Accuracy vs Analytical Profile")
+    print("Benchmark: Profile Consistency (Point-Evaluation Formula)")
     print("=" * 60)
 
     results = []
@@ -125,8 +237,8 @@ def benchmark_accuracy():
     sersic_indices = [1.0, 4.0, 8.0]
     engines_to_test = ["astropy"]
 
-    if HAS_PYPROFIT:
-        engines_to_test.append("pyprofit")
+    if HAS_LIBPROFIT:
+        engines_to_test.append("libprofit")
 
     size = 501
     re_pix = 50.0
@@ -194,8 +306,8 @@ def benchmark_psf_convolution(n_iterations: int = 5):
     results = []
     engines_to_test = ["astropy"]
 
-    if HAS_PYPROFIT:
-        engines_to_test.append("pyprofit")
+    if HAS_LIBPROFIT:
+        engines_to_test.append("libprofit")
 
     size = 512
     psf_sizes = [11, 33, 65]  # Odd sizes for centered PSF
@@ -269,8 +381,8 @@ def benchmark_ellipticity_range():
     results = []
     engines_to_test = ["astropy"]
 
-    if HAS_PYPROFIT:
-        engines_to_test.append("pyprofit")
+    if HAS_LIBPROFIT:
+        engines_to_test.append("libprofit")
 
     ellipticities = [0.0, 0.3, 0.5, 0.7, 0.8, 0.9, 0.95]
     size = 201
@@ -293,7 +405,7 @@ def benchmark_ellipticity_range():
                 elapsed = time.perf_counter() - start
 
                 # Verify result is valid
-                is_valid = (
+                is_valid = bool(
                     np.isfinite(image).all() and
                     image.max() > 0 and
                     image.min() >= 0
@@ -325,38 +437,65 @@ def benchmark_ellipticity_range():
 
 
 def main():
-    """Run all benchmarks."""
-    print("Mock Galaxy Image Generator - Engine Benchmarks")
-    print(f"pyprofit available: {HAS_PYPROFIT}")
+    """Run all benchmarks and save results."""
+    print("="*60)
+    print("MockGal Benchmark Suite")
+    print("="*60)
+
+    print("\nCollecting system information...")
+    system_info = get_system_info()
+
+    print("\nSystem Information:")
+    for key, value in system_info.items():
+        print(f"  {key}: {value}")
+
+    print(f"\nlibprofit available: {HAS_LIBPROFIT}")
     print()
 
-    all_results = {}
-
     # Run benchmarks
-    all_results['rendering_speed'] = benchmark_rendering_speed()
-    all_results['accuracy'] = benchmark_accuracy()
-    all_results['psf_convolution'] = benchmark_psf_convolution()
-    all_results['ellipticity_range'] = benchmark_ellipticity_range()
+    speed_results = benchmark_rendering_speed()
+    accuracy_results = benchmark_accuracy()
+    psf_results = benchmark_psf_convolution()
+    ellipticity_results = benchmark_ellipticity_range()
 
     # Summary
     print("\n" + "=" * 60)
     print("Summary")
     print("=" * 60)
 
-    if HAS_PYPROFIT:
-        speed_results = all_results['rendering_speed']
+    if HAS_LIBPROFIT:
         speedups = [r['speedup'] for r in speed_results if r.get('speedup')]
         if speedups:
-            avg_speedup = np.mean(speedups)
-            print(f"Average pyprofit speedup over astropy: {avg_speedup:.1f}x")
+            avg_ratio = np.mean(speedups)
+            if avg_ratio < 1.0:
+                # Astropy is faster
+                print(f"Average performance: astropy is {1/avg_ratio:.1f}x faster than libprofit")
+            else:
+                # Libprofit is faster
+                print(f"Average performance: libprofit is {avg_ratio:.1f}x faster than astropy")
     else:
-        print("Install pyprofit for performance comparison")
+        print("Install libprofit for performance comparison")
 
-    # Save results to JSON
-    output_path = Path(__file__).parent / "benchmark_results.json"
-    with open(output_path, 'w') as f:
-        json.dump(all_results, f, indent=2, default=str)
-    print(f"\nResults saved to: {output_path}")
+    # Save results with system info and timestamp
+    results = {
+        'system_info': system_info,
+        'timestamp': time.strftime('%Y-%m-%d %H:%M:%S'),
+        'rendering_speed': speed_results,
+        'accuracy': accuracy_results,
+        'psf_convolution': psf_results,
+        'ellipticity_range': ellipticity_results,
+    }
+
+    output_file = Path(__file__).parent / 'benchmark_results.json'
+    with open(output_file, 'w') as f:
+        json.dump(results, f, indent=2)
+
+    print(f"\nResults saved to {output_file}")
+
+    # Generate summary report
+    summary_file = output_file.with_suffix('.md')
+    generate_summary_report(results, summary_file)
+    print(f"Summary report saved to {summary_file}")
 
 
 if __name__ == "__main__":

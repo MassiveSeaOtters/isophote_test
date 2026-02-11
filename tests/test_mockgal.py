@@ -20,6 +20,7 @@ from mockgal import (
     DEFAULT_PIXEL_SCALE,
     DEFAULT_REDSHIFT,
     DEFAULT_ZEROPOINT,
+    HAS_MATPLOTLIB,
     MAX_SERSIC_INDEX,
     ImageConfig,
     MockGalaxy,
@@ -98,7 +99,7 @@ def default_config():
 @pytest.fixture
 def huang_catalog_path():
     """Path to Huang 2013 catalog."""
-    return Path(__file__).parent.parent / "examples" / "huang2013_cgs_model.txt"
+    return Path(__file__).parent.parent / "inputs" / "huang2013_cgs_model.txt"
 
 
 @pytest.fixture
@@ -753,6 +754,92 @@ class TestOutput:
             assert header['OBJECT'] == simple_galaxy.name
             assert header['NCOMP'] == 1
 
+    def test_output_png_without_fits(self, simple_galaxy, default_config, tmp_path):
+        """Test generating PNG directly without saving FITS."""
+        if not HAS_MATPLOTLIB:
+            pytest.skip("matplotlib not available")
+
+        from mockgal import visualize_galaxy
+
+        gen = MockImageGenerator(default_config)
+        image, metadata = gen.generate(simple_galaxy)
+
+        # Generate PNG directly without FITS
+        png_path = tmp_path / "direct.png"
+        visualize_galaxy(image, metadata=metadata, output_path=str(png_path))
+
+        assert png_path.exists()
+        assert not (tmp_path / "direct.fits").exists()
+
+    def test_filename_convention(self):
+        """Test new filename convention (no underscores in galaxy names)."""
+        from mockgal import sanitize_filename
+
+        galaxy_name = "NGC 3923"
+        config_name = "clean"
+
+        safe_galaxy = sanitize_filename(galaxy_name)
+        safe_config = sanitize_filename(config_name)
+
+        filename = f"{safe_galaxy}_{safe_config}.fits"
+        assert filename == "NGC3923_clean.fits"
+        assert "_" in filename  # Underscore between galaxy and config
+        assert filename.count("_") == 1  # Only one underscore
+
+
+# =============================================================================
+# Test Visualization
+# =============================================================================
+
+class TestVisualization:
+    """Tests for visualization functions."""
+
+    def test_visualize_from_fits(self, simple_galaxy, default_config, tmp_path):
+        """Test visualizing a FITS file (auto-generates PNG)."""
+        if not HAS_MATPLOTLIB:
+            pytest.skip("matplotlib not available")
+
+        from mockgal import visualize_galaxy
+
+        gen = MockImageGenerator(default_config)
+        image, metadata = gen.generate(simple_galaxy)
+
+        fits_path = tmp_path / "test.fits"
+        png_path = tmp_path / "test.png"
+        save_fits(image, metadata, fits_path)
+
+        # Should auto-generate PNG with same prefix
+        visualize_galaxy(str(fits_path))
+        assert png_path.exists()
+
+    def test_visualize_from_array(self, simple_galaxy, default_config, tmp_path):
+        """Test visualizing from numpy array with metadata."""
+        if not HAS_MATPLOTLIB:
+            pytest.skip("matplotlib not available")
+
+        from mockgal import visualize_galaxy
+
+        gen = MockImageGenerator(default_config)
+        image, metadata = gen.generate(simple_galaxy)
+
+        output_path = tmp_path / "test_array.png"
+        visualize_galaxy(image, metadata=metadata, output_path=str(output_path))
+        assert output_path.exists()
+
+    def test_visualize_custom_colormap(self, simple_galaxy, default_config, tmp_path):
+        """Test visualization with custom colormap."""
+        if not HAS_MATPLOTLIB:
+            pytest.skip("matplotlib not available")
+
+        from mockgal import visualize_galaxy
+
+        gen = MockImageGenerator(default_config)
+        image, metadata = gen.generate(simple_galaxy)
+
+        output_path = tmp_path / "test_magma.png"
+        visualize_galaxy(image, metadata=metadata, output_path=str(output_path), cmap='magma')
+        assert output_path.exists()
+
 
 # =============================================================================
 # Test Convention Conversions
@@ -782,6 +869,16 @@ class TestConventions:
         # Round-trip
         axrat_recovered = 1 - ellip
         assert np.isclose(axrat_recovered, axrat)
+
+    def test_sanitize_filename(self):
+        """Test filename sanitization removes spaces, not replaces with underscores."""
+        from mockgal import sanitize_filename
+
+        assert sanitize_filename("NGC 3923") == "NGC3923"
+        assert sanitize_filename("IC 1459") == "IC1459"
+        assert sanitize_filename("ESO 185-G054") == "ESO185-G054"
+        assert sanitize_filename("NGC  1399") == "NGC1399"  # multiple spaces
+        assert sanitize_filename("simple") == "simple"
 
 
 if __name__ == "__main__":

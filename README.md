@@ -12,6 +12,42 @@ A Python tool for generating realistic mock galaxy images with Sersic profiles, 
 - Batch processing with optional parallelization
 - FITS output with complete metadata headers
 
+## Repository Structure
+
+```
+mockgal/
+├── mockgal.py              # Main generator script (CLI + library)
+├── inputs/                 # Input data files (models, configs, demos)
+│   ├── example_models.yaml
+│   ├── huang2013_models.yaml
+│   ├── example_image_config.yaml
+│   ├── huang2013_test_config.yaml
+│   ├── convert_huang2013.py
+│   └── demo scripts...
+├── tests/                  # Test suite (pytest)
+│   ├── test_mockgal.py
+│   └── README.md
+├── benchmarks/             # Performance benchmarks
+│   ├── bench_engines.py
+│   └── README.md
+├── output/                 # Generated images (not in git)
+│   ├── test_*/            # Test outputs
+│   ├── huang2013_*/       # Batch processing
+│   └── README.md
+├── docs/                   # Additional documentation
+└── MIGRATION.md           # Migration guide for v2.0
+```
+
+### Directory Purposes
+
+- **`inputs/`** - Galaxy models, image configurations, and demo scripts
+- **`tests/`** - Test suite with 11 test classes and 57+ test functions
+- **`benchmarks/`** - Performance benchmarks with system info reports
+- **`output/`** - Generated mock galaxy images (organized by source)
+- **`docs/`** - Additional documentation and specifications
+
+See individual README files in each directory for detailed information.
+
 ## Requirements
 
 ```bash
@@ -82,7 +118,7 @@ Generate a mock image from a model file:
 from mockgal import generate_mock_image_from_model
 
 image, metadata = generate_mock_image_from_model(
-    model_path="examples/example_models.yaml",
+    model_path="inputs/example_models.yaml",
     galaxy_name="NGC_1399",
     config={"size_pixels": 51, "engine": "auto"},
 )
@@ -94,8 +130,8 @@ Process multiple galaxies from a YAML model file:
 
 ```bash
 python mockgal.py \
-    --models examples/huang2013_models.yaml \
-    --config examples/example_image_config.yaml \
+    --models inputs/huang2013_models.yaml \
+    --config inputs/example_image_config.yaml \
     -o output/ \
     --workers 1
 ```
@@ -104,8 +140,8 @@ Select specific galaxies:
 
 ```bash
 python mockgal.py \
-    --models examples/huang2013_models.yaml \
-    --config examples/example_image_config.yaml \
+    --models inputs/huang2013_models.yaml \
+    --config inputs/example_image_config.yaml \
     --galaxy "NGC 1399" "IC 1459" "NGC 1407" \
     -o output/ \
     --workers 4
@@ -159,13 +195,13 @@ The repository includes the Huang et al. (2013) CGS Survey catalog with 93 nearb
 
 ```bash
 # Convert ASCII catalog to YAML
-python examples/convert_huang2013.py examples/huang2013_cgs_model.txt -o examples/huang2013_models.yaml
+python inputs/convert_huang2013.py inputs/huang2013_cgs_model.txt -o inputs/huang2013_models.yaml
 
 # Generate images for selected galaxies
 python mockgal.py \
-    --models examples/huang2013_models.yaml \
+    --models inputs/huang2013_models.yaml \
     --galaxy "IC 1459" "NGC 1399" "NGC 1407" \
-    --config examples/huang2013_test_config.yaml \
+    --config inputs/huang2013_test_config.yaml \
     -o output/huang2013_test/ \
     --workers 1
 ```
@@ -204,6 +240,37 @@ usage: mockgal.py [-h] (--models FILE | --single) [--config FILE]
 | `--sky-sb-value MAG` | Sky surface brightness (mag/arcsec^2) for sky background |
 | `--sky-sb-limit MAG` | 5-sigma surface brightness limit (mag/arcsec^2) for Gaussian noise |
 | `--gain GAIN` | Detector gain (e-/ADU) for Poisson noise |
+
+## Development
+
+### Running Tests
+
+Full test suite with verbose output:
+```bash
+pytest tests/test_mockgal.py -v
+```
+
+Tests automatically organize output in `output/test_*/` subdirectories. See `tests/README.md` for test coverage details.
+
+### Running Benchmarks
+
+```bash
+python benchmarks/bench_engines.py
+```
+
+Results saved to:
+- `benchmarks/benchmark_results.json` - Complete data with system information
+- `benchmarks/benchmark_results.md` - Human-readable summary report
+
+### Output Organization
+
+Generated images are organized by source:
+- `output/test_*/` - Test outputs (organized by test name)
+- `output/huang2013_*/` - Batch processing outputs for Huang2013 catalog
+- `output/demo/` - Demo script outputs
+- `output/verification/` - Manual verification runs
+
+See `output/README.md` for complete details.
 
 ## Output
 
@@ -251,8 +318,11 @@ For systems with limited memory:
 
 ### Filename Convention
 
-Output filenames replace spaces with underscores:
-- Galaxy "IC 1459" with config "clean" → `IC_1459_clean.fits`
+Output filenames remove spaces from galaxy names:
+- Galaxy "NGC 3923" with config "clean" → `NGC3923_clean.fits`
+- Galaxy "IC 1459" with config "noisy" → `IC1459_noisy.fits`
+
+The underscore separates galaxy name from configuration name. See `MIGRATION.md` for details on changes from v1.x.
 
 ## References
 

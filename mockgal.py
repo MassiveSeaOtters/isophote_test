@@ -95,6 +95,36 @@ logger = logging.getLogger(__name__)
 
 
 # =============================================================================
+# Section 1.5: Helper Functions
+# =============================================================================
+
+def sanitize_filename(name: str) -> str:
+    """
+    Sanitize a name for use in filenames by removing spaces.
+
+    Examples
+    --------
+    >>> sanitize_filename("NGC 3923")
+    'NGC3923'
+    >>> sanitize_filename("IC 1459")
+    'IC1459'
+    >>> sanitize_filename("ESO 185-G054")
+    'ESO185-G054'
+
+    Parameters
+    ----------
+    name : str
+        Name to sanitize
+
+    Returns
+    -------
+    str
+        Sanitized filename-safe name
+    """
+    return ''.join(name.split())
+
+
+# =============================================================================
 # Section 2: Data Classes
 # =============================================================================
 
@@ -1531,10 +1561,10 @@ def process_single_job(args: Tuple[MockGalaxy, ImageConfig, str, str]) -> str:
     gen = MockImageGenerator(config)
     image, metadata = gen.generate(galaxy)
 
-    # Generate output filename (replace spaces with underscores)
+    # Generate output filename (remove spaces from galaxy name)
     suffix = '.fits' if output_format == 'fits' else '.npy'
-    safe_name = galaxy.name.replace(' ', '_')
-    safe_config = config.name.replace(' ', '_')
+    safe_name = sanitize_filename(galaxy.name)
+    safe_config = sanitize_filename(config.name)
     outpath = Path(output_dir) / f"{safe_name}_{safe_config}{suffix}"
 
     if output_format == 'fits':
@@ -1821,9 +1851,9 @@ def main():
         gen = MockImageGenerator(image_config)
         image, metadata = gen.generate(galaxy)
 
-        # Save output (replace spaces with underscores in filename)
+        # Save output (remove spaces from galaxy name in filename)
         suffix = '.fits' if args.format == 'fits' else '.npy'
-        safe_name = args.name.replace(' ', '_')
+        safe_name = sanitize_filename(args.name)
         outpath = Path(args.output) / f"{safe_name}{suffix}"
 
         if args.format == 'fits':

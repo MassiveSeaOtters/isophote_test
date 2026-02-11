@@ -11,13 +11,13 @@ MockGal is a mock galaxy image generator for testing isophote fitting algorithms
 | File | Purpose |
 |------|---------|
 | `mockgal.py` | Main generator script (CLI + library) |
-| `examples/convert_huang2013.py` | Converts Huang 2013 ASCII catalog to YAML |
-| `examples/huang2013_models.yaml` | 93 galaxies from Huang et al. (2013) |
-| `examples/example_image_config.yaml` | Sample image configurations |
-| `examples/huang2013_test_config.yaml` | Test config for Huang2013 galaxies |
-| `examples/huang2013_cgs_model.txt` | Source ASCII catalog from Huang et al. (2013) |
-| `examples/example_models.yaml` | Example galaxy models for testing |
-| `tests/test_mockgal.py` | Test suite |
+| `inputs/convert_huang2013.py` | Converts Huang 2013 ASCII catalog to YAML |
+| `inputs/huang2013_models.yaml` | 93 galaxies from Huang et al. (2013) |
+| `inputs/example_image_config.yaml` | Sample image configurations |
+| `inputs/huang2013_test_config.yaml` | Test config for Huang2013 galaxies |
+| `inputs/huang2013_cgs_model.txt` | Source ASCII catalog from Huang et al. (2013) |
+| `inputs/example_models.yaml` | Example galaxy models for testing |
+| `tests/test_mockgal.py` | Test suite (11 classes, 57+ functions) |
 | `benchmarks/bench_engines.py` | Performance benchmarks |
 
 ## Ground Rules
@@ -44,7 +44,9 @@ MockGal is a mock galaxy image generator for testing isophote fitting algorithms
    - Default redshift for Huang2013 galaxies: z=0.01
 
 5. **Output filenames must not contain spaces**
-   - Replace spaces with underscores: "IC 1459" → "IC_1459"
+   - Remove spaces from galaxy names: "NGC 3923" → "NGC3923"
+   - Underscore separates galaxy from config: "NGC3923_clean.fits"
+   - Use `sanitize_filename()` function for consistency
    - Applied in `process_single_job()` and single-galaxy mode
 
 ### Testing
@@ -52,8 +54,8 @@ MockGal is a mock galaxy image generator for testing isophote fitting algorithms
 6. **Standard test command for Huang2013 batch mode:**
    ```bash
    python mockgal.py \
-       --models examples/huang2013_models.yaml \
-       --config examples/huang2013_test_config.yaml \
+       --models inputs/huang2013_models.yaml \
+       --config inputs/huang2013_test_config.yaml \
        --galaxy "ESO 185-G054" "ESO 221-G026" "IC 1459" "IC 1633" "IC 2006" \
        --workers 1 \
        -o output/huang2013_test \
@@ -64,13 +66,28 @@ MockGal is a mock galaxy image generator for testing isophote fitting algorithms
    ```bash
    python -c "
    from astropy.io import fits
-   f = fits.open('output/huang2013_test/IC_1459_clean.fits')
+   f = fits.open('output/huang2013_test/IC1459_clean.fits')
    print(f'Shape: {f[0].data.shape}')
    print(f'Max flux: {f[0].data.max():.4e}')
    "
    ```
 
-8. All examples or demos should go into the "examples" folder.
+8. **All input data files go into the "inputs" folder**
+   - Model files (YAML/JSON galaxy definitions)
+   - Config files (image generation settings)
+   - Demo and utility scripts
+
+9. **Filename conventions for output**
+   - Galaxy names in filenames have spaces removed: "NGC 3923" → "NGC3923"
+   - Underscore separates galaxy name from config name: "NGC3923_clean.fits"
+   - Do NOT use underscores within galaxy names in output files
+   - Use `sanitize_filename()` function for consistency
+
+10. **Test and benchmark output organization**
+    - Tests save to `output/test_*/` subdirectories
+    - Benchmarks include system information in JSON results
+    - Benchmarks generate markdown summary reports
+    - PNG visualizations can be generated without FITS files
 
 ## Code Structure
 
@@ -93,6 +110,7 @@ MockGal is a mock galaxy image generator for testing isophote fitting algorithms
 - `generate_mock_image()`: Convenience API for direct image generation
 - `visualize_galaxy()`: Create PNG visualization with arcsinh scaling and contours
 - `parse_huang2013()`: Parse Huang 2013 ASCII catalog (for testing)
+- `sanitize_filename()`: Remove spaces from names for filenames
 
 ### Constants
 
@@ -109,7 +127,7 @@ MAX_IMAGE_SIZE = 4001          # maximum image dimension
 
 ### Adding a New Image Config
 
-Add to `examples/example_image_config.yaml`:
+Add to `inputs/example_image_config.yaml`:
 ```yaml
 - name: "new_config"
   pixel_scale: 0.3
@@ -124,7 +142,7 @@ Add to `examples/example_image_config.yaml`:
 
 If the source catalog or conversion logic changes:
 ```bash
-python examples/convert_huang2013.py examples/huang2013_cgs_model.txt -o examples/huang2013_models.yaml -v
+python inputs/convert_huang2013.py inputs/huang2013_cgs_model.txt -o inputs/huang2013_models.yaml -v
 ```
 
 ### Visualizing Mock Galaxy Images
@@ -134,10 +152,10 @@ Generate publication-quality visualizations with arcsinh scaling:
 from mockgal import visualize_galaxy
 
 # Visualize a FITS file (auto-generates PNG with same prefix)
-visualize_galaxy('output/IC_1459_clean.fits')
+visualize_galaxy('output/IC1459_clean.fits')
 
 # Customize visualization
-visualize_galaxy('output/NGC_1399_clean.fits',
+visualize_galaxy('output/NGC1399_clean.fits',
                 cmap='magma',           # perceptually uniform colormap
                 sigma_smooth=3.0,       # smoothing for contours
                 n_contours=10,          # number of contour levels

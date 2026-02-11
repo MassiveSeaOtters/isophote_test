@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Generate Huang2013 mock images with sky-sb-limit noise and PNG visualizations."""
+"""Generate Huang2013 mock images with sky-sb-value + gain Poisson noise."""
 from __future__ import annotations
 
 import math
@@ -11,13 +11,13 @@ from mockgal import (
     MockImageGenerator,
     kpc_to_arcsec,
     load_model_file,
+    sanitize_filename,
     save_fits,
-    sb_limit_to_sigma,
     visualize_galaxy,
 )
 
-MODEL_PATH = Path("examples/huang2013_models.yaml")
-OUTPUT_DIR = Path("output/huang2013_sblimit_noise_test")
+MODEL_PATH = Path("inputs/huang2013_models.yaml")
+OUTPUT_DIR = Path("output/huang2013_sbvalue_noise_test")
 TARGET_NAME = "NGC 3923"
 
 REDSHIFT = 0.3
@@ -26,7 +26,8 @@ PSF_FWHM = 0.7      # arcsec
 ZEROPOINT = 27.0
 MAX_SIZE_PIXELS = 2000
 
-SB_LIMITS = [23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0]
+SB_VALUES = [18.0, 19.0, 20.0, 21.0, 22.0, 23.0]
+GAIN = 12.0
 NOISE_SEED = 42
 
 
@@ -69,7 +70,7 @@ def main() -> None:
     max_re_kpc = max(c.r_eff_kpc for c in galaxy.components)
     size_pixels = _size_from_max_re(max_re_kpc, galaxy.redshift)
 
-    out_dir = OUTPUT_DIR / TARGET_NAME.replace(" ", "_")
+    out_dir = OUTPUT_DIR / sanitize_filename(TARGET_NAME)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"Galaxy: {TARGET_NAME}")
@@ -77,27 +78,28 @@ def main() -> None:
     print(f"Max Re (kpc): {max_re_kpc:.2f}")
     print(f"Image size: {size_pixels} x {size_pixels} pixels")
 
-    configs = [("noiseless", None)] + [(f"sky_sblimit_{v:.1f}", v) for v in SB_LIMITS]
-    for name, sb_limit in configs:
+    for sb_value in SB_VALUES:
         cfg = ImageConfig(
-            name=name,
+            name=f"sky_sbvalue_{sb_value:.1f}",
             pixel_scale=PIXEL_SCALE,
             zeropoint=ZEROPOINT,
             size_pixels=size_pixels,
             psf_enabled=True,
             psf_type="gaussian",
             psf_fwhm=PSF_FWHM,
-            noise_enabled=sb_limit is not None,
-            sky_sb_limit=sb_limit,
-            noise_seed=NOISE_SEED if sb_limit is not None else None,
+            sky_enabled=True,
+            sky_sb_value=sb_value,
+            noise_enabled=True,
+            gain=GAIN,
+            noise_seed=NOISE_SEED,
             engine="auto",
         )
 
         generator = MockImageGenerator(config=cfg)
         image, metadata = generator.generate(galaxy)
 
-        fits_path = out_dir / f"{TARGET_NAME.replace(' ', '_')}_{cfg.name}.fits"
-        png_path = out_dir / f"{TARGET_NAME.replace(' ', '_')}_{cfg.name}.png"
+        fits_path = out_dir / f"{sanitize_filename(TARGET_NAME)}_{cfg.name}.fits"
+        png_path = out_dir / f"{sanitize_filename(TARGET_NAME)}_{cfg.name}.png"
 
         save_fits(image, metadata, fits_path)
         visualize_galaxy(
@@ -110,11 +112,7 @@ def main() -> None:
         )
         fits_path.unlink(missing_ok=True)
 
-        if sb_limit is None:
-            print("  noiseless -> sigma=0")
-        else:
-            sigma = sb_limit_to_sigma(sb_limit, PIXEL_SCALE, ZEROPOINT)
-            print(f"  sky-sb-limit={sb_limit:.1f} -> sigma={sigma:.3e} per pixel")
+        print(f"  sky-sb-value={sb_value:.1f} mag/arcsec^2 (gain={GAIN:.1f})")
 
     print(f"PNGs saved to: {out_dir}")
 
