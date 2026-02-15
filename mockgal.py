@@ -206,6 +206,9 @@ class ImageConfig:
     sky_sb_limit: Optional[float] = None  # mag/arcsec^2
     gain: Optional[float] = DEFAULT_GAIN
 
+    # Noise seed override
+    randomize_noise_seed: bool = False  # If True, ignore noise_seed and use random entropy
+
     # Engine selection
     engine: str = "auto"  # libprofit | astropy | auto
     profit_cli_path: Optional[str] = None  # Custom path to profit-cli
@@ -834,7 +837,8 @@ class MockImageGenerator:
 
     def _add_noise(self, image: np.ndarray, params: dict) -> np.ndarray:
         """Add Gaussian noise to the image."""
-        rng = np.random.default_rng(self.config.noise_seed)
+        seed = None if self.config.randomize_noise_seed else self.config.noise_seed
+        rng = np.random.default_rng(seed)
 
         if self.config.sky_sb_value is not None and self.config.sky_sb_limit is not None:
             logger.warning(
@@ -845,12 +849,18 @@ class MockImageGenerator:
             gain = self.config.gain if self.config.gain is not None else DEFAULT_GAIN
             if gain <= 0:
                 raise ValueError("gain must be positive for Poisson noise")
-            image_e = image * gain
+            sky_level = sb_mag_to_flux_per_pixel(
+                self.config.sky_sb_value,
+                self.config.pixel_scale,
+                self.config.zeropoint
+            )
+            image_with_sky = image + sky_level
+            image_e = image_with_sky * gain
             if np.any(image_e < 0):
                 logger.warning("Negative values found before Poisson draw; clipping to 0")
                 image_e = np.clip(image_e, 0, None)
             noisy = rng.poisson(image_e) / gain
-            return noisy
+            return noisy - sky_level
 
         if self.config.sky_sb_limit is not None:
             sigma = sb_limit_to_sigma(
@@ -1267,6 +1277,7 @@ def load_image_configs(
             noise_seed=cfg_dict.get('noise_seed'),
             sky_sb_limit=cfg_dict.get('sky_sb_limit'),
             gain=cfg_dict.get('gain', DEFAULT_GAIN),
+            randomize_noise_seed=cfg_dict.get('randomize_noise_seed', False),
             engine=cfg_dict.get('engine', 'auto'),
             profit_cli_path=profit_cli_path
         ))
@@ -1724,6 +1735,8 @@ def create_parser() -> argparse.ArgumentParser:
                        help="5-sigma surface brightness limit (mag/arcsec^2)")
     noise.add_argument("--gain", type=float, metavar="GAIN",
                        default=DEFAULT_GAIN, help="Detector gain (e-/ADU)")
+    noise.add_argument("--randomize-noise-seed", action="store_true",
+                       help="Ignore fixed noise seed; use OS entropy for unique noise each run")
 
     # Engine selection
     engine_group = parser.add_argument_group("Engine")
@@ -1779,7 +1792,7 @@ def main():
             psf_fwhm=args.psf_fwhm,
             psf_moffat_beta=args.moffat_beta,
             psf_file=args.psf_file,
-            sky_enabled=(args.sky is not None or args.sky_tilted is not None or args.sky_sb_value is not None),
+            sky_enabled=(args.sky is not None or args.sky_tilted is not None),
             sky_type="tilted" if args.sky_tilted else "flat",
             sky_level=args.sky if args.sky else 0.0,
             sky_coeffs=args.sky_tilted if args.sky_tilted else [0.0],
@@ -1795,6 +1808,7 @@ def main():
             noise_seed=args.seed,
             sky_sb_limit=args.sky_sb_limit,
             gain=args.gain,
+            randomize_noise_seed=args.randomize_noise_seed,
             engine=args.engine,
             profit_cli_path=profit_cli
         )

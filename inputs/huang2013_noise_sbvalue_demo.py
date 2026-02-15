@@ -87,11 +87,11 @@ def main() -> None:
             psf_enabled=True,
             psf_type="gaussian",
             psf_fwhm=PSF_FWHM,
-            sky_enabled=True,
             sky_sb_value=sb_value,
             noise_enabled=True,
             gain=GAIN,
             noise_seed=NOISE_SEED,
+            randomize_noise_seed=True,
             engine="auto",
         )
 

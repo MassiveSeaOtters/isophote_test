@@ -91,6 +91,7 @@ def main() -> None:
             noise_enabled=sb_limit is not None,
             sky_sb_limit=sb_limit,
             noise_seed=NOISE_SEED if sb_limit is not None else None,
+            randomize_noise_seed=True,
             engine="auto",
         )
 
