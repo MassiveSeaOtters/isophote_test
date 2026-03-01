@@ -33,6 +33,7 @@ import shutil
 import subprocess
 import sys
 from dataclasses import dataclass, field
+from functools import lru_cache
 from multiprocessing import Pool, cpu_count
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
@@ -161,12 +162,15 @@ class MockGalaxy:
     name: str
     redshift: float
     components: List[SersicComponent]
+    re_overall: Optional[float] = None
 
     def __post_init__(self):
         if self.redshift <= 0:
             raise ValueError(f"Redshift must be positive, got {self.redshift}")
         if not self.components:
             raise ValueError("Galaxy must have at least one component")
+        if self.re_overall is not None and self.re_overall <= 0:
+            raise ValueError(f"re_overall must be positive, got {self.re_overall}")
 
     @property
     def total_abs_mag(self) -> float:
@@ -183,6 +187,7 @@ class ImageConfig:
     zeropoint: float = DEFAULT_ZEROPOINT
     size_factor: float = DEFAULT_SIZE_FACTOR
     size_pixels: Optional[int] = None
+    max_image_size: int = MAX_IMAGE_SIZE
 
     # PSF configuration
     psf_enabled: bool = False
@@ -224,6 +229,8 @@ class ImageConfig:
             raise ValueError(f"engine must be libprofit|astropy|auto, got {self.engine}")
         if self.gain is not None and self.gain <= 0:
             raise ValueError(f"gain must be positive, got {self.gain}")
+        if self.max_image_size <= 0:
+            raise ValueError(f"max_image_size must be positive, got {self.max_image_size}")
 
 
 # =============================================================================
@@ -370,6 +377,38 @@ def _resolve_profit_cli_path(path_value: Optional[str]) -> Optional[str]:
     return None
 
 
+@lru_cache(maxsize=None)
+def _profit_cli_is_usable(profit_cli_path: str) -> bool:
+    """Return True when profit-cli can start in the current environment."""
+    try:
+        result = subprocess.run(
+            [profit_cli_path],
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=5,
+        )
+    except (OSError, subprocess.SubprocessError) as exc:
+        logger.warning(f"profit-cli is not usable at {profit_cli_path}: {exc}")
+        return False
+
+    if result.returncode < 0:
+        logger.warning(
+            f"profit-cli failed health check at {profit_cli_path}: "
+            f"{result.stderr.strip() or result.stdout.strip()}"
+        )
+        return False
+
+    stderr_text = (result.stderr or "").lower()
+    if "library not loaded" in stderr_text:
+        logger.warning(
+            f"profit-cli failed health check at {profit_cli_path}: {result.stderr.strip()}"
+        )
+        return False
+
+    return True
+
+
 def find_profit_cli(custom_path: Optional[str] = None) -> Optional[str]:
     """
     Find the profit-cli executable.
@@ -386,15 +425,15 @@ def find_profit_cli(custom_path: Optional[str] = None) -> Optional[str]:
     """
     # Check custom path first
     resolved = _resolve_profit_cli_path(custom_path)
-    if resolved:
+    if resolved and _profit_cli_is_usable(resolved):
         return resolved
 
     # Check environment variable
     resolved = _resolve_profit_cli_path(LIBPROFIT_PATH)
-    if resolved:
+    if resolved and _profit_cli_is_usable(resolved):
         return resolved
     resolved = _resolve_profit_cli_path(PROFIT_CLI_PATH)
-    if resolved:
+    if resolved and _profit_cli_is_usable(resolved):
         return resolved
 
     # Check PATH
@@ -410,7 +449,7 @@ def find_profit_cli(custom_path: Optional[str] = None) -> Optional[str]:
         Path("/opt/homebrew/bin/profit-cli"),
     ]
     for loc in common_locations:
-        if loc.is_file():
+        if loc.is_file() and _profit_cli_is_usable(str(loc)):
             return str(loc)
 
     return None
@@ -761,8 +800,19 @@ class MockImageGenerator:
             })
             max_re_arcsec = max(max_re_arcsec, re_arcsec)
 
+        overall_re_kpc = galaxy.re_overall
+        if overall_re_kpc is not None:
+            overall_re_arcsec = kpc_to_arcsec(overall_re_kpc, galaxy.redshift)
+            overall_re_pix = overall_re_arcsec / self.config.pixel_scale
+        else:
+            overall_re_arcsec = max_re_arcsec
+            overall_re_pix = max_re_arcsec / self.config.pixel_scale
+
         params['max_re_arcsec'] = max_re_arcsec
         params['max_re_pix'] = max_re_arcsec / self.config.pixel_scale
+        params['overall_re_kpc'] = overall_re_kpc
+        params['overall_re_arcsec'] = overall_re_arcsec
+        params['overall_re_pix'] = overall_re_pix
         params['redshift'] = galaxy.redshift
 
         return params
@@ -772,17 +822,17 @@ class MockImageGenerator:
         if self.config.size_pixels is not None:
             size = self.config.size_pixels
         else:
-            # size_factor times the largest Re
-            half_size = int(self.config.size_factor * params['max_re_pix'])
+            # size_factor times the overall galaxy Re when available
+            half_size = int(self.config.size_factor * params['overall_re_pix'])
             size = 2 * half_size + 1  # Odd for centering
 
         # Check for excessively large images and apply cap
-        if size > MAX_IMAGE_SIZE:
+        if size > self.config.max_image_size:
             logger.warning(
-                f"Computed image size {size}x{size} exceeds maximum ({MAX_IMAGE_SIZE}). "
-                f"Capping to {MAX_IMAGE_SIZE}x{MAX_IMAGE_SIZE} pixels."
+                f"Computed image size {size}x{size} exceeds maximum ({self.config.max_image_size}). "
+                f"Capping to {self.config.max_image_size}x{self.config.max_image_size} pixels."
             )
-            size = MAX_IMAGE_SIZE
+            size = self.config.max_image_size
 
         return (size, size)
 
@@ -1083,6 +1133,7 @@ def load_model_file(
             continue
 
         redshift = gal_dict.get('redshift', DEFAULT_REDSHIFT)
+        re_overall = gal_dict.get('re_overall')
 
         components = []
         for i, comp_dict in enumerate(gal_dict.get('components', [])):
@@ -1106,7 +1157,8 @@ def load_model_file(
             galaxies.append(MockGalaxy(
                 name=name,
                 redshift=redshift,
-                components=components
+                components=components,
+                re_overall=re_overall
             ))
 
     logger.info(f"Loaded {len(galaxies)} galaxies from {filepath}")
@@ -1261,6 +1313,7 @@ def load_image_configs(
             zeropoint=cfg_dict.get('zeropoint', DEFAULT_ZEROPOINT),
             size_factor=cfg_dict.get('size_factor', DEFAULT_SIZE_FACTOR),
             size_pixels=cfg_dict.get('size_pixels'),
+            max_image_size=cfg_dict.get('max_image_size', MAX_IMAGE_SIZE),
             psf_enabled=cfg_dict.get('psf_enabled', False),
             psf_type=cfg_dict.get('psf_type', 'gaussian'),
             psf_fwhm=cfg_dict.get('psf_fwhm', DEFAULT_PSF_FWHM),
@@ -1492,7 +1545,7 @@ def visualize_galaxy(
         mu_ticks = zeropoint - 2.5 * np.log10(flux_ticks / (pixel_scale ** 2))
         cbar.set_ticks(scaled_ticks)
         cbar.set_ticklabels([f"{mu:.1f}" for mu in mu_ticks])
-        cbar.set_label('Surface brightness (mag/arcsec^2)', fontsize=12)
+        cbar.set_label(r'Surface brightness (mag arcsec$^{-2}$)', fontsize=12)
     else:
         cbar.set_label('arcsinh(Flux)', fontsize=12)
 
@@ -1701,6 +1754,8 @@ def create_parser() -> argparse.ArgumentParser:
                      help="Image half-size = factor * max(Re)")
     img.add_argument("--size", type=int, metavar="PIXELS",
                      help="Fixed image size in pixels (overrides size-factor)")
+    img.add_argument("--max-image-size", type=int, default=MAX_IMAGE_SIZE,
+                     help=f"Maximum allowed image dimension in pixels (default: {MAX_IMAGE_SIZE})")
 
     # PSF parameters
     psf = parser.add_argument_group("PSF Parameters")
@@ -1787,6 +1842,7 @@ def main():
             zeropoint=args.zeropoint,
             size_factor=args.size_factor,
             size_pixels=args.size,
+            max_image_size=args.max_image_size,
             psf_enabled=args.psf,
             psf_type=args.psf_type,
             psf_fwhm=args.psf_fwhm,

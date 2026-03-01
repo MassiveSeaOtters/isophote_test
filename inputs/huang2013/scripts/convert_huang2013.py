@@ -220,9 +220,15 @@ def convert_to_model_format(galaxies: Dict[str, dict]) -> dict:
     # Build galaxy list
     galaxy_list = []
     for name, data in sorted(galaxies.items()):
+        fluxes = [10 ** (-0.4 * component['abs_mag']) for component in data['components']]
+        re_overall = float(np.average(
+            [component['r_eff_kpc'] for component in data['components']],
+            weights=fluxes,
+        ))
         galaxy_entry = {
             'name': data['name'],
             'redshift': data['redshift'],
+            're_overall': round(re_overall, 4),
             'components': data['components']
         }
         # Add flag as comment if present

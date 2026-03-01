@@ -61,7 +61,8 @@ Systematic Huang2013 mocks:
 
 ```bash
 python inputs/huang2013/scripts/generate_huang2013_mocks.py \
-    --output output/huang2013_systematic \
+    --run-manifest inputs/huang2013/runs/huang2013_production_baseline.yaml \
+    --output output/huang2013_production/huang2013_production_baseline \
     --test
 ```
 
@@ -87,7 +88,9 @@ image, metadata = generate_mock_image(
 
 - The canonical Huang2013 inputs live under `inputs/huang2013/`.
 - `inputs/huang2013/models/huang2013_models.yaml` contains the 93-galaxy model set.
-- `inputs/huang2013/scripts/generate_huang2013_mocks.py` creates four HSC-like mocks per galaxy with `sky_sb_limit = 24.5`, dynamic `size_factor = 16`, and a 4001-pixel safety cap.
+- `inputs/huang2013/scripts/generate_huang2013_mocks.py` now runs manifest-defined Huang2013 production batches from `inputs/huang2013/runs/`.
+- The baseline production manifest keeps HSC-like settings with `pixel_scale = 0.168`, `psf_fwhm = 0.7`, `size_factor = 6` anchored on Huang2013 `re_overall`, an explicit `max_image_size = 4001`, and baseline noisy rows at `sky_sb_limit = 24.5` plus a low-noise reference row at `29.0`.
+- `inputs/huang2013/configs/huang2013_hsc_i_calibration.yaml` stores optional Huang2013-only HSC `i`-band `wide` and `dud` depth references; those values are not global defaults.
 - Use small validation runs before attempting a broad batch job.
 
 ## Development

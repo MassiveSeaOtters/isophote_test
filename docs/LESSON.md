@@ -5,6 +5,8 @@
 - Validate Huang2013 workflows on a small subset before attempting a broader batch run.
 - On memory-limited machines, run Huang2013 jobs with `--workers 1`; parallel workers can push large images over memory limits.
 - Keep the 4001-pixel image-size cap in place unless the user explicitly asks to revisit it.
+- In this environment, manually export `LIBPROFIT_PATH=/Users/shuang/Dropbox/work/project/otters/isophote_test/libprofit/mbp` before libprofit-backed Huang2013 validation commands.
+- Treat `profit-cli` as available only if it can actually start. A binary that exists on disk but fails its dynamic-library health check should fall back to the astropy engine in `auto` mode.
 
 ## Huang2013 Data Conventions
 
@@ -20,11 +22,16 @@
 - For HSC sky-region calibration, request only the image and variance planes. The mask and PSF products are not needed for the blank-sky workflow.
 - For HSC `coadd/bg` calibration, center each cutout on its sigma-clipped local median before pooling pixels. Use the pooled centered RMS as the primary mapping into `sky_sb_limit`.
 - Use original per-cutout medians only as a secondary summary for exploratory `sky_sb_value` reporting. Coadd-derived `gain` estimates remain too unstable to treat as a detector parameter.
+- Keep HSC `i`-band calibration values in Huang2013-specific reference files and require explicit workflow opt-in; do not promote them to repo-wide defaults.
+- For Huang2013 production runs, copy calibrated numeric values into run manifests directly rather than referencing calibration profile names at runtime.
 
 ## Image Size And Survey Mocking
 
-- Dynamic sizing with `size_factor = 16` is preferable to hard-coded 4000-pixel Huang2013 images because it scales with angular size while still respecting the 4001-pixel cap.
-- The current Huang2013 systematic mock workflow uses HSC-like settings: `pixel_scale = 0.168`, `psf_fwhm = 0.7`, and `sky_sb_limit = 24.5`.
+- Huang2013 image sizing should anchor on galaxy-level `re_overall` rather than the single largest component radius; using the largest component makes the dynamic sizes excessively large for this sample.
+- Treat the image-size cap as configuration when reproducibility matters. Recording `max_image_size` in the run manifest is clearer than relying on an implicit global constant.
+- The baseline Huang2013 systematic mock workflow uses HSC-like settings: `pixel_scale = 0.168`, `psf_fwhm = 0.7`, and `sky_sb_limit = 24.5`.
+- For near-ideal Huang2013 reference images, prefer very low noise such as `sky_sb_limit = 29.0` over perfectly noise-free outputs.
+- The canonical Huang2013 production path should be manifest-driven: one YAML file per run family, one row per mock configuration, with explicit numeric values.
 - Per-galaxy QA mosaics are useful enough to keep in the canonical Huang2013 generator because they provide quick visual validation without opening four FITS files individually.
 
 ## Filename And Output Conventions

@@ -15,6 +15,7 @@ import pytest
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
+import mockgal as mockgal_module
 
 from mockgal import (
     DEFAULT_PIXEL_SCALE,
@@ -32,6 +33,7 @@ from mockgal import (
     generate_mock_image,
     generate_mock_image_from_model,
     kpc_to_arcsec,
+    load_model_file,
     parse_huang2013,
     save_fits,
     sb_limit_to_sigma,
@@ -83,6 +85,20 @@ def multi_component_galaxy():
     return MockGalaxy(
         name="test_multi",
         redshift=0.01,
+        components=[
+            SersicComponent(r_eff_kpc=0.5, abs_mag=-18.0, n=1.0),
+            SersicComponent(r_eff_kpc=2.0, abs_mag=-21.0, n=4.0),
+        ]
+    )
+
+
+@pytest.fixture
+def multi_component_galaxy_with_overall_re():
+    """Multi-component galaxy with an explicit overall effective radius."""
+    return MockGalaxy(
+        name="test_multi_overall",
+        redshift=0.01,
+        re_overall=1.0,
         components=[
             SersicComponent(r_eff_kpc=0.5, abs_mag=-18.0, n=1.0),
             SersicComponent(r_eff_kpc=2.0, abs_mag=-21.0, n=4.0),
@@ -293,6 +309,16 @@ class TestSersicEngine:
     def test_engine_selection_astropy(self):
         """Astropy selection should work."""
         engine = SersicEngine(engine="astropy")
+        assert engine.engine == "astropy"
+
+    def test_engine_selection_auto_falls_back_when_profit_cli_unusable(self, monkeypatch):
+        """Auto selection should ignore a profit-cli binary that cannot start."""
+        mockgal_module._profit_cli_is_usable.cache_clear()
+        monkeypatch.setattr(mockgal_module, "_resolve_profit_cli_path", lambda path: "/tmp/profit-cli")
+        monkeypatch.setattr(mockgal_module, "_profit_cli_is_usable", lambda path: False)
+
+        engine = SersicEngine(engine="auto", profit_cli_path="/tmp/profit-cli")
+
         assert engine.engine == "astropy"
 
     def test_render_circular_profile(self, engine):
@@ -567,6 +593,15 @@ class TestMockImageGenerator:
 
         assert image.shape == (201, 201)
 
+    def test_image_size_uses_overall_re_when_available(self, multi_component_galaxy, multi_component_galaxy_with_overall_re):
+        """Explicit overall Re should shrink sizing relative to largest-component anchoring."""
+        config = ImageConfig(size_factor=10.0)
+
+        image_without_overall_re, _ = MockImageGenerator(config).generate(multi_component_galaxy)
+        image_with_overall_re, _ = MockImageGenerator(config).generate(multi_component_galaxy_with_overall_re)
+
+        assert image_with_overall_re.shape[0] < image_without_overall_re.shape[0]
+
     def test_end_to_end_output_and_engine(self, simple_galaxy, tmp_path):
         """Generate and save output, verify engine selection."""
         config = ImageConfig(size_pixels=51, engine="auto")
@@ -727,6 +762,15 @@ class TestHuangParser:
         assert len(ic1459) == 3  # 3-component model
         # First component should have smallest Re
         assert ic1459[0].r_eff_kpc < ic1459[1].r_eff_kpc
+
+    def test_load_model_file_reads_re_overall(self):
+        """Model loader should preserve galaxy-level re_overall metadata."""
+        model_path = Path(__file__).parent.parent / "inputs" / "huang2013" / "models" / "huang2013_models.yaml"
+        galaxies = load_model_file(str(model_path), galaxy_names=["IC 1459"])
+
+        assert len(galaxies) == 1
+        assert galaxies[0].re_overall is not None
+        assert galaxies[0].re_overall > 0
 
 
 # =============================================================================
