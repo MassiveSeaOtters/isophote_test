@@ -6,9 +6,9 @@ This script reads the Huang et al. (2013) CGS model catalog and converts it
 to a machine-friendly YAML or JSON format suitable for use with mockgal.py.
 
 Usage:
-    python convert_huang2013.py huang2013_cgs_model.txt -o huang2013_models.yaml
-    python convert_huang2013.py huang2013_cgs_model.txt -o huang2013_models.json
-    python convert_huang2013.py huang2013_cgs_model.txt --galaxy NGC1399 IC1459
+    python inputs/huang2013/scripts/convert_huang2013.py inputs/huang2013/catalog/huang2013_cgs_model.txt -o inputs/huang2013/models/huang2013_models.yaml
+    python inputs/huang2013/scripts/convert_huang2013.py inputs/huang2013/catalog/huang2013_cgs_model.txt -o huang2013_models.json
+    python inputs/huang2013/scripts/convert_huang2013.py inputs/huang2013/catalog/huang2013_cgs_model.txt --galaxy NGC1399 IC1459
 """
 
 import argparse

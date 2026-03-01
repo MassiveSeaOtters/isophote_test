@@ -1,72 +1,42 @@
-# MockGal - Mock Galaxy Image Generator
+# MockGal
 
-A Python tool for generating realistic mock galaxy images with Sersic profiles, designed for testing isophote fitting algorithms and galaxy photometry pipelines.
+MockGal generates mock galaxy images with Sersic profiles for isophote-fitting tests and related photometry workflows. It supports both the `libprofit` backend and a pure-Python `astropy` fallback.
 
-## Features
+## Repository Layout
 
-- Multi-component Sersic profile rendering
-- Support for libprofit (fast C++) and astropy (pure Python) backends
-- PSF convolution (Gaussian, Moffat, or custom image)
-- Realistic sky background (flat or tilted polynomial)
-- Noise injection (fixed sigma or sky-SB-limited)
-- Batch processing with optional parallelization
-- FITS output with complete metadata headers
-
-## Repository Structure
-
-```
-mockgal/
-├── mockgal.py              # Main generator script (CLI + library)
-├── inputs/                 # Input data files (models, configs, demos)
-│   ├── example_models.yaml
-│   ├── huang2013_models.yaml
-│   ├── example_image_config.yaml
-│   ├── huang2013_test_config.yaml
-│   ├── convert_huang2013.py
-│   └── demo scripts...
-├── tests/                  # Test suite (pytest)
-│   ├── test_mockgal.py
-│   └── README.md
-├── benchmarks/             # Performance benchmarks
-│   ├── bench_engines.py
-│   └── README.md
-├── output/                 # Generated images (not in git)
-│   ├── test_*/            # Test outputs
-│   ├── huang2013_*/       # Batch processing
-│   └── README.md
-├── docs/                   # Additional documentation
-└── MIGRATION.md           # Migration guide for v2.0
+```text
+mockgal.py
+inputs/
+tests/
+benchmarks/
+docs/
+output/
 ```
 
-### Directory Purposes
+- `mockgal.py`: CLI entry point and core library
+- `inputs/`: canonical Huang2013 assets, examples, and demos
+- `tests/`: pytest suite
+- `benchmarks/`: performance benchmarks and reports
+- `docs/`: lessons, build notes, quick references, and planning docs
+- `output/`: generated artifacts, not tracked in git
 
-- **`inputs/`** - Galaxy models, image configurations, and demo scripts
-- **`tests/`** - Test suite with 11 test classes and 57+ test functions
-- **`benchmarks/`** - Performance benchmarks with system info reports
-- **`output/`** - Generated mock galaxy images (organized by source)
-- **`docs/`** - Additional documentation and specifications
+## Setup
 
-See individual README files in each directory for detailed information.
-
-## Requirements
+Install dependencies with `uv`. This repo does not yet ship a lockfile or `pyproject.toml`, so use `uv pip` in your existing environment:
 
 ```bash
-pip install numpy scipy astropy pyyaml
+uv pip install numpy scipy astropy pyyaml pytest
 ```
 
-For optimal performance, build libprofit and ensure `profit-cli` is available (set `LIBPROFIT_PATH` or the legacy `PROFIT_CLI_PATH`):
-```bash
-export LIBPROFIT_PATH=/path/to/profit-cli
-```
+For `libprofit`, make sure `profit-cli` is available and set `LIBPROFIT_PATH` if needed.
 
 ## Quick Start
 
-### Single Galaxy Mode
-
-Generate a simple de Vaucouleurs galaxy:
+Single galaxy from the CLI:
 
 ```bash
 python mockgal.py --single \
+    --name de_vaucouleurs \
     -z 0.05 \
     --r-eff 5.0 \
     --abs-mag -21.0 \
@@ -76,255 +46,69 @@ python mockgal.py --single \
     -o output/
 ```
 
-Two-component bulge+disk system:
+Batch run with canonical Huang2013 assets:
 
 ```bash
-python mockgal.py --single \
-    --name "bulge_disk" \
-    -z 0.03 \
-    --r-eff 1.0 3.0 \
-    --abs-mag -19.0 -20.5 \
-    --sersic-n 4.0 1.0 \
-    --ellip 0.2 0.5 \
-    --pa 45 45 \
-    --psf --psf-fwhm 1.0 \
-    --sky-sb-limit 27.5 \
-    -o output/
+python mockgal.py \
+    --models inputs/huang2013/models/huang2013_models.yaml \
+    --config inputs/huang2013/configs/huang2013_test_config.yaml \
+    --galaxy "IC 1459" "NGC 1399" "NGC 1407" \
+    --workers 1 \
+    -o output/huang2013_test
 ```
 
-### Direct API Usage
+Systematic Huang2013 mocks:
 
-Generate a mock image directly from Python:
+```bash
+python inputs/huang2013/scripts/generate_huang2013_mocks.py \
+    --output output/huang2013_systematic \
+    --test
+```
+
+## Direct API Usage
 
 ```python
-from mockgal import SersicComponent, ImageConfig, generate_mock_image
+from mockgal import ImageConfig, SersicComponent, generate_mock_image
 
 components = [
     SersicComponent(r_eff_kpc=1.0, abs_mag=-20.0, n=4.0, ellipticity=0.2, pa_deg=30.0)
 ]
-config = ImageConfig(size_pixels=51, engine="auto")
 
 image, metadata = generate_mock_image(
     name="api_demo",
     redshift=0.01,
     components=components,
-    config=config,
+    config=ImageConfig(size_pixels=51, engine="auto"),
+    return_metadata=True,
 )
 ```
 
-Generate a mock image from a model file:
+## Huang2013 Notes
 
-```python
-from mockgal import generate_mock_image_from_model
-
-image, metadata = generate_mock_image_from_model(
-    model_path="inputs/example_models.yaml",
-    galaxy_name="NGC_1399",
-    config={"size_pixels": 51, "engine": "auto"},
-)
-```
-
-### Batch Mode with Model Files
-
-Process multiple galaxies from a YAML model file:
-
-```bash
-python mockgal.py \
-    --models inputs/huang2013_models.yaml \
-    --config inputs/example_image_config.yaml \
-    -o output/ \
-    --workers 1
-```
-
-Select specific galaxies:
-
-```bash
-python mockgal.py \
-    --models inputs/huang2013_models.yaml \
-    --config inputs/example_image_config.yaml \
-    --galaxy "NGC 1399" "IC 1459" "NGC 1407" \
-    -o output/ \
-    --workers 4
-```
-
-## Input Files
-
-### Model File (YAML/JSON)
-
-Define galaxies with multiple Sersic components:
-
-```yaml
-galaxies:
-  - name: NGC_1399
-    redshift: 0.01
-    components:
-      - r_eff_kpc: 0.9
-        abs_mag: -20.26
-        n: 1.45
-        ellipticity: 0.17
-        pa_deg: 116.8
-      - r_eff_kpc: 10.93
-        abs_mag: -22.01
-        n: 3.13
-        ellipticity: 0.08
-        pa_deg: 88.63
-```
-
-### Image Config File (YAML/JSON)
-
-Define image generation settings:
-
-```yaml
-image_configs:
-  - name: "realistic"
-    pixel_scale: 0.3          # arcsec/pixel
-    zeropoint: 27.0
-    engine: libprofit         # or astropy, auto
-    psf_enabled: true
-    psf_type: moffat
-    psf_fwhm: 0.8
-    psf_moffat_beta: 4.765
-    noise_enabled: true
-    sky_sb_limit: 27.0
-    noise_seed: 42
-```
-
-## Huang 2013 Catalog
-
-The repository includes the Huang et al. (2013) CGS Survey catalog with 93 nearby elliptical galaxies:
-
-```bash
-# Convert ASCII catalog to YAML
-python inputs/convert_huang2013.py inputs/huang2013_cgs_model.txt -o inputs/huang2013_models.yaml
-
-# Generate images for selected galaxies
-python mockgal.py \
-    --models inputs/huang2013_models.yaml \
-    --galaxy "IC 1459" "NGC 1399" "NGC 1407" \
-    --config inputs/huang2013_test_config.yaml \
-    -o output/huang2013_test/ \
-    --workers 1
-```
-
-## Command Line Reference
-
-```
-usage: mockgal.py [-h] (--models FILE | --single) [--config FILE]
-                  [--name NAME] [-z REDSHIFT] [--r-eff KPC [KPC ...]]
-                  [--abs-mag MAG [MAG ...]] [--sersic-n N [N ...]]
-                  [--ellip ELLIP [ELLIP ...]] [--pa PA [PA ...]]
-                  [--pixel-scale PIXEL_SCALE] [--zeropoint ZEROPOINT]
-                  [--size-factor SIZE_FACTOR] [--size PIXELS]
-                  [--psf] [--psf-fwhm PSF_FWHM] [--psf-type {gaussian,moffat,image}]
-                  [--psf-file FILE] [--moffat-beta MOFFAT_BETA]
-                  [--sky LEVEL] [--sky-tilted COEFF [COEFF ...]]
-                  [--noise-sigma SIGMA] [--seed SEED]
-                  [--engine {libprofit,astropy,auto}] [--profit-cli PATH]
-                  [-o DIR] [--format {fits,npy}]
-                  [--galaxy NAME [NAME ...]] [--workers WORKERS] [-v]
-```
-
-### Key Options
-
-| Option | Description |
-|--------|-------------|
-| `--models FILE` | Input model file (YAML/JSON) with galaxy definitions |
-| `--single` | Single galaxy mode (parameters via CLI) |
-| `--config FILE` | Image config file (PSF, sky, noise settings) |
-| `--galaxy NAME` | Select specific galaxies from model file |
-| `--workers N` | Number of parallel workers (default: 8, use 1 for sequential) |
-| `--engine` | Rendering engine: `libprofit`, `astropy`, or `auto` |
-| `--size PIXELS` | Fixed image size (overrides size_factor) |
-| `-o DIR` | Output directory |
-| `-v` | Verbose output |
-| `--sky-sb-value MAG` | Sky surface brightness (mag/arcsec^2) for sky background |
-| `--sky-sb-limit MAG` | 5-sigma surface brightness limit (mag/arcsec^2) for Gaussian noise |
-| `--gain GAIN` | Detector gain (e-/ADU) for Poisson noise |
+- The canonical Huang2013 inputs live under `inputs/huang2013/`.
+- `inputs/huang2013/models/huang2013_models.yaml` contains the 93-galaxy model set.
+- `inputs/huang2013/scripts/generate_huang2013_mocks.py` creates four HSC-like mocks per galaxy with `sky_sb_limit = 24.5`, dynamic `size_factor = 16`, and a 4001-pixel safety cap.
+- Use small validation runs before attempting a broad batch job.
 
 ## Development
 
-### Running Tests
+Run tests:
 
-Full test suite with verbose output:
 ```bash
 pytest tests/test_mockgal.py -v
 ```
 
-Tests automatically organize output in `output/test_*/` subdirectories. See `tests/README.md` for test coverage details.
-
-### Running Benchmarks
+Run benchmarks:
 
 ```bash
 python benchmarks/bench_engines.py
 ```
 
-Results saved to:
-- `benchmarks/benchmark_results.json` - Complete data with system information
-- `benchmarks/benchmark_results.md` - Human-readable summary report
+## Documentation
 
-### Output Organization
-
-Generated images are organized by source:
-- `output/test_*/` - Test outputs (organized by test name)
-- `output/huang2013_*/` - Batch processing outputs for Huang2013 catalog
-- `output/demo/` - Demo script outputs
-- `output/verification/` - Manual verification runs
-
-See `output/README.md` for complete details.
-
-## Output
-
-FITS files include comprehensive headers with:
-- Galaxy parameters (name, redshift, components)
-- Image settings (pixel scale, zeropoint, size)
-- PSF configuration (type, FWHM, beta)
-- Noise parameters (sigma, sky SB limit, seed)
-- Component details (Re, magnitude, Sersic n, ellipticity, PA)
-
-## Notes
-
-### Image Size Limits
-
-To prevent memory issues, image dimensions are automatically capped at 4001 pixels. A warning is displayed when this limit is applied:
-
-```
-WARNING - Computed image size 9171x9171 exceeds maximum (4001). Capping to 4001x4001 pixels.
-```
-
-### libprofit PSF Convolution
-
-On some systems, `profit-cli` fails to load PSF FITS files (e.g., "less data found than expected"). In this case, PSF convolution is applied in Python after the libprofit render, which keeps results consistent across engines.
-
-### Noise Model (current)
-
-MockGal uses sky-surface-brightness–based noise. The recommended path is `--sky-sb-limit`, which interprets the provided value as a 5-sigma surface brightness limit (mag/arcsec^2) and derives a per-pixel Gaussian sigma using the pixel scale and zeropoint. For Poisson noise with a sky background, provide `--sky-sb-value` (mag/arcsec^2) and `--gain` (e-/ADU).
-
-### Background-Dominated Noise (current)
-
-Two background-dominated noise modes are supported:
-
-1. **SB limit (Gaussian)**: Provide a 5-sigma surface brightness limit (`sky_sb_limit`, mag/arcsec^2). The per-pixel sigma is derived as:
-   `sigma = 10**(-0.4 * (sky_sb_limit - zeropoint)) * pixel_scale**2 / 5`
-2. **Sky SB + gain (Poisson)**: Provide `sky_sb_value` (mag/arcsec^2) and `gain` (e-/ADU). A flat sky image is added to the galaxy, then Poisson noise is drawn on the combined image.
-
-If both `sky_sb_value` and `sky_sb_limit` are provided, `sky_sb_value` takes precedence (a warning is logged).
-
-### Memory-Limited Systems
-
-For systems with limited memory:
-- Use `--workers 1` to disable parallelization
-- Use `--size PIXELS` to set a fixed (smaller) image size
-- Process galaxies in smaller batches
-
-### Filename Convention
-
-Output filenames remove spaces from galaxy names:
-- Galaxy "NGC 3923" with config "clean" → `NGC3923_clean.fits`
-- Galaxy "IC 1459" with config "noisy" → `IC1459_noisy.fits`
-
-The underscore separates galaxy name from configuration name. See `MIGRATION.md` for details on changes from v1.x.
-
-## References
-
-- Huang S., Ho L.C., Peng C.Y., Li Z.-Y., Barth A.J. (2013), ApJ, 766, 47
-- libprofit: https://github.com/ICRAR/libprofit
+- `AGENTS.md`: repo workflow rules
+- `CLAUDE.md`: concise project map for Claude-compatible tools
+- `docs/LESSON.md`: durable lessons and pitfalls
+- `inputs/README.md`: canonical input inventory and Huang2013 table of contents
+- `docs/LIBPROFIT_COMPILE.md`: local `libprofit` build notes
+- `docs/PROFIT_CLI_USAGE.md`: raw `profit-cli` help text

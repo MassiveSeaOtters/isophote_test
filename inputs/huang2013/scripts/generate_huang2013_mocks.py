@@ -18,8 +18,8 @@ Output structure:
                 [GALAXY_NAME]_mock4.fits
 
 Usage:
-    python generate_huang2013_mocks.py --output /path/to/output
-    python generate_huang2013_mocks.py --output /path/to/output --galaxies "NGC 3923" "IC 1459"
+    python inputs/huang2013/scripts/generate_huang2013_mocks.py --output /path/to/output
+    python inputs/huang2013/scripts/generate_huang2013_mocks.py --output /path/to/output --galaxies "NGC 3923" "IC 1459"
 """
 
 from __future__ import annotations
@@ -32,8 +32,8 @@ from typing import List, Optional
 
 import numpy as np
 
-# Add parent directory to path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+REPO_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(REPO_ROOT))
 
 from mockgal import (
     ImageConfig,
@@ -53,7 +53,7 @@ SKY_SB_LIMIT = 24.5     # mag/arcsec^2
 NOISE_SEED = 42
 
 # Huang2013 model file
-MODEL_FILE = Path(__file__).parent / "huang2013_models.yaml"
+MODEL_FILE = Path(__file__).resolve().parents[1] / "models" / "huang2013_models.yaml"
 
 
 def create_image_configs() -> List[ImageConfig]:
@@ -282,7 +282,7 @@ def main():
 
     # Load galaxy models
     print(f"Loading galaxy models from {MODEL_FILE}")
-    galaxies = load_model_file(MODEL_FILE)
+    galaxies = load_model_file(str(MODEL_FILE))
     print(f"Loaded {len(galaxies)} galaxies")
 
     # Filter galaxies if requested

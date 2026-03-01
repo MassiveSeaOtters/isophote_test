@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import math
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from mockgal import (
     ImageConfig,
@@ -16,7 +19,7 @@ from mockgal import (
     visualize_galaxy,
 )
 
-MODEL_PATH = Path("inputs/huang2013_models.yaml")
+MODEL_PATH = Path(__file__).resolve().parents[1] / "huang2013" / "models" / "huang2013_models.yaml"
 OUTPUT_DIR = Path("output/huang2013_sbvalue_noise_test")
 TARGET_NAME = "NGC 3923"
 
