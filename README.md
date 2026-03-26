@@ -82,6 +82,15 @@ image, metadata = generate_mock_image(
     config=ImageConfig(size_pixels=51, engine="auto"),
     return_metadata=True,
 )
+
+# Rectangular image: size_pixels can be (ny, nx) tuple
+config_rect = ImageConfig(size_pixels=(100, 150), engine="auto")
+image_rect, metadata_rect = generate_mock_image(
+    name="api_demo_rect",
+    redshift=0.01,
+    components=components,
+    config=config_rect,
+)
 ```
 
 ## Huang2013 Notes

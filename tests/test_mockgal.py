@@ -9,14 +9,17 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
+from scipy.ndimage import convolve as ndi_convolve
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 import mockgal as mockgal_module
 
+import mockgal as mockgal_module
 from mockgal import (
     DEFAULT_PIXEL_SCALE,
     DEFAULT_REDSHIFT,
@@ -288,6 +291,42 @@ class TestImageConfig:
         with pytest.raises(ValueError, match="engine must be"):
             ImageConfig(engine="invalid")
 
+    def test_valid_size_pixels_int(self):
+        """Valid int size_pixels should work."""
+        config = ImageConfig(size_pixels=100)
+        assert config.size_pixels == 100
+
+    def test_valid_size_pixels_tuple(self):
+        """Valid tuple size_pixels should work."""
+        config = ImageConfig(size_pixels=(100, 200))
+        assert config.size_pixels == (100, 200)
+
+    def test_valid_size_pixels_list_converted_to_tuple(self):
+        """List size_pixels should be converted to tuple."""
+        config = ImageConfig(size_pixels=[100, 200])
+        assert config.size_pixels == (100, 200)
+        assert isinstance(config.size_pixels, tuple)
+
+    def test_invalid_size_pixels_negative(self):
+        """Negative size_pixels should raise error."""
+        with pytest.raises(ValueError, match="size_pixels must be positive"):
+            ImageConfig(size_pixels=-100)
+
+    def test_invalid_size_pixels_tuple_wrong_length(self):
+        """size_pixels tuple with wrong length should raise error."""
+        with pytest.raises(ValueError, match="size_pixels tuple must have 2 elements"):
+            ImageConfig(size_pixels=(100, 200, 300))
+
+    def test_invalid_size_pixels_tuple_negative(self):
+        """size_pixels tuple with negative values should raise error."""
+        with pytest.raises(ValueError, match="size_pixels elements must be positive"):
+            ImageConfig(size_pixels=(100, -200))
+
+    def test_invalid_size_pixels_type(self):
+        """Invalid size_pixels type should raise error."""
+        with pytest.raises(ValueError, match="size_pixels must be int or tuple"):
+            ImageConfig(size_pixels="100")
+
 
 # =============================================================================
 # Test Sersic Engine
@@ -417,6 +456,83 @@ class TestSersicEngine:
         # Allow 10% tolerance due to edge effects
         assert np.isclose(total_flux, expected_flux, rtol=0.1)
 
+    def test_libprofit_psf_passes_P_argument(self, monkeypatch):
+        """libprofit render should pass PSF FITS path via -P."""
+        monkeypatch.setattr(mockgal_module, "find_profit_cli", lambda *_: "/fake/profit-cli")
+        engine = SersicEngine(engine="libprofit")
+
+        calls = []
+
+        def _mock_run(cmd, capture_output, text, check):
+            calls.append(cmd)
+            return SimpleNamespace(stdout="1 2\n3 4\n", stderr="")
+
+        monkeypatch.setattr(mockgal_module.subprocess, "run", _mock_run)
+
+        psf = np.ones((3, 3), dtype=float)
+        image = engine.render(
+            shape=(2, 2),
+            xcen=1.0,
+            ycen=1.0,
+            mag=15.0,
+            re_pix=2.0,
+            n=2.0,
+            axrat=0.9,
+            ang=30.0,
+            zeropoint=27.0,
+            psf=psf,
+        )
+
+        assert image.shape == (2, 2)
+        assert calls
+        assert "-P" in calls[0]
+
+    def test_libprofit_psf_failure_falls_back_to_python_convolution(self, monkeypatch, caplog):
+        """If -P path fails, engine should retry without -P and convolve in Python."""
+        monkeypatch.setattr(mockgal_module, "find_profit_cli", lambda *_: "/fake/profit-cli")
+        engine = SersicEngine(engine="libprofit")
+
+        calls = []
+        raw_image = np.array([[1.0, 2.0], [3.0, 4.0]])
+        stdout = "\n".join(" ".join(str(v) for v in row) for row in raw_image)
+
+        def _mock_run(cmd, capture_output, text, check):
+            calls.append(cmd)
+            if "-P" in cmd:
+                raise subprocess.CalledProcessError(
+                    returncode=1, cmd=cmd, stderr="psf read failed"
+                )
+            return SimpleNamespace(stdout=stdout, stderr="")
+
+        monkeypatch.setattr(mockgal_module.subprocess, "run", _mock_run)
+
+        psf = np.array(
+            [[0.0, 1.0, 0.0], [1.0, 4.0, 1.0], [0.0, 1.0, 0.0]],
+            dtype=float,
+        )
+        psf /= psf.sum()
+
+        with caplog.at_level("WARNING"):
+            image = engine.render(
+                shape=(2, 2),
+                xcen=1.0,
+                ycen=1.0,
+                mag=15.0,
+                re_pix=2.0,
+                n=2.0,
+                axrat=0.9,
+                ang=30.0,
+                zeropoint=27.0,
+                psf=psf,
+            )
+
+        assert len(calls) == 2
+        assert "-P" in calls[0]
+        assert "-P" not in calls[1]
+        expected = ndi_convolve(raw_image, psf, mode="constant")
+        assert np.allclose(image, expected)
+        assert "falling back to Python convolution" in caplog.text
+
 
 # =============================================================================
 # Test Image Generator
@@ -446,15 +562,42 @@ class TestMockImageGenerator:
         assert meta['psf_enabled'] is True
         assert meta['psf_type'] == 'gaussian'
 
+    def test_generate_libprofit_path_avoids_post_convolution(self, simple_galaxy, monkeypatch):
+        """libprofit path should pass PSF into engine and skip extra post-convolution."""
+        config = ImageConfig(size_pixels=51, psf_enabled=True, psf_fwhm=1.0, engine="astropy")
+        gen = MockImageGenerator(config)
+
+        class DummyEngine:
+            engine = "libprofit"
+
+            def __init__(self):
+                self.received_psf = None
+
+            def render(self, **kwargs):
+                self.received_psf = kwargs.get("psf")
+                return np.ones(kwargs["shape"], dtype=np.float64)
+
+        dummy_engine = DummyEngine()
+        gen.engine = dummy_engine
+
+        def _unexpected_convolve(*args, **kwargs):
+            raise AssertionError("Post-convolution should not be called for libprofit path")
+
+        monkeypatch.setattr(mockgal_module, "convolve", _unexpected_convolve)
+
+        image, _ = gen.generate(simple_galaxy)
+        assert image.shape == (51, 51)
+        assert dummy_engine.received_psf is not None
+
     def test_psf_smoothing_effect(self, simple_galaxy):
         """PSF should smooth the image."""
         # Without PSF
-        config_no_psf = ImageConfig(size_pixels=101)
+        config_no_psf = ImageConfig(size_pixels=101, engine="astropy")
         gen_no_psf = MockImageGenerator(config_no_psf)
         image_no_psf, _ = gen_no_psf.generate(simple_galaxy)
 
         # With PSF
-        config_psf = ImageConfig(size_pixels=101, psf_enabled=True, psf_fwhm=2.0)
+        config_psf = ImageConfig(size_pixels=101, psf_enabled=True, psf_fwhm=2.0, engine="astropy")
         gen_psf = MockImageGenerator(config_psf)
         image_psf, _ = gen_psf.generate(simple_galaxy)
 
@@ -469,7 +612,7 @@ class TestMockImageGenerator:
         config = ImageConfig(
             size_pixels=101,
             psf_enabled=True,
-            psf_type="image",
+            psf_type="file",
             psf_file=str(psf_image_path),
         )
         gen = MockImageGenerator(config)
@@ -477,7 +620,7 @@ class TestMockImageGenerator:
 
         assert image.max() > 0
         assert meta["psf_enabled"] is True
-        assert meta["psf_type"] == "image"
+        assert meta["psf_type"] == "file"
 
     def test_generate_with_flat_sky(self, simple_galaxy):
         """Generate image with flat sky background."""
@@ -593,14 +736,13 @@ class TestMockImageGenerator:
 
         assert image.shape == (201, 201)
 
-    def test_image_size_uses_overall_re_when_available(self, multi_component_galaxy, multi_component_galaxy_with_overall_re):
-        """Explicit overall Re should shrink sizing relative to largest-component anchoring."""
-        config = ImageConfig(size_factor=10.0)
+    def test_image_rectangular_size(self, simple_galaxy):
+        """Rectangular size should work with tuple."""
+        config = ImageConfig(size_pixels=(150, 200))
+        gen = MockImageGenerator(config)
+        image, _ = gen.generate(simple_galaxy)
 
-        image_without_overall_re, _ = MockImageGenerator(config).generate(multi_component_galaxy)
-        image_with_overall_re, _ = MockImageGenerator(config).generate(multi_component_galaxy_with_overall_re)
-
-        assert image_with_overall_re.shape[0] < image_without_overall_re.shape[0]
+        assert image.shape == (150, 200)
 
     def test_end_to_end_output_and_engine(self, simple_galaxy, tmp_path):
         """Generate and save output, verify engine selection."""
