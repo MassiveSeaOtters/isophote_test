@@ -32,6 +32,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 from dataclasses import dataclass, field
 from multiprocessing import Pool, cpu_count
 from pathlib import Path
@@ -156,7 +157,7 @@ class ImageConfig:
     pixel_scale: float = DEFAULT_PIXEL_SCALE
     zeropoint: float = DEFAULT_ZEROPOINT
     size_factor: float = DEFAULT_SIZE_FACTOR
-    size_pixels: Optional[int] = None
+    size_pixels: Optional[Union[int, Tuple[int, int]]] = None
 
     # PSF configuration
     psf_enabled: bool = False
@@ -188,6 +189,20 @@ class ImageConfig:
     def __post_init__(self):
         if self.pixel_scale <= 0:
             raise ValueError(f"pixel_scale must be positive, got {self.pixel_scale}")
+        if self.size_pixels is not None:
+            if isinstance(self.size_pixels, int):
+                if self.size_pixels <= 0:
+                    raise ValueError(f"size_pixels must be positive, got {self.size_pixels}")
+            elif isinstance(self.size_pixels, (tuple, list)):
+                if len(self.size_pixels) != 2:
+                    raise ValueError(f"size_pixels tuple must have 2 elements, got {len(self.size_pixels)}")
+                if any(s <= 0 for s in self.size_pixels):
+                    raise ValueError(f"size_pixels elements must be positive, got {self.size_pixels}")
+                # Convert to tuple if it's a list
+                if isinstance(self.size_pixels, list):
+                    self.size_pixels = tuple(self.size_pixels)
+            else:
+                raise ValueError(f"size_pixels must be int or tuple, got {type(self.size_pixels)}")
         if self.psf_type not in ("gaussian", "moffat", "file", "array"):
             raise ValueError(f"psf_type must be gaussian|moffat|file|array, got {self.psf_type}")
         if self.sky_type not in ("flat", "tilted"):
@@ -520,21 +535,19 @@ class SersicEngine:
             "-p", profile_spec,
             "-t"  # Output as text to stdout
         ]
-
-        if psf is not None:
-            logger.warning(
-                "profit-cli PSF loading is not supported here; "
-                "ignoring PSF in libprofit render."
-            )
-
-        try:
-            # Run profit-cli
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                check=True
-            )
+        
+        def _run_profit_cli(parse_cmd: List[str]) -> np.ndarray:
+            """Run profit-cli and parse image from stdout."""
+            try:
+                result = subprocess.run(
+                    parse_cmd,
+                    capture_output=True,
+                    text=True,
+                    check=True
+                )
+            except subprocess.CalledProcessError as e:
+                logger.error(f"profit-cli failed: {e.stderr}")
+                raise RuntimeError(f"profit-cli execution failed: {e.stderr}") from e
 
             # Parse output - profit-cli outputs timing info in first 2 lines,
             # then space-separated pixel values, one row per line
@@ -563,15 +576,46 @@ class SersicEngine:
                 logger.warning(
                     f"profit-cli output shape {image.shape} differs from expected {(height, width)}"
                 )
-
             return image
 
-        except subprocess.CalledProcessError as e:
-            logger.error(f"profit-cli failed: {e.stderr}")
-            raise RuntimeError(f"profit-cli execution failed: {e.stderr}")
+        # No PSF requested: standard libprofit path
+        if psf is None:
+            return _run_profit_cli(cmd)
 
+        # PSF requested: prefer libprofit internal convolution via -P.
+        # If -P path fails, fall back to Python-side convolution for compatibility.
+        psf_kernel = np.asarray(psf, dtype=np.float64)
+        psf_sum = psf_kernel.sum()
+        if psf_sum <= 0:
+            logger.warning("PSF sum is zero; rendering without PSF convolution")
+            return _run_profit_cli(cmd)
+
+        psf_kernel = psf_kernel / psf_sum
+        psf_path = None
+        try:
+            fd, psf_path = tempfile.mkstemp(prefix="profit_psf_", suffix=".fits")
+            os.close(fd)
+            fits.writeto(
+                psf_path,
+                psf_kernel.astype(np.float64),
+                overwrite=True,
+                output_verify="silentfix",
+            )
+            cmd_with_psf = cmd + ["-P", psf_path]
+            return _run_profit_cli(cmd_with_psf)
+        except Exception as exc:
+            logger.warning(
+                "profit-cli PSF convolution failed; falling back to Python convolution: %s",
+                exc,
+            )
+            image = _run_profit_cli(cmd)
+            return convolve(image, psf_kernel, mode='constant')
         finally:
-            pass
+            if psf_path is not None and os.path.exists(psf_path):
+                try:
+                    os.remove(psf_path)
+                except OSError:
+                    pass
 
     def _render_astropy(
         self,
@@ -692,11 +736,12 @@ class MockImageGenerator:
                 axrat=comp.axrat,
                 ang=comp.pa_deg,
                 zeropoint=self.config.zeropoint,
-                psf=None
+                psf=psf if self.config.psf_enabled and self.engine.engine == "libprofit" else None
             )
 
-        # 5. Apply PSF to the combined image (consistent across engines)
-        if self.config.psf_enabled:
+        # 5. Apply PSF on combined image for non-libprofit engines.
+        # libprofit path already handles PSF inside SersicEngine (with fallback).
+        if self.config.psf_enabled and self.engine.engine != "libprofit":
             image = convolve(image, psf, mode='constant')
 
         # 6. Add sky background
@@ -743,21 +788,27 @@ class MockImageGenerator:
     def _compute_image_shape(self, params: dict) -> Tuple[int, int]:
         """Determine image dimensions."""
         if self.config.size_pixels is not None:
-            size = self.config.size_pixels
+            # Handle both int (square) and tuple (rectangular)
+            if isinstance(self.config.size_pixels, int):
+                ny, nx = self.config.size_pixels, self.config.size_pixels
+            else:  # tuple
+                ny, nx = self.config.size_pixels
         else:
             # size_factor times the largest Re
             half_size = int(self.config.size_factor * params['max_re_pix'])
             size = 2 * half_size + 1  # Odd for centering
+            ny, nx = size, size
 
         # Check for excessively large images and apply cap
-        if size > MAX_IMAGE_SIZE:
+        if ny > MAX_IMAGE_SIZE or nx > MAX_IMAGE_SIZE:
             logger.warning(
-                f"Computed image size {size}x{size} exceeds maximum ({MAX_IMAGE_SIZE}). "
-                f"Capping to {MAX_IMAGE_SIZE}x{MAX_IMAGE_SIZE} pixels."
+                f"Computed image size {ny}x{nx} exceeds maximum ({MAX_IMAGE_SIZE}). "
+                f"Capping to {min(ny, MAX_IMAGE_SIZE)}x{min(nx, MAX_IMAGE_SIZE)} pixels."
             )
-            size = MAX_IMAGE_SIZE
+            ny = min(ny, MAX_IMAGE_SIZE)
+            nx = min(nx, MAX_IMAGE_SIZE)
 
-        return (size, size)
+        return (ny, nx)
 
     def _make_psf(self) -> np.ndarray:
         """Generate or load PSF image."""

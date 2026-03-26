@@ -67,6 +67,7 @@ from mockgal import SersicComponent, ImageConfig, generate_mock_image
 components = [
     SersicComponent(r_eff_kpc=1.0, abs_mag=-20.0, n=4.0, ellipticity=0.2, pa_deg=30.0)
 ]
+# Square image: size_pixels can be int
 config = ImageConfig(size_pixels=51, engine="auto")
 
 image, metadata = generate_mock_image(
@@ -74,6 +75,15 @@ image, metadata = generate_mock_image(
     redshift=0.01,
     components=components,
     config=config,
+)
+
+# Rectangular image: size_pixels can be (ny, nx) tuple
+config_rect = ImageConfig(size_pixels=(100, 150), engine="auto")
+image_rect, metadata_rect = generate_mock_image(
+    name="api_demo_rect",
+    redshift=0.01,
+    components=components,
+    config=config_rect,
 )
 ```
 
@@ -144,6 +154,7 @@ image_configs:
   - name: "realistic"
     pixel_scale: 0.3          # arcsec/pixel
     zeropoint: 27.0
+    size_pixels: 201          # int for square, or [ny, nx] for rectangular
     engine: libprofit         # or astropy, auto
     psf_enabled: true
     psf_type: moffat
@@ -152,6 +163,11 @@ image_configs:
     noise_enabled: true
     sky_sb_limit: 27.0
     noise_seed: 42
+  
+  - name: "rectangular"
+    pixel_scale: 0.3
+    size_pixels: [150, 200]   # rectangular image (ny=150, nx=200)
+    zeropoint: 27.0
 ```
 
 ## Huang 2013 Catalog
@@ -199,7 +215,7 @@ usage: mockgal.py [-h] (--models FILE | --single) [--config FILE]
 | `--galaxy NAME` | Select specific galaxies from model file |
 | `--workers N` | Number of parallel workers (default: 8, use 1 for sequential) |
 | `--engine` | Rendering engine: `libprofit`, `astropy`, or `auto` |
-| `--size PIXELS` | Fixed image size (overrides size_factor) |
+| `--size PIXELS` | Fixed square image size (overrides size_factor). Use config file for rectangular images. |
 | `-o DIR` | Output directory |
 | `-v` | Verbose output |
 | `--sky-sb-value MAG` | Sky surface brightness (mag/arcsec^2) for sky background |
