@@ -6,9 +6,9 @@ This script reads the Huang et al. (2013) CGS model catalog and converts it
 to a machine-friendly YAML or JSON format suitable for use with mockgal.py.
 
 Usage:
-    python convert_huang2013.py huang2013_cgs_model.txt -o huang2013_models.yaml
-    python convert_huang2013.py huang2013_cgs_model.txt -o huang2013_models.json
-    python convert_huang2013.py huang2013_cgs_model.txt --galaxy NGC1399 IC1459
+    python inputs/huang2013/scripts/convert_huang2013.py inputs/huang2013/catalog/huang2013_cgs_model.txt -o inputs/huang2013/models/huang2013_models.yaml
+    python inputs/huang2013/scripts/convert_huang2013.py inputs/huang2013/catalog/huang2013_cgs_model.txt -o huang2013_models.json
+    python inputs/huang2013/scripts/convert_huang2013.py inputs/huang2013/catalog/huang2013_cgs_model.txt --galaxy NGC1399 IC1459
 """
 
 import argparse
@@ -220,9 +220,15 @@ def convert_to_model_format(galaxies: Dict[str, dict]) -> dict:
     # Build galaxy list
     galaxy_list = []
     for name, data in sorted(galaxies.items()):
+        fluxes = [10 ** (-0.4 * component['abs_mag']) for component in data['components']]
+        re_overall = float(np.average(
+            [component['r_eff_kpc'] for component in data['components']],
+            weights=fluxes,
+        ))
         galaxy_entry = {
             'name': data['name'],
             'redshift': data['redshift'],
+            're_overall': round(re_overall, 4),
             'components': data['components']
         }
         # Add flag as comment if present

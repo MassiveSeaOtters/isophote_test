@@ -46,6 +46,7 @@ galaxies:
     surface_brightness: 23.05
     lum_fraction: 0.87
     lopsidedness: 0.02
+  re_overall: 16.6704
 - name: ESO 221-G026
   redshift: 0.01
   components:
@@ -90,6 +91,7 @@ galaxies:
     lum_fraction: 0.71
     lopsidedness: 0.01
   flag: a
+  re_overall: 2.3821
 - name: IC 1459
   redshift: 0.01
   components:
@@ -123,6 +125,7 @@ galaxies:
     surface_brightness: 22.98
     lum_fraction: 0.43
     lopsidedness: 0.03
+  re_overall: 7.1374
 - name: IC 1633
   redshift: 0.01
   components:
@@ -156,6 +159,7 @@ galaxies:
     surface_brightness: 23.78
     lum_fraction: 0.7
     lopsidedness: 0.04
+  re_overall: 28.2112
 - name: IC 2006
   redshift: 0.01
   components:
@@ -200,6 +204,7 @@ galaxies:
     lum_fraction: 0.09
     lopsidedness: 0.03
   flag: b
+  re_overall: 2.3699
 - name: IC 2311
   redshift: 0.01
   components:
@@ -243,6 +248,7 @@ galaxies:
     surface_brightness: 24.11
     lum_fraction: 0.51
     lopsidedness: 0.06
+  re_overall: 4.926
 - name: IC 2597
   redshift: 0.01
   components:
@@ -276,6 +282,7 @@ galaxies:
     surface_brightness: 23.19
     lum_fraction: 0.84
     lopsidedness: 0.01
+  re_overall: 8.0437
 - name: IC 3370
   redshift: 0.01
   components:
@@ -310,6 +317,7 @@ galaxies:
     lum_fraction: 0.72
     lopsidedness: 0.02
   flag: c
+  re_overall: 4.6853
 - name: IC 3896
   redshift: 0.01
   components:
@@ -343,6 +351,7 @@ galaxies:
     surface_brightness: 23.63
     lum_fraction: 0.6
     lopsidedness: 0.02
+  re_overall: 6.9185
 - name: IC 4296
   redshift: 0.01
   components:
@@ -376,6 +385,7 @@ galaxies:
     surface_brightness: 24.18
     lum_fraction: 0.51
     lopsidedness: 0.07
+  re_overall: 17.0922
 - name: IC 4329
   redshift: 0.01
   components:
@@ -409,6 +419,7 @@ galaxies:
     surface_brightness: 23.32
     lum_fraction: 0.89
     lopsidedness: 0.01
+  re_overall: 27.4741
 - name: IC 4742
   redshift: 0.01
   components:
@@ -433,6 +444,7 @@ galaxies:
     lum_fraction: 0.38
     lopsidedness: 0.1
   flag: d,e
+  re_overall: 7.2845
 - name: IC 4765
   redshift: 0.01
   components:
@@ -466,6 +478,7 @@ galaxies:
     surface_brightness: 24.74
     lum_fraction: 0.55
     lopsidedness: 0.1
+  re_overall: 32.3491
 - name: IC 4797
   redshift: 0.01
   components:
@@ -510,6 +523,7 @@ galaxies:
     lum_fraction: 0.33
     lopsidedness: 0.05
   flag: g
+  re_overall: 4.1952
 - name: IC 4889
   redshift: 0.01
   components:
@@ -543,6 +557,7 @@ galaxies:
     surface_brightness: 24.06
     lum_fraction: 0.23
     lopsidedness: 0.01
+  re_overall: 3.605
 - name: IC 5328
   redshift: 0.01
   components:
@@ -576,6 +591,7 @@ galaxies:
     surface_brightness: 22.32
     lum_fraction: 0.74
     lopsidedness: 0.02
+  re_overall: 5.3603
 - name: NGC 1052
   redshift: 0.01
   components:
@@ -609,6 +625,7 @@ galaxies:
     surface_brightness: 23.41
     lum_fraction: 0.45
     lopsidedness: 0.01
+  re_overall: 3.826
 - name: NGC 1172
   redshift: 0.01
   components:
@@ -643,6 +660,7 @@ galaxies:
     lum_fraction: 0.74
     lopsidedness: 0.02
   flag: f
+  re_overall: 5.3812
 - name: NGC 1199
   redshift: 0.01
   components:
@@ -677,6 +695,7 @@ galaxies:
     lum_fraction: 0.61
     lopsidedness: 0.01
   flag: f
+  re_overall: 4.917
 - name: NGC 1209
   redshift: 0.01
   components:
@@ -710,6 +729,7 @@ galaxies:
     surface_brightness: 23.41
     lum_fraction: 0.45
     lopsidedness: 0.02
+  re_overall: 5.8168
 - name: NGC 1339
   redshift: 0.01
   components:
@@ -744,6 +764,7 @@ galaxies:
     lum_fraction: 0.71
     lopsidedness: 0.01
   flag: e
+  re_overall: 1.7215
 - name: NGC 1340
   redshift: 0.01
   components:
@@ -777,6 +798,7 @@ galaxies:
     surface_brightness: 23.36
     lum_fraction: 0.36
     lopsidedness: 0.02
+  re_overall: 4.1766
 - name: NGC 1374
   redshift: 0.01
   components:
@@ -810,6 +832,7 @@ galaxies:
     surface_brightness: 23.05
     lum_fraction: 0.46
     lopsidedness: 0.01
+  re_overall: 2.5905
 - name: NGC 1379
   redshift: 0.01
   components:
@@ -843,6 +866,7 @@ galaxies:
     surface_brightness: 22.26
     lum_fraction: 0.53
     lopsidedness: 0.0
+  re_overall: 2.2995
 - name: NGC 1395
   redshift: 0.01
   components:
@@ -876,6 +900,7 @@ galaxies:
     surface_brightness: 24.29
     lum_fraction: 0.45
     lopsidedness: 0.02
+  re_overall: 10.8287
 - name: NGC 1399
   redshift: 0.01
   components:
@@ -909,6 +934,7 @@ galaxies:
     surface_brightness: 22.7
     lum_fraction: 0.82
     lopsidedness: 0.01
+  re_overall: 9.1629
 - name: NGC 1404
   redshift: 0.01
   components:
@@ -933,6 +959,7 @@ galaxies:
     lum_fraction: 0.93
     lopsidedness: 0.01
   flag: d,e
+  re_overall: 2.5604
 - name: NGC 1407
   redshift: 0.01
   components:
@@ -966,6 +993,7 @@ galaxies:
     surface_brightness: 23.15
     lum_fraction: 0.77
     lopsidedness: 0.01
+  re_overall: 11.8842
 - name: NGC 1426
   redshift: 0.01
   components:
@@ -999,6 +1027,7 @@ galaxies:
     surface_brightness: 22.73
     lum_fraction: 0.73
     lopsidedness: 0.01
+  re_overall: 3.9376
 - name: NGC 1427
   redshift: 0.01
   components:
@@ -1032,6 +1061,7 @@ galaxies:
     surface_brightness: 23.02
     lum_fraction: 0.59
     lopsidedness: 0.01
+  re_overall: 4.184
 - name: NGC 1439
   redshift: 0.01
   components:
@@ -1065,6 +1095,7 @@ galaxies:
     surface_brightness: 23.03
     lum_fraction: 0.66
     lopsidedness: 0.01
+  re_overall: 4.237
 - name: NGC 1453
   redshift: 0.01
   components:
@@ -1089,6 +1120,7 @@ galaxies:
     lum_fraction: 0.91
     lopsidedness: 0.02
   flag: e
+  re_overall: 12.9994
 - name: NGC 1521
   redshift: 0.01
   components:
@@ -1122,6 +1154,7 @@ galaxies:
     surface_brightness: 24.24
     lum_fraction: 0.55
     lopsidedness: 0.01
+  re_overall: 16.4769
 - name: NGC 1549
   redshift: 0.01
   components:
@@ -1156,6 +1189,7 @@ galaxies:
     lum_fraction: 0.21
     lopsidedness: 0.2
   flag: d
+  re_overall: 5.0225
 - name: NGC 1600
   redshift: 0.01
   components:
@@ -1189,6 +1223,7 @@ galaxies:
     surface_brightness: 24.24
     lum_fraction: 0.51
     lopsidedness: 0.01
+  re_overall: 17.7716
 - name: NGC 1700
   redshift: 0.01
   components:
@@ -1222,6 +1257,7 @@ galaxies:
     surface_brightness: 24.07
     lum_fraction: 0.19
     lopsidedness: 0.06
+  re_overall: 5.0208
 - name: NGC 2305
   redshift: 0.01
   components:
@@ -1256,6 +1292,7 @@ galaxies:
     lum_fraction: 0.74
     lopsidedness: 0.01
   flag: d
+  re_overall: 5.7708
 - name: NGC 2325
   redshift: 0.01
   components:
@@ -1289,6 +1326,7 @@ galaxies:
     surface_brightness: 23.2
     lum_fraction: 0.78
     lopsidedness: 0.02
+  re_overall: 6.9302
 - name: NGC 2434
   redshift: 0.01
   components:
@@ -1323,6 +1361,7 @@ galaxies:
     lum_fraction: 0.68
     lopsidedness: 0.01
   flag: e
+  re_overall: 4.486
 - name: NGC 2663
   redshift: 0.01
   components:
@@ -1356,6 +1395,7 @@ galaxies:
     surface_brightness: 22.84
     lum_fraction: 0.85
     lopsidedness: 0.01
+  re_overall: 9.2639
 - name: NGC 2865
   redshift: 0.01
   components:
@@ -1390,6 +1430,7 @@ galaxies:
     lum_fraction: 0.25
     lopsidedness: 0.04
   flag: c,e
+  re_overall: 4.025
 - name: NGC 2986
   redshift: 0.01
   components:
@@ -1423,6 +1464,7 @@ galaxies:
     surface_brightness: 23.47
     lum_fraction: 0.55
     lopsidedness: 0.04
+  re_overall: 9.2499
 - name: NGC 3078
   redshift: 0.01
   components:
@@ -1466,6 +1508,7 @@ galaxies:
     surface_brightness: 22.9
     lum_fraction: 0.61
     lopsidedness: 0.01
+  re_overall: 5.7411
 - name: NGC 3087
   redshift: 0.01
   components:
@@ -1499,6 +1542,7 @@ galaxies:
     surface_brightness: 23.73
     lum_fraction: 0.49
     lopsidedness: 0.03
+  re_overall: 6.575
 - name: NGC 3091
   redshift: 0.01
   components:
@@ -1532,6 +1576,7 @@ galaxies:
     surface_brightness: 24.02
     lum_fraction: 0.41
     lopsidedness: 0.02
+  re_overall: 11.5419
 - name: NGC 3136
   redshift: 0.01
   components:
@@ -1566,6 +1611,7 @@ galaxies:
     lum_fraction: 0.73
     lopsidedness: 0.03
   flag: f
+  re_overall: 9.1547
 - name: NGC 3250
   redshift: 0.01
   components:
@@ -1599,6 +1645,7 @@ galaxies:
     surface_brightness: 24.38
     lum_fraction: 0.33
     lopsidedness: 0.02
+  re_overall: 8.5264
 - name: NGC 3258
   redshift: 0.01
   components:
@@ -1632,6 +1679,7 @@ galaxies:
     surface_brightness: 24.27
     lum_fraction: 0.6
     lopsidedness: 0.02
+  re_overall: 14.7684
 - name: NGC 3268
   redshift: 0.01
   components:
@@ -1665,6 +1713,7 @@ galaxies:
     surface_brightness: 23.96
     lum_fraction: 0.77
     lopsidedness: 0.04
+  re_overall: 14.7413
 - name: NGC 3557
   redshift: 0.01
   components:
@@ -1698,6 +1747,7 @@ galaxies:
     surface_brightness: 22.39
     lum_fraction: 0.83
     lopsidedness: 0.01
+  re_overall: 9.1467
 - name: NGC 3585
   redshift: 0.01
   components:
@@ -1732,6 +1782,7 @@ galaxies:
     lum_fraction: 0.89
     lopsidedness: 0.01
   flag: a
+  re_overall: 7.556
 - name: NGC 3904
   redshift: 0.01
   components:
@@ -1776,6 +1827,7 @@ galaxies:
     lum_fraction: 0.3
     lopsidedness: 0.02
   flag: g
+  re_overall: 4.9666
 - name: NGC 3923
   redshift: 0.01
   components:
@@ -1809,6 +1861,7 @@ galaxies:
     surface_brightness: 22.53
     lum_fraction: 0.77
     lopsidedness: 0.02
+  re_overall: 8.3237
 - name: NGC 3962
   redshift: 0.01
   components:
@@ -1842,6 +1895,7 @@ galaxies:
     surface_brightness: 22.98
     lum_fraction: 0.65
     lopsidedness: 0.02
+  re_overall: 7.4774
 - name: NGC 4033
   redshift: 0.01
   components:
@@ -1886,6 +1940,7 @@ galaxies:
     lum_fraction: 0.27
     lopsidedness: 0.02
   flag: g
+  re_overall: 2.1526
 - name: NGC 4696
   redshift: 0.01
   components:
@@ -1919,6 +1974,7 @@ galaxies:
     surface_brightness: 24.88
     lum_fraction: 0.35
     lopsidedness: 0.02
+  re_overall: 20.6809
 - name: NGC 4697
   redshift: 0.01
   components:
@@ -1963,6 +2019,7 @@ galaxies:
     lum_fraction: 0.52
     lopsidedness: 0.0
   flag: g
+  re_overall: 5.0465
 - name: NGC 4709
   redshift: 0.01
   components:
@@ -1996,6 +2053,7 @@ galaxies:
     surface_brightness: 25.32
     lum_fraction: 0.49
     lopsidedness: 0.07
+  re_overall: 19.2619
 - name: NGC 4742
   redshift: 0.01
   components:
@@ -2030,6 +2088,7 @@ galaxies:
     lum_fraction: 0.71
     lopsidedness: 0.0
   flag: e
+  re_overall: 1.1467
 - name: NGC 4760
   redshift: 0.01
   components:
@@ -2063,6 +2122,7 @@ galaxies:
     surface_brightness: 23.12
     lum_fraction: 0.8
     lopsidedness: 0.01
+  re_overall: 12.1587
 - name: NGC 4767
   redshift: 0.01
   components:
@@ -2096,6 +2156,7 @@ galaxies:
     surface_brightness: 24.58
     lum_fraction: 0.37
     lopsidedness: 0.02
+  re_overall: 7.7686
 - name: NGC 4786
   redshift: 0.01
   components:
@@ -2139,6 +2200,7 @@ galaxies:
     surface_brightness: 23.56
     lum_fraction: 0.55
     lopsidedness: 0.01
+  re_overall: 10.0448
 - name: NGC 4936
   redshift: 0.01
   components:
@@ -2172,6 +2234,7 @@ galaxies:
     surface_brightness: 24.3
     lum_fraction: 0.53
     lopsidedness: 0.1
+  re_overall: 12.4124
 - name: NGC 4976
   redshift: 0.01
   components:
@@ -2205,6 +2268,7 @@ galaxies:
     surface_brightness: 22.26
     lum_fraction: 0.66
     lopsidedness: 0.04
+  re_overall: 3.3962
 - name: NGC 5011
   redshift: 0.01
   components:
@@ -2239,6 +2303,7 @@ galaxies:
     lum_fraction: 0.92
     lopsidedness: 0.01
   flag: e
+  re_overall: 9.535
 - name: NGC 5018
   redshift: 0.01
   components:
@@ -2263,6 +2328,7 @@ galaxies:
     lum_fraction: 0.32
     lopsidedness: 0.1
   flag: c
+  re_overall: 5.1345
 - name: NGC 5044
   redshift: 0.01
   components:
@@ -2296,6 +2362,7 @@ galaxies:
     surface_brightness: 25.1
     lum_fraction: 0.28
     lopsidedness: 0.07
+  re_overall: 11.7526
 - name: NGC 5061
   redshift: 0.01
   components:
@@ -2330,6 +2397,7 @@ galaxies:
     lum_fraction: 0.55
     lopsidedness: 0.02
   flag: d,e
+  re_overall: 6.5301
 - name: NGC 5077
   redshift: 0.01
   components:
@@ -2353,6 +2421,7 @@ galaxies:
     surface_brightness: 23.81
     lum_fraction: 0.35
     lopsidedness: 0.07
+  re_overall: 6.0141
 - name: NGC 5328
   redshift: 0.01
   components:
@@ -2386,6 +2455,7 @@ galaxies:
     surface_brightness: 24.33
     lum_fraction: 0.43
     lopsidedness: 0.09
+  re_overall: 9.9911
 - name: NGC 5419
   redshift: 0.01
   components:
@@ -2419,6 +2489,7 @@ galaxies:
     surface_brightness: 24.79
     lum_fraction: 0.38
     lopsidedness: 0.01
+  re_overall: 19.6087
 - name: NGC 5791
   redshift: 0.01
   components:
@@ -2452,6 +2523,7 @@ galaxies:
     surface_brightness: 25.84
     lum_fraction: 0.21
     lopsidedness: 0.03
+  re_overall: 5.8838
 - name: NGC 5796
   redshift: 0.01
   components:
@@ -2495,6 +2567,7 @@ galaxies:
     surface_brightness: 25.36
     lum_fraction: 0.2
     lopsidedness: 0.05
+  re_overall: 6.3451
 - name: NGC 5812
   redshift: 0.01
   components:
@@ -2528,6 +2601,7 @@ galaxies:
     surface_brightness: 22.87
     lum_fraction: 0.63
     lopsidedness: 0.01
+  re_overall: 4.2648
 - name: NGC 584
   redshift: 0.01
   components:
@@ -2572,6 +2646,7 @@ galaxies:
     lum_fraction: 0.39
     lopsidedness: 0.01
   flag: g
+  re_overall: 3.2469
 - name: NGC 5898
   redshift: 0.01
   components:
@@ -2605,6 +2680,7 @@ galaxies:
     surface_brightness: 22.73
     lum_fraction: 0.63
     lopsidedness: 0.01
+  re_overall: 4.4005
 - name: NGC 5903
   redshift: 0.01
   components:
@@ -2638,6 +2714,7 @@ galaxies:
     surface_brightness: 23.83
     lum_fraction: 0.56
     lopsidedness: 0.01
+  re_overall: 8.3159
 - name: NGC 596
   redshift: 0.01
   components:
@@ -2671,6 +2748,7 @@ galaxies:
     surface_brightness: 22.42
     lum_fraction: 0.64
     lopsidedness: 0.0
+  re_overall: 3.3496
 - name: NGC 636
   redshift: 0.01
   components:
@@ -2704,6 +2782,7 @@ galaxies:
     surface_brightness: 22.85
     lum_fraction: 0.73
     lopsidedness: 0.01
+  re_overall: 4.2075
 - name: NGC 6673
   redshift: 0.01
   components:
@@ -2748,6 +2827,7 @@ galaxies:
     lum_fraction: 0.32
     lopsidedness: 0.01
   flag: g
+  re_overall: 1.3977
 - name: NGC 6851
   redshift: 0.01
   components:
@@ -2781,6 +2861,7 @@ galaxies:
     surface_brightness: 23.33
     lum_fraction: 0.48
     lopsidedness: 0.01
+  re_overall: 3.6327
 - name: NGC 6868
   redshift: 0.01
   components:
@@ -2814,6 +2895,7 @@ galaxies:
     surface_brightness: 23.81
     lum_fraction: 0.47
     lopsidedness: 0.01
+  re_overall: 8.8152
 - name: NGC 6876
   redshift: 0.01
   components:
@@ -2847,6 +2929,7 @@ galaxies:
     surface_brightness: 23.16
     lum_fraction: 0.71
     lopsidedness: 0.02
+  re_overall: 10.9007
 - name: NGC 6909
   redshift: 0.01
   components:
@@ -2880,6 +2963,7 @@ galaxies:
     surface_brightness: 23.55
     lum_fraction: 0.5
     lopsidedness: 0.03
+  re_overall: 5.6337
 - name: NGC 6958
   redshift: 0.01
   components:
@@ -2913,6 +2997,7 @@ galaxies:
     surface_brightness: 23.2
     lum_fraction: 0.49
     lopsidedness: 0.04
+  re_overall: 4.8491
 - name: NGC 7029
   redshift: 0.01
   components:
@@ -2957,6 +3042,7 @@ galaxies:
     lum_fraction: 0.69
     lopsidedness: 0.01
   flag: a
+  re_overall: 3.997
 - name: NGC 7144
   redshift: 0.01
   components:
@@ -3001,6 +3087,7 @@ galaxies:
     lum_fraction: 0.45
     lopsidedness: 0.03
   flag: g
+  re_overall: 5.0958
 - name: NGC 7145
   redshift: 0.01
   components:
@@ -3045,6 +3132,7 @@ galaxies:
     lum_fraction: 0.6
     lopsidedness: 0.01
   flag: g
+  re_overall: 4.6992
 - name: NGC 7192
   redshift: 0.01
   components:
@@ -3089,6 +3177,7 @@ galaxies:
     lum_fraction: 0.48
     lopsidedness: 0.01
   flag: g
+  re_overall: 6.9726
 - name: NGC 7196
   redshift: 0.01
   components:
@@ -3132,6 +3221,7 @@ galaxies:
     surface_brightness: 23.66
     lum_fraction: 0.48
     lopsidedness: 0.04
+  re_overall: 7.2491
 - name: NGC 720
   redshift: 0.01
   components:
@@ -3165,6 +3255,7 @@ galaxies:
     surface_brightness: 22.08
     lum_fraction: 0.78
     lopsidedness: 0.0
+  re_overall: 6.6301
 - name: NGC 7507
   redshift: 0.01
   components:
@@ -3208,6 +3299,7 @@ galaxies:
     surface_brightness: 23.26
     lum_fraction: 0.44
     lopsidedness: 0.02
+  re_overall: 6.7394
 - name: NGC 7796
   redshift: 0.01
   components:
@@ -3241,3 +3333,4 @@ galaxies:
     surface_brightness: 22.71
     lum_fraction: 0.74
     lopsidedness: 0.0
+  re_overall: 8.0733

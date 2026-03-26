@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import math
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from mockgal import (
     ImageConfig,
@@ -11,11 +14,12 @@ from mockgal import (
     MockImageGenerator,
     kpc_to_arcsec,
     load_model_file,
+    sanitize_filename,
     save_fits,
     visualize_galaxy,
 )
 
-MODEL_PATH = Path("examples/huang2013_models.yaml")
+MODEL_PATH = Path(__file__).resolve().parents[1] / "huang2013" / "models" / "huang2013_models.yaml"
 OUTPUT_DIR = Path("output/huang2013_sbvalue_noise_test")
 TARGET_NAME = "NGC 3923"
 
@@ -69,7 +73,7 @@ def main() -> None:
     max_re_kpc = max(c.r_eff_kpc for c in galaxy.components)
     size_pixels = _size_from_max_re(max_re_kpc, galaxy.redshift)
 
-    out_dir = OUTPUT_DIR / TARGET_NAME.replace(" ", "_")
+    out_dir = OUTPUT_DIR / sanitize_filename(TARGET_NAME)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"Galaxy: {TARGET_NAME}")
@@ -86,19 +90,19 @@ def main() -> None:
             psf_enabled=True,
             psf_type="gaussian",
             psf_fwhm=PSF_FWHM,
-            sky_enabled=True,
             sky_sb_value=sb_value,
             noise_enabled=True,
             gain=GAIN,
             noise_seed=NOISE_SEED,
+            randomize_noise_seed=True,
             engine="auto",
         )
 
         generator = MockImageGenerator(config=cfg)
         image, metadata = generator.generate(galaxy)
 
-        fits_path = out_dir / f"{TARGET_NAME.replace(' ', '_')}_{cfg.name}.fits"
-        png_path = out_dir / f"{TARGET_NAME.replace(' ', '_')}_{cfg.name}.png"
+        fits_path = out_dir / f"{sanitize_filename(TARGET_NAME)}_{cfg.name}.fits"
+        png_path = out_dir / f"{sanitize_filename(TARGET_NAME)}_{cfg.name}.png"
 
         save_fits(image, metadata, fits_path)
         visualize_galaxy(

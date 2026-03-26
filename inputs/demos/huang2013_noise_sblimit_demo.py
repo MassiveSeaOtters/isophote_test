@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import math
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from mockgal import (
     ImageConfig,
@@ -11,12 +14,13 @@ from mockgal import (
     MockImageGenerator,
     kpc_to_arcsec,
     load_model_file,
+    sanitize_filename,
     save_fits,
     sb_limit_to_sigma,
     visualize_galaxy,
 )
 
-MODEL_PATH = Path("examples/huang2013_models.yaml")
+MODEL_PATH = Path(__file__).resolve().parents[1] / "huang2013" / "models" / "huang2013_models.yaml"
 OUTPUT_DIR = Path("output/huang2013_sblimit_noise_test")
 TARGET_NAME = "NGC 3923"
 
@@ -90,14 +94,15 @@ def main() -> None:
             noise_enabled=sb_limit is not None,
             sky_sb_limit=sb_limit,
             noise_seed=NOISE_SEED if sb_limit is not None else None,
+            randomize_noise_seed=True,
             engine="auto",
         )
 
         generator = MockImageGenerator(config=cfg)
         image, metadata = generator.generate(galaxy)
 
-        fits_path = out_dir / f"{TARGET_NAME.replace(' ', '_')}_{cfg.name}.fits"
-        png_path = out_dir / f"{TARGET_NAME.replace(' ', '_')}_{cfg.name}.png"
+        fits_path = out_dir / f"{sanitize_filename(TARGET_NAME)}_{cfg.name}.fits"
+        png_path = out_dir / f"{sanitize_filename(TARGET_NAME)}_{cfg.name}.png"
 
         save_fits(image, metadata, fits_path)
         visualize_galaxy(

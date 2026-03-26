@@ -17,12 +17,14 @@ from scipy.ndimage import convolve as ndi_convolve
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
+import mockgal as mockgal_module
 
 import mockgal as mockgal_module
 from mockgal import (
     DEFAULT_PIXEL_SCALE,
     DEFAULT_REDSHIFT,
     DEFAULT_ZEROPOINT,
+    HAS_MATPLOTLIB,
     MAX_SERSIC_INDEX,
     ImageConfig,
     MockGalaxy,
@@ -34,6 +36,7 @@ from mockgal import (
     generate_mock_image,
     generate_mock_image_from_model,
     kpc_to_arcsec,
+    load_model_file,
     parse_huang2013,
     save_fits,
     sb_limit_to_sigma,
@@ -93,6 +96,20 @@ def multi_component_galaxy():
 
 
 @pytest.fixture
+def multi_component_galaxy_with_overall_re():
+    """Multi-component galaxy with an explicit overall effective radius."""
+    return MockGalaxy(
+        name="test_multi_overall",
+        redshift=0.01,
+        re_overall=1.0,
+        components=[
+            SersicComponent(r_eff_kpc=0.5, abs_mag=-18.0, n=1.0),
+            SersicComponent(r_eff_kpc=2.0, abs_mag=-21.0, n=4.0),
+        ]
+    )
+
+
+@pytest.fixture
 def default_config():
     """Default image configuration."""
     return ImageConfig()
@@ -101,7 +118,7 @@ def default_config():
 @pytest.fixture
 def huang_catalog_path():
     """Path to Huang 2013 catalog."""
-    return Path(__file__).parent.parent / "examples" / "huang2013_cgs_model.txt"
+    return Path(__file__).parent.parent / "inputs" / "huang2013_cgs_model.txt"
 
 
 @pytest.fixture
@@ -331,6 +348,16 @@ class TestSersicEngine:
     def test_engine_selection_astropy(self):
         """Astropy selection should work."""
         engine = SersicEngine(engine="astropy")
+        assert engine.engine == "astropy"
+
+    def test_engine_selection_auto_falls_back_when_profit_cli_unusable(self, monkeypatch):
+        """Auto selection should ignore a profit-cli binary that cannot start."""
+        mockgal_module._profit_cli_is_usable.cache_clear()
+        monkeypatch.setattr(mockgal_module, "_resolve_profit_cli_path", lambda path: "/tmp/profit-cli")
+        monkeypatch.setattr(mockgal_module, "_profit_cli_is_usable", lambda path: False)
+
+        engine = SersicEngine(engine="auto", profit_cli_path="/tmp/profit-cli")
+
         assert engine.engine == "astropy"
 
     def test_render_circular_profile(self, engine):
@@ -878,6 +905,15 @@ class TestHuangParser:
         # First component should have smallest Re
         assert ic1459[0].r_eff_kpc < ic1459[1].r_eff_kpc
 
+    def test_load_model_file_reads_re_overall(self):
+        """Model loader should preserve galaxy-level re_overall metadata."""
+        model_path = Path(__file__).parent.parent / "inputs" / "huang2013" / "models" / "huang2013_models.yaml"
+        galaxies = load_model_file(str(model_path), galaxy_names=["IC 1459"])
+
+        assert len(galaxies) == 1
+        assert galaxies[0].re_overall is not None
+        assert galaxies[0].re_overall > 0
+
 
 # =============================================================================
 # Test Output Functions
@@ -903,6 +939,92 @@ class TestOutput:
             header = hdul[0].header
             assert header['OBJECT'] == simple_galaxy.name
             assert header['NCOMP'] == 1
+
+    def test_output_png_without_fits(self, simple_galaxy, default_config, tmp_path):
+        """Test generating PNG directly without saving FITS."""
+        if not HAS_MATPLOTLIB:
+            pytest.skip("matplotlib not available")
+
+        from mockgal import visualize_galaxy
+
+        gen = MockImageGenerator(default_config)
+        image, metadata = gen.generate(simple_galaxy)
+
+        # Generate PNG directly without FITS
+        png_path = tmp_path / "direct.png"
+        visualize_galaxy(image, metadata=metadata, output_path=str(png_path))
+
+        assert png_path.exists()
+        assert not (tmp_path / "direct.fits").exists()
+
+    def test_filename_convention(self):
+        """Test new filename convention (no underscores in galaxy names)."""
+        from mockgal import sanitize_filename
+
+        galaxy_name = "NGC 3923"
+        config_name = "clean"
+
+        safe_galaxy = sanitize_filename(galaxy_name)
+        safe_config = sanitize_filename(config_name)
+
+        filename = f"{safe_galaxy}_{safe_config}.fits"
+        assert filename == "NGC3923_clean.fits"
+        assert "_" in filename  # Underscore between galaxy and config
+        assert filename.count("_") == 1  # Only one underscore
+
+
+# =============================================================================
+# Test Visualization
+# =============================================================================
+
+class TestVisualization:
+    """Tests for visualization functions."""
+
+    def test_visualize_from_fits(self, simple_galaxy, default_config, tmp_path):
+        """Test visualizing a FITS file (auto-generates PNG)."""
+        if not HAS_MATPLOTLIB:
+            pytest.skip("matplotlib not available")
+
+        from mockgal import visualize_galaxy
+
+        gen = MockImageGenerator(default_config)
+        image, metadata = gen.generate(simple_galaxy)
+
+        fits_path = tmp_path / "test.fits"
+        png_path = tmp_path / "test.png"
+        save_fits(image, metadata, fits_path)
+
+        # Should auto-generate PNG with same prefix
+        visualize_galaxy(str(fits_path))
+        assert png_path.exists()
+
+    def test_visualize_from_array(self, simple_galaxy, default_config, tmp_path):
+        """Test visualizing from numpy array with metadata."""
+        if not HAS_MATPLOTLIB:
+            pytest.skip("matplotlib not available")
+
+        from mockgal import visualize_galaxy
+
+        gen = MockImageGenerator(default_config)
+        image, metadata = gen.generate(simple_galaxy)
+
+        output_path = tmp_path / "test_array.png"
+        visualize_galaxy(image, metadata=metadata, output_path=str(output_path))
+        assert output_path.exists()
+
+    def test_visualize_custom_colormap(self, simple_galaxy, default_config, tmp_path):
+        """Test visualization with custom colormap."""
+        if not HAS_MATPLOTLIB:
+            pytest.skip("matplotlib not available")
+
+        from mockgal import visualize_galaxy
+
+        gen = MockImageGenerator(default_config)
+        image, metadata = gen.generate(simple_galaxy)
+
+        output_path = tmp_path / "test_magma.png"
+        visualize_galaxy(image, metadata=metadata, output_path=str(output_path), cmap='magma')
+        assert output_path.exists()
 
 
 # =============================================================================
@@ -933,6 +1055,16 @@ class TestConventions:
         # Round-trip
         axrat_recovered = 1 - ellip
         assert np.isclose(axrat_recovered, axrat)
+
+    def test_sanitize_filename(self):
+        """Test filename sanitization removes spaces, not replaces with underscores."""
+        from mockgal import sanitize_filename
+
+        assert sanitize_filename("NGC 3923") == "NGC3923"
+        assert sanitize_filename("IC 1459") == "IC1459"
+        assert sanitize_filename("ESO 185-G054") == "ESO185-G054"
+        assert sanitize_filename("NGC  1399") == "NGC1399"  # multiple spaces
+        assert sanitize_filename("simple") == "simple"
 
 
 if __name__ == "__main__":

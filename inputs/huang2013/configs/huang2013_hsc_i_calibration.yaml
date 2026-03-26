@@ -1,0 +1,18 @@
+metadata:
+  source_summary_csv: output/hsc_sky_calibration_full_run/combined_summary.csv
+  filter_name: i
+  image_type: coadd/bg
+  scope_note: HSC calibration values are i-band Huang2013 workflow references only and must not be treated as global defaults.
+
+profiles:
+  hsc_i_wide:
+    label: wide
+    rerun: s23b_wide
+    recommended_sky_sb_limit: 24.62395438263279
+    exploratory_sky_sb_value: 29.25639935865067
+
+  hsc_i_dud:
+    label: dud
+    rerun: s21a_dud2
+    recommended_sky_sb_limit: 25.697653749397546
+    exploratory_sky_sb_value: 29.18302649497224
