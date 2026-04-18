@@ -86,11 +86,11 @@ DEFAULT_H0 = 70.0  # km/s/Mpc
 DEFAULT_OM = 0.3
 
 
-# profit-cli path (can be overridden via CLI or environment variable)
-os.environ["LIBPROFIT_PATH"] = "/Users/denekow/Documents/Research/xx_package/libprofit/build/profit-cli"
-os.environ["PATH"] = os.environ["LIBPROFIT_PATH"] + ":" + os.environ["PATH"]
+# profit-cli discovery: respect whatever the user sets in the environment.
+# Do not hardcode user-specific paths here and do not mutate PATH at import time.
+# Configure via LIBPROFIT_PATH (preferred) or PROFIT_CLI_PATH before launching,
+# or pass --profit-cli-path on the CLI.
 LIBPROFIT_PATH = os.environ.get('LIBPROFIT_PATH', None)
-
 PROFIT_CLI_PATH = os.environ.get('PROFIT_CLI_PATH', None)
 
 logging.basicConfig(
