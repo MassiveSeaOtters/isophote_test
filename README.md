@@ -28,7 +28,33 @@ Install dependencies with `uv`. This repo does not yet ship a lockfile or `pypro
 uv pip install numpy scipy astropy pyyaml pytest
 ```
 
-For `libprofit`, make sure `profit-cli` is available and set `LIBPROFIT_PATH` if needed.
+### libprofit (optional but preferred)
+
+MockGal prefers the `libprofit` backend via `profit-cli`. To enable it, point MockGal
+at your local `profit-cli` binary with **one** of the following:
+
+```bash
+# Preferred: directory that contains profit-cli, or the binary itself
+export LIBPROFIT_PATH=/absolute/path/to/libprofit/build
+
+# Alternative env var (same semantics)
+export PROFIT_CLI_PATH=/absolute/path/to/libprofit/build/profit-cli
+
+# Or pass it on the CLI per invocation
+python mockgal.py --profit-cli-path /absolute/path/to/libprofit/build/profit-cli ...
+```
+
+> **IMPORTANT: do not hardcode your local `LIBPROFIT_PATH` inside `mockgal.py`.**
+> Earlier versions of this repo accidentally overwrote `os.environ["LIBPROFIT_PATH"]`
+> at module import time with a specific developer's path. That silently disabled the
+> documented `export LIBPROFIT_PATH=...` workflow for everyone else, forced the
+> fallback to the `astropy` engine on machines where the hardcoded path did not exist,
+> and mutated the process-wide `PATH` as a side effect. Keep user-specific paths in
+> your shell environment (or pass `--profit-cli-path`), never in tracked source.
+
+If `profit-cli` cannot be located (or fails its dynamic-library health check),
+MockGal falls back to the pure-Python `astropy` engine in `auto` mode and logs a
+warning.
 
 ## Quick Start
 
