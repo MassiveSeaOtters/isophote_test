@@ -1,0 +1,55 @@
+#see  www.oulu.fi/astronomy/S4G_PIPELINE4/  for decomposition plots
+
+#  Input menu file: ESO410-018_d.ingal
+
+#  Chi^2/nu = 1.935,  Chi^2 = 106267.570,  Ndof = 54932
+
+================================================================================
+# IMAGE and GALFIT CONTROL PARAMETERS
+A) ESO410-018.phot.1_nonan.fits      # Input data image (FITS file)
+B) ESO410-018_d.fits      # Output data image block
+C) ESO410-018_sigma2014.fits      # Sigma image name (made from data if blank or "none") 
+D) PSF-1.composite.fits          # Input PSF image and (optional) diffusion kernel
+E) 5                   # PSF fine sampling factor relative to data 
+F) ESO410-018.1.finmask_nonan.fits      # Bad pixel mask (FITS image or ASCII coord list)
+G) none                # File with parameter constraints (ASCII file) 
+H) 514  761  609  856  # Image region to fit (xmin xmax ymin ymax)
+I) 50     50           # Size of the convolution box (x y)
+J) 21.097              # Magnitude photometric zeropoint 
+K) 0.750  0.750        # Plate scale (dx dy)   [arcsec per pixel]
+O) regular             # Display type (regular, curses, both)
+P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
+
+# INITIAL FITTING PARAMETERS
+#
+#   For component type, the allowed functions are: 
+#       sersic, expdisk, edgedisk, devauc, king, nuker, psf, 
+#       gaussian, moffat, ferrer, and sky. 
+#  
+#   Hidden parameters will only appear when they're specified:
+#       Bn (n=integer, Bending Modes).
+#       C0 (diskyness/boxyness), 
+#       Fn (n=integer, Azimuthal Fourier Modes).
+#       R0-R10 (coordinate rotation, for creating spiral structures).
+#       To, Ti, T0-T10 (truncation function).
+# 
+# ------------------------------------------------------------------------------
+#   par)    par value(s)    fit toggle(s)    # parameter description 
+# ------------------------------------------------------------------------------
+
+# Component number: 1
+# STRUCTURE: DISK
+ 0) expdisk                #  Component type
+ 1) 638.3350 733.0930 0 0  #  Position x, y
+ 3) 14.1476     1          #  Integrated magnitude 
+ 4) 25.8315     1          #  R_s (disk scale-length)   [pix]
+ 5) 0.0000      0          #     ----- 
+ 6) 0.0000      0          #     ----- 
+ 7) 0.0000      0          #     ----- 
+ 8) 0.0000      0          #     ----- 
+ 9) 0.8902      0          #  Axis ratio (b/a)  
+10) 26.6037     0          #  Position angle (PA) [deg: Up=0, Left=90]
+ Z) 0                      #  Skip this model in output image?  (yes=1, no=0)
+
+================================================================================
+

@@ -1,0 +1,69 @@
+#see  www.oulu.fi/astronomy/S4G_PIPELINE4/  for decomposition plots
+
+#  Input menu file: NGC3906_dbarf.ingal
+
+#  Chi^2/nu = 5.266,  Chi^2 = 341508.156,  Ndof = 64850
+
+================================================================================
+# IMAGE and GALFIT CONTROL PARAMETERS
+A) NGC3906.phot.1_nonan.fits      # Input data image (FITS file)
+B) NGC3906_dbarf.fits      # Output data image block
+C) NGC3906_sigma2014.fits      # Sigma image name (made from data if blank or "none") 
+D) PSF-1.composite.fits          # Input PSF image and (optional) diffusion kernel
+E) 5                   # PSF fine sampling factor relative to data 
+F) NGC3906.1.finmask_nonan.fits      # Bad pixel mask (FITS image or ASCII coord list)
+G) none                # File with parameter constraints (ASCII file) 
+H) 569  829  240  500  # Image region to fit (xmin xmax ymin ymax)
+I) 50     50           # Size of the convolution box (x y)
+J) 21.097              # Magnitude photometric zeropoint 
+K) 0.750  0.750        # Plate scale (dx dy)   [arcsec per pixel]
+O) regular             # Display type (regular, curses, both)
+P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
+
+# INITIAL FITTING PARAMETERS
+#
+#   For component type, the allowed functions are: 
+#       sersic, expdisk, edgedisk, devauc, king, nuker, psf, 
+#       gaussian, moffat, ferrer, and sky. 
+#  
+#   Hidden parameters will only appear when they're specified:
+#       Bn (n=integer, Bending Modes).
+#       C0 (diskyness/boxyness), 
+#       Fn (n=integer, Azimuthal Fourier Modes).
+#       R0-R10 (coordinate rotation, for creating spiral structures).
+#       To, Ti, T0-T10 (truncation function).
+# 
+# ------------------------------------------------------------------------------
+#   par)    par value(s)    fit toggle(s)    # parameter description 
+# ------------------------------------------------------------------------------
+
+# Component number: 1
+# STRUCTURE: DISK
+ 0) expdisk                #  Component type
+ 1) 710.5038 367.8116 1 1  #  Position x, y
+ 3) 12.9956     1          #  Integrated magnitude 
+ 4) 22.9637     1          #  R_s (disk scale-length)   [pix]
+ 5) 0.0000      0          #     ----- 
+ 6) 0.0000      0          #     ----- 
+ 7) 0.0000      0          #     ----- 
+ 8) 0.0000      0          #     ----- 
+ 9) 0.8691      0          #  Axis ratio (b/a)  
+10) 28.1464     0          #  Position angle (PA) [deg: Up=0, Left=90]
+ Z) 0                      #  Skip this model in output image?  (yes=1, no=0)
+
+# Component number: 2
+# STRUCTURE: BAR
+ 0) ferrer2                #  Component type
+ 1) 692.0078 372.1621 1 1  #  Position x, y 
+ 3) 20.8678     1          #  Surface brightness at FWHM [mag/arcsec^2]
+ 4) 29.0000     0          #  Outer truncation radius  [pix]
+ 5) 2.0000      0          #  Alpha (outer truncation sharpness) 
+ 6) 0.0000      0          #  Beta (central slope)
+ 7) 0.0000      0          #     ----- 
+ 8) 0.0000      0          #     ----- 
+ 9) 0.3611      1          #  Axis ratio (b/a)  
+10) 78.1069     1          #  Position angle (PA) [deg: Up=0, Left=90]
+ Z) 0                      #  Skip this model in output image?  (yes=1, no=0)
+
+================================================================================
+
