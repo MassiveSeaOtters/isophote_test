@@ -30,6 +30,11 @@
 | P7.6 | P7 | Phase 2e: YAML/JSON serialization + idempotent round-trip | Done | Both modules |
 | P7.7 | P7 | Phase 2f: integration test against real `/Users/shuang/code/galfit/galfit` | Done | GALFIT 3.0.7 accepts parser-written config; parser reads its `galfit.01` |
 | P7.8 | P7 | Phase 3: SKILL package for global install | Done | Installed at `~/.claude/skills/galfit/` (visible to Claude Code) and mirrored at `~/Dropbox/work/project/vibe/guangtou_vibe/skills/galfit/`; ships parser + CLI + 7 reference docs |
+| P9.1 | P9 | Refactor mockgal.py to polymorphic Component ABC | Done | `Component` ABC with `to_libprofit_spec`, `to_astropy_image`, `derived_params`, `angular_extent_arcsec`; `RenderContext` bundles per-render env; `SersicEngine` aliased to `RenderEngine`; bit-identical parity with pre-refactor reference |
+| P9.2 | P9 | Add `FerrerComponent` (libprofit only) | Done | 21 tests; astropy path raises `NotImplementedError`; registered under `type: ferrer`; defaults `alpha=2, beta=0` match Salo+2015 bar fits |
+| P9.3 | P9 | Add `PointSourceComponent` with hard PSF guard | Done | 21 tests; stamps delta in astropy path; auto-size falls back to `MIN_IMAGE_EXTENT_PIX = 51` for PSF-only galaxies; registered under `type: psf`; raises `ValueError` if `psf_enabled=False` |
+| P9.4 | P9 | Add `mockgal_galfit.py` (GALFIT-backed reference renderer) | Done | Wraps GALFIT 3.0.7 binary in `P) 1` model-only mode via the bundled `/galfit` skill's `write_galfit`; two input modes (MockGalaxy + GALFIT-dict-direct); 13 tests |
+| P9.5 | P9 | Component-ABC contract test | Done | Walks `_COMPONENT_REGISTRY`, asserts the four abstract methods are implemented and that each registered class instantiates; catches future profile types added without proper interface compliance |
 
 ## Review
 
@@ -44,3 +49,5 @@
 - Huang2013 manifests can now record `max_image_size` explicitly, and the baseline run uses a low-noise reference row instead of a zero-noise row.
 - The Huang2013 model file now stores `re_overall`, and production sizing is anchored on that galaxy-level radius with `size_factor = 6`.
 - Focused verification is clean again after restoring the `load_model_file` test import, teaching `engine=\"auto\"` to ignore unusable `profit-cli` binaries, and fixing the visualization colorbar label for LaTeX-backed matplotlib sessions.
+- mockgal now renders multi-component galaxies (Sersic + Ferrer + PSF-convolved point source) via a polymorphic `Component` ABC. Adding new profile types requires implementing four methods and registering in `_COMPONENT_REGISTRY` rather than touching three dispersed dispatch sites. The refactor is behavior-preserving: bit-identical render output on the existing single-Sersic and multi-Sersic reference cases.
+- Pixel-perfect GALFIT renders are available via `mockgal_galfit.py`, which wraps the GALFIT binary in model-only mode and shares the bundled `/galfit` skill's writer. Use it as a reference renderer when validating mockgal's libprofit/astropy paths against the original GALFIT integrators.

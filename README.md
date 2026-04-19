@@ -1,11 +1,16 @@
 # MockGal
 
-MockGal generates mock galaxy images with Sersic profiles for isophote-fitting tests and related photometry workflows. It supports both the `libprofit` backend and a pure-Python `astropy` fallback.
+MockGal generates mock galaxy images for isophote-fitting tests and related photometry workflows. It renders multi-component galaxies (Sersic + Ferrer bar + PSF-convolved nucleus) via a polymorphic `Component` ABC, with three rendering backends:
+
+- `libprofit` (preferred): native rendering of all profile types via `profit-cli`.
+- `astropy` (fallback): pure-Python rendering for Sersic and PointSource; Ferrer raises `NotImplementedError`.
+- GALFIT binary via `mockgal_galfit.py`: pixel-perfect reference renders, used for cross-validation.
 
 ## Repository Layout
 
 ```text
 mockgal.py
+mockgal_galfit.py
 inputs/
 tests/
 benchmarks/
@@ -14,8 +19,9 @@ output/
 ```
 
 - `mockgal.py`: CLI entry point and core library
+- `mockgal_galfit.py`: GALFIT-backed reference renderer
 - `inputs/`: canonical Huang2013 assets, examples, and demos
-- `tests/`: pytest suite
+- `tests/`: pytest suite (228 passing)
 - `benchmarks/`: performance benchmarks and reports
 - `docs/`: lessons, build notes, quick references, and planning docs
 - `output/`: generated artifacts, not tracked in git
@@ -118,6 +124,56 @@ image_rect, metadata_rect = generate_mock_image(
     config=config_rect,
 )
 ```
+
+### Multi-component galaxies (bulge + bar + nucleus)
+
+```python
+from mockgal import (
+    ImageConfig,
+    SersicComponent,
+    FerrerComponent,
+    PointSourceComponent,
+    generate_mock_image,
+)
+
+components = [
+    SersicComponent(r_eff_kpc=0.8, abs_mag=-19.0, n=4.0,
+                    ellipticity=0.1, pa_deg=0.0),     # bulge
+    SersicComponent(r_eff_kpc=4.0, abs_mag=-20.0, n=1.0,
+                    ellipticity=0.4, pa_deg=30.0),    # disk
+    FerrerComponent(r_out_kpc=2.5, abs_mag=-18.5,
+                    alpha=2.0, beta=0.0,
+                    ellipticity=0.6, pa_deg=15.0),    # bar (libprofit only)
+    PointSourceComponent(abs_mag=-16.0),               # nucleus (requires PSF)
+]
+
+image, metadata = generate_mock_image(
+    name="multi_component_demo",
+    redshift=0.01,
+    components=components,
+    config=ImageConfig(size_pixels=201, engine="libprofit",
+                       psf_enabled=True, psf_type="gaussian", psf_fwhm=1.0),
+)
+```
+
+`PointSourceComponent` requires `psf_enabled=True` (rendering a delta without a PSF would produce a single bright pixel). `FerrerComponent` is libprofit-only — the astropy backend raises `NotImplementedError`.
+
+### GALFIT-backed reference render
+
+For pixel-perfect parity with the original GALFIT integrator (e.g. when validating a parsed Salo+2015 P4 model), use `mockgal_galfit.py`:
+
+```python
+from mockgal import MockGalaxy, SersicComponent, ImageConfig
+from mockgal_galfit import render_with_galfit
+
+galaxy = MockGalaxy(name="ref", redshift=0.01,
+                    components=[SersicComponent(r_eff_kpc=2.0, abs_mag=-19.5, n=4.0)])
+config = ImageConfig(size_pixels=101, pixel_scale=0.168, zeropoint=27.0,
+                     psf_enabled=True, psf_type="gaussian", psf_fwhm=1.0)
+image, meta = render_with_galfit(galaxy, config)
+```
+
+By default the GALFIT binary is `/Users/shuang/code/galfit/galfit`; override via the `GALFIT_BIN` env var or the `galfit_bin=` kwarg.
 
 ## Huang2013 Notes
 
