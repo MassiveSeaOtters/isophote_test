@@ -35,10 +35,10 @@
 | P8.3 | P8 | Probe IRSA P4 directories, tag complexity | Done | `inputs/cs4g/scripts/probe_p4.py` → `cs4g_p4_index.csv` (1208 with rank ≥ 2) |
 | P8.4 | P8 | Fetch best `.outgal` per galaxy with local mirror | Done | `inputs/cs4g/scripts/fetch_outgals.py` → `inputs/cs4g/p4/{name}/` |
 | P8.5 | P8 | Parse outgals with /galfit skill, drop edgedisk galaxies | Done | `inputs/cs4g/scripts/parse_outgals.py` → `cs4g_models.json` (1198 kept, 10 edgedisk-skipped) |
-| P8.6 | P8 | Magnitude/size conversion to mockgal schema | TODO | `inputs/cs4g/scripts/cs4g_to_mockgal.py` → `cs4g_components.json` |
-| P8.7 | P8 | Stratified downsample to ~200 | TODO | `inputs/cs4g/scripts/downsample.py` → `cs4g_sample.csv` |
-| P8.8 | P8 | MockGal manifest YAML | TODO | `inputs/cs4g/runs/cs4g_test.yaml` |
-| P8.9 | P8 | Validation: render 5 vs S4G `_subcomps.fits` cubes | TODO | Eyeball check |
+| P8.6 | P8 | Magnitude/size conversion to mockgal schema | Done | `inputs/cs4g/scripts/cs4g_to_mockgal.py` -> `cs4g_components.json` (1198 galaxies, 2625 components); analytic Ferrer SB->integrated-mag validated at 0.02% flux accuracy vs direct GALFIT |
+| P8.7 | P8 | Stratified downsample to ~200 | Done | `inputs/cs4g/scripts/downsample.py` -> `cs4g_sample.csv` (198 rows, KS(logMstar)=0.034, prefers complex models) |
+| P8.8 | P8 | MockGal manifest YAML | Done | `inputs/cs4g/models/cs4g_sample_models.yaml` + `inputs/cs4g/runs/cs4g_s4g_irac1_test.yaml` (dev test at Spitzer/IRAC1 native) |
+| P8.9 | P8 | Validation: render 3 vs S4G `_subcomps.fits` cubes | TODO | Target set: NGC1433 (SBab), NGC0275 (disk+disk+bar), NGC1357 (pure Sersic control). Skip PSF and n>8 components. Gaussian PSF approximation. See PLAN_CS4G_SAMPLE.md Phase 8 |
 | P9.1 | P9 | Refactor mockgal.py to polymorphic Component ABC | Done | `Component` ABC with `to_libprofit_spec`, `to_astropy_image`, `derived_params`, `angular_extent_arcsec`; `RenderContext` bundles per-render env; `SersicEngine` aliased to `RenderEngine`; bit-identical parity with pre-refactor reference |
 | P9.2 | P9 | Add `FerrerComponent` (libprofit only) | Done | 21 tests; astropy path raises `NotImplementedError`; registered under `type: ferrer`; defaults `alpha=2, beta=0` match Salo+2015 bar fits |
 | P9.3 | P9 | Add `PointSourceComponent` with hard PSF guard | Done | 21 tests; stamps delta in astropy path; auto-size falls back to `MIN_IMAGE_EXTENT_PIX = 51` for PSF-only galaxies; registered under `type: psf`; raises `ValueError` if `psf_enabled=False` |

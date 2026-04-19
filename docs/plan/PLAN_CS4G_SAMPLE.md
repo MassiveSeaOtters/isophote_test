@@ -116,11 +116,61 @@ The 366 calibrators are dwarfs (DG sub-sample). For S4G spirals the
 - One YAML entry per sampled galaxy, mirroring Huang2013 conventions.
 - Reference the per-galaxy model JSON from Phase 5.
 
-### Phase 8 — Validation
+### Phase 8 — Validation (P8.9)
 
-- Render 5 galaxies with `mockgal`, eyeball against the IRSA-hosted
-  `*_subcomps.fits` cube for the same galaxy.
-- Sanity check on flux conservation, Re consistency.
+Compare mockgal renders of the CS4G sample against the original
+Salo+2015 `*_subcomps.fits` cubes hosted on IRSA. Both sides use
+Spitzer/IRAC1 native geometry (0.75 arcsec/pix, zp=21.097, Gaussian
+PSF FWHM=1.66 arcsec) driven by `inputs/cs4g/runs/cs4g_s4g_irac1_test.yaml`.
+
+#### Selection constraints (locked in)
+
+- **No galaxies with a PSF component** (PointSourceComponent handling is
+  assumed-correct across all engines; excluding PSF isolates the
+  extended-component fidelity).
+- **No galaxies with a Sersic index > 8** (mockgal clamps n>8 to 8.0 at
+  load time; any such galaxy would have a non-faithful bulge render
+  that confounds the comparison).
+- Scope: **3 galaxies** covering the profile-mix spectrum.
+- PSF: keep the Gaussian FWHM=1.66 arcsec approximation for now
+  (option (a)). Only revisit with per-galaxy Salo composite PSF files
+  if the core residuals dominate the comparison.
+
+#### Proposed validation sample
+
+From the 78 sample galaxies that pass the two constraints:
+
+| Galaxy    | Components             | Role in validation                                   |
+|-----------|------------------------|------------------------------------------------------|
+| NGC1433   | BULGE + DISK + BAR     | Classic SBab ringed barred spiral; exercises Ferrer  |
+| NGC0275   | DISK + DISK + BAR      | Bulgeless disk-dominated; exercises Ferrer           |
+| NGC1357   | BULGE + DISK + DISK    | Sersic-only control (no Ferrer, no PSF)              |
+
+Two galaxies exercise the Ferrer conversion; the third isolates the
+Sersic/expdisk path.
+
+#### Steps
+
+1. Fetch each galaxy's `{name}_subcomps.fits.gz` from the IRSA P4
+   folder, unzip, save to `output/cs4g_s4g_irac1_test/{name}/s4g_subcomps.fits`.
+2. Build a sum image from the subcomps cube (sky plane excluded).
+3. Render via mockgal libprofit driven by the test manifest.
+4. Optionally render via `mockgal_galfit.py` (MockGalaxy mode) as a
+   second reference; useful to separate "our conversion is right" from
+   "libprofit ~ GALFIT".
+5. Crop/align to a common FOV, compute flux ratios and radial profiles.
+6. Emit per-galaxy and summary QA figures to
+   `output/cs4g_s4g_irac1_test/qa_s4g_validation.png`.
+
+#### Expected residual sources
+
+- Central PSF differences (Salo's composite PSF vs our Gaussian) --
+  should dominate inside ~2-3 FWHM of the nucleus.
+- Axis-ratio convention quirks if any (we have not hit these in the
+  NGC1097/NGC1365 2-galaxy check; flag if they appear).
+- Profile-edge differences near Ferrer's truncation -- already
+  characterized in the GALFIT-vs-libprofit Ferrer empirical test
+  (~1% flux near r_out, numerical-only).
 
 ## Risks & open issues
 
