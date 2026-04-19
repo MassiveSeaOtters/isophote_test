@@ -80,25 +80,33 @@ def load_model_dict(path: Path) -> dict[str, dict]:
 
 
 def build_mockgalaxy(name: str, record: dict) -> MockGalaxy:
+    # The CS4G sample YAML stores abs_mag in predicted i-band (see the
+    # metadata's `assumed_band` field). For P8.9 we compare against the
+    # S4G IRAC1 3.6 um subcomps cubes using zp=21.097, so we add the
+    # per-galaxy color term (M_3.6 - M_i = color_shift_3p6_minus_i,
+    # positive because IRAC1 is brighter for these late-type disks) to
+    # each component's abs_mag to recover the 3.6 um magnitude.
+    color_shift = float(record.get("color_shift_3p6_minus_i", 0.0))
     comps = []
     for c in record["components"]:
         t = c["type"]
         cid = c.get("id")
+        abs_mag_3p6 = float(c["abs_mag"]) + color_shift
         if t == "sersic":
             comps.append(SersicComponent(
-                r_eff_kpc=c["r_eff_kpc"], abs_mag=c["abs_mag"], n=c["n"],
+                r_eff_kpc=c["r_eff_kpc"], abs_mag=abs_mag_3p6, n=c["n"],
                 ellipticity=c["ellipticity"], pa_deg=c["pa_deg"],
                 component_id=cid,
             ))
         elif t == "ferrer":
             comps.append(FerrerComponent(
-                r_out_kpc=c["r_out_kpc"], abs_mag=c["abs_mag"],
+                r_out_kpc=c["r_out_kpc"], abs_mag=abs_mag_3p6,
                 alpha=c["alpha"], beta=c["beta"],
                 ellipticity=c["ellipticity"], pa_deg=c["pa_deg"],
                 component_id=cid,
             ))
         elif t == "psf":
-            comps.append(PointSourceComponent(abs_mag=c["abs_mag"], component_id=cid))
+            comps.append(PointSourceComponent(abs_mag=abs_mag_3p6, component_id=cid))
         else:
             raise ValueError(f"Unknown component type {t!r} in {name}")
     return MockGalaxy(name=name, redshift=record["redshift"], components=comps)
@@ -231,6 +239,9 @@ def render_and_compare(name: str, record: dict, out_dir: Path) -> dict:
     galaxy = build_mockgalaxy(name, record)
     config = make_config()
 
+    color_shift = float(record.get("color_shift_3p6_minus_i", 0.0))
+    print(f"[{name}] color_shift (M_3.6 - M_i) = {color_shift:+.4f} mag "
+          f"(added to abs_mag before rendering)")
     print(f"[{name}] rendering via mockgal libprofit...")
     mock_img, meta = generate_mock_image(
         name=name,
@@ -288,6 +299,7 @@ def render_and_compare(name: str, record: dict, out_dir: Path) -> dict:
     return {
         "name": name,
         "components": [c["type"] for c in record["components"]],
+        "color_shift_3p6_minus_i": color_shift,
         "mock_path": str(mock_path),
         "ref_path": str(ref_path),
         "subcomps_path": str(subcomps),

@@ -122,31 +122,47 @@ The 366 calibrators are dwarfs (DG sub-sample). For S4G spirals the
 outputs in `output/cs4g_s4g_irac1_test/` (`qa_s4g_validation.png`,
 `qa_summary.json`, per-galaxy `mockgal.fits` + `s4g_reference.fits`).
 
-Measured metrics on the 3-galaxy set (see `qa_summary.json`):
+Final metrics on the 3-galaxy set (after P8.11 color-shift fix):
 
 | Galaxy   | Components            | flux_ratio | corr   | peak_ratio |
 |----------|-----------------------|------------|--------|------------|
-| NGC1433  | sersic+sersic+ferrer  | 1.423      | 0.974  | 2.80       |
-| NGC0275  | sersic+ferrer+ferrer  | 1.642      | 0.9996 | 1.68       |
-| NGC1357  | sersic+sersic+sersic  | 1.309      | 0.877  | 5.27       |
+| NGC1433  | sersic+sersic+ferrer  | 0.996      | 0.974  | 1.96       |
+| NGC0275  | sersic+ferrer+ferrer  | 0.991      | 0.9996 | 1.01       |
+| NGC1357  | sersic+sersic+sersic  | 0.989      | 0.877  | 3.98       |
 
-Shape agreement is excellent (correlation 0.88–0.9996). Two systematic
-biases were uncovered and filed as separate TODO rows:
+Total-flux agreement within 1% of unity; pixel-wise correlation
+0.88–0.9996. Residual peak_ratio > 1 for bulge-dominated galaxies
+is fully explained by the Gaussian-FWHM=1.66″ PSF placeholder vs
+Salo's composite PSF; bulgeless NGC0275 shows peak_ratio=1.01 (no
+PSF-core cusp to smear).
 
-- **Run-manifest `defaults:` not merged** (P8.10): `load_image_configs`
+Path to these final numbers:
+
+1. First-pass flux_ratio measured 1.31–1.64 before any correction.
+2. Root cause traced to a **band mismatch** in the QA script, not a
+   cosmology bug: `cs4g_sample_models.yaml` stores i-band absolute
+   magnitudes (see `metadata.assumed_band`), and the converter applies
+   a per-galaxy `M_3.6 − M_i` color shift to the Salo IRAC1 source
+   values. Rendering those i-band abs_mags against an IRAC1 reference
+   without undoing the shift produces flux excess exactly equal to
+   `10^(0.4·color_shift)`. Predicted flux ratios matched measurements
+   to 0.005 (e.g. NGC0275: predicted 1.658, measured 1.642).
+3. `color_shift_3p6_minus_i` is already a top-level field in the sample
+   YAML. P8.11 added the undo-shift to `build_mockgalaxy` in
+   `qa_mockgal_vs_s4g.py` (three-line change); no converter or model
+   regeneration required.
+
+Follow-ups filed as separate TODO rows:
+
+- **P8.10 — Run-manifest `defaults:` not merged**: `load_image_configs`
   reads `pixel_scale`/`zeropoint`/PSF from each `configs:` entry only,
   ignoring a sibling `defaults:` block. P8.9 worked around it by driving
   `generate_mock_image(...)` from Python with an explicit `ImageConfig`.
-- **`abs_mag` distance-catalog mismatch** (P8.11): `cs4g_to_mockgal.py`
-  used Salo's catalog distance when computing `abs_mag`, but mockgal
-  converts back via Hubble-flow `FlatLambdaCDM(70, 0.3).distmod(z)`.
-  The per-galaxy constant mag offset reproduces the measured flux
-  ratios to 0.1% (NGC1357: predicted 1.310 vs measured 1.309).
-- **Gaussian vs composite PSF** (P8.12, low priority): `peak_ratio`
-  5.3× for NGC1357's bulge reflects Gaussian-FWHM=1.66″ vs Salo's
-  tighter composite PSF core. Cubes ship `PSF-1.composite.fits`
+- **P8.12 — Gaussian vs composite PSF** (low priority): remaining
+  peak_ratio=3.98 for NGC1357 is the Gaussian FWHM=1.66″ vs Salo's
+  composite PSF core. `PSF-1.composite.fits` is already pre-fetched
   locally at `output/cs4g_s4g_irac1_test/{name}/s4g_psf_composite.fits`
-  for a drop-in when needed.
+  for a drop-in when core fidelity matters.
 
 ### Phase 8 — Original specification (reference)
 
