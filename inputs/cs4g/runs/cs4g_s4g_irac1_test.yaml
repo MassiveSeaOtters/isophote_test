@@ -1,0 +1,47 @@
+run_name: cs4g_s4g_irac1_test
+description: >
+  Development-stage test manifest that renders the CS4G 198-galaxy sample at
+  the native Spitzer/IRAC1 settings used by Salo+2015 to build the S4G P4
+  decompositions. Intended for the P8.9 validation step: compare mockgal
+  renders against the original `*_subcomps.fits` cubes pulled from IRSA.
+  NOT a production or demo manifest -- just a single noise-free reference
+  row that mirrors the S4G pipeline geometry.
+
+model_file: inputs/cs4g/models/cs4g_sample_models.yaml
+output_root: output/cs4g_s4g_irac1_test
+
+# All values below are the Spitzer/IRAC1 conventions used by Salo+2015:
+#   pixel_scale 0.75 arcsec/pix     -- IRAC1 mosaic native (matches S4G outgal K))
+#   zeropoint   21.097 mag (AB)     -- Salo+2015 S4G pipeline zeropoint (outgal J))
+#   psf_fwhm    1.66 arcsec         -- IRAC1 in-flight PSF FWHM (Hora et al. 2012;
+#                                      Salo et al. 2015 use a composite PSF file
+#                                      per galaxy; a 1.66" Gaussian is the simple
+#                                      placeholder for this dev-stage test)
+defaults:
+  pixel_scale: 0.75
+  zeropoint: 21.097
+  size_pixels: null
+  max_image_size: 4001
+  psf_enabled: true
+  psf_type: gaussian
+  psf_fwhm: 1.66
+  psf_moffat_beta: 4.765
+  psf_file: null
+  sky_enabled: false
+  sky_type: flat
+  sky_level: 0.0
+  sky_coeffs: [0.0]
+  sky_sb_value: null
+  noise_enabled: false
+  noise_sigma: null
+  noise_snr: null
+  noise_seed: 42
+  sky_sb_limit: null
+  gain: null
+  randomize_noise_seed: false
+  engine: libprofit          # Ferrer has no astropy renderer in mockgal
+  profit_cli_path: null
+
+configs:
+  - name: s4g_native_clean
+    size_factor: 6.0

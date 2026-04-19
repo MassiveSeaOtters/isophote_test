@@ -1,0 +1,5004 @@
+metadata:
+  source: Salo+2015 S4G P4 GALFIT decompositions (IRSA cs4gcat x Comeron+2025)
+  description: Multi-component mockgal models for a stratified 198-galaxy sub-sample
+    of CS4G late-type disks. Sizes in kpc, magnitudes in absolute i-band AB (predicted
+    from IRAC1 via Strategy D).
+  reference: Salo+2015 ApJS 219 4; Comeron+2025 A&A 697 A38; Sheth+2010 PASP 122 1397
+  assumed_band: SDSS i-band AB (predicted)
+  n_galaxies: 198
+  sample_selection: stratified logMstar, prefer complex; see docs/plan/PLAN_CS4G_SAMPLE.md
+  component_types:
+    sersic: bulge or disk (expdisk converted to Sersic n=1, R_e=1.6783 R_s)
+    ferrer: Salo+2015 bar profile; alpha=2, beta=0 typical
+    psf: unresolved galaxy nucleus; requires PSF-enabled render
+galaxies:
+- name: ESO026-001
+  redshift: 0.003979448855674918
+  distance_mpc: 17.04
+  color_shift_3p6_minus_i: 0.4118167687560508
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.6910252405291932
+    abs_mag: -18.59156472090945
+    n: 1.0
+    ellipticity: 0.06040000000000001
+    pa_deg: 19.3482
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.040059329088866
+    abs_mag: -15.556619830412473
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7145
+    pa_deg: 69.6292
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -13.423764720909453
+- name: ESO027-001
+  redshift: 0.0035263895375992524
+  distance_mpc: 15.1
+  color_shift_3p6_minus_i: 0.4775079130694735
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.13857510653445454
+    abs_mag: -17.387292649535322
+    n: 3.2567
+    ellipticity: 0.6321
+    pa_deg: 58.0289
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.0314807066767955
+    abs_mag: -19.85399264953532
+    n: 1.0
+    ellipticity: 0.2158
+    pa_deg: 12.4953
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.2808752062938167
+    abs_mag: -17.23438016608036
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6371
+    pa_deg: 62.3126
+- name: ESO048-017
+  redshift: 0.006179355441382531
+  distance_mpc: 26.46
+  color_shift_3p6_minus_i: 0.6880830618254912
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.447051061061526
+    abs_mag: -18.3488322610829
+    n: 1.0
+    ellipticity: 0.4697
+    pa_deg: 62.9853
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.4376769619658845
+    abs_mag: -16.3507039809387
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.8239
+    pa_deg: 59.8686
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -12.9394322610829
+- name: ESO120-012
+  redshift: 0.0030826716487622604
+  distance_mpc: 13.2
+  color_shift_3p6_minus_i: 0.6894743691668737
+  components:
+  - type: sersic
+    id: DISK_1
+    r_eff_kpc: 1.5769267957925264
+    abs_mag: -16.123744025196125
+    n: 0.9553
+    ellipticity: 0.6265000000000001
+    pa_deg: -79.7965
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.180027703026192
+    abs_mag: -17.101744025196123
+    n: 1.0
+    ellipticity: 0.3247
+    pa_deg: 86.4099
+- name: ESO234-043
+  redshift: 0.005235871088276506
+  distance_mpc: 22.42
+  color_shift_3p6_minus_i: 0.6763868397042714
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.259342946024129
+    abs_mag: -18.433464880999047
+    n: 1.0
+    ellipticity: 0.33140000000000003
+    pa_deg: -88.6982
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.9992941501217087
+    abs_mag: -16.239930290750173
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7561
+    pa_deg: 52.7971
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -13.025664880999045
+- name: ESO237-052
+  redshift: 0.008066324147594582
+  distance_mpc: 34.54
+  color_shift_3p6_minus_i: 0.6367737415469428
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.5454416439090601
+    abs_mag: -15.340985407704142
+    n: 0.9546
+    ellipticity: 0.3657
+    pa_deg: 14.5848
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.039459748322087
+    abs_mag: -19.097185407704142
+    n: 1.0
+    ellipticity: 0.5159
+    pa_deg: 59.7134
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.5118196818285057
+    abs_mag: -15.191450365419865
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.772
+    pa_deg: 53.6039
+- name: ESO340-042
+  redshift: 0.005604857543204111
+  distance_mpc: 24.0
+  color_shift_3p6_minus_i: 0.6751832090111378
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.551744968010606
+    abs_mag: -18.95413941756917
+    n: 1.0
+    ellipticity: 0.31289999999999996
+    pa_deg: 71.9185
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.246308560486782
+    abs_mag: -16.41448093980954
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.636
+    pa_deg: -57.2958
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -12.87523941756917
+- name: ESO357-012
+  redshift: 0.004974311069593648
+  distance_mpc: 21.3
+  color_shift_3p6_minus_i: 0.6709160340405163
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 6.300986098113361
+    abs_mag: -18.847514051234207
+    n: 1.0
+    ellipticity: 0.3779
+    pa_deg: -50.633
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 4.536334237160596
+    abs_mag: -15.881817598388508
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6675
+    pa_deg: -85.7818
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -12.007914051234206
+- name: ESO408-012
+  redshift: 0.013218122372723027
+  distance_mpc: 56.6
+  color_shift_3p6_minus_i: 0.624664306646217
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 6.573062937243496
+    abs_mag: -19.53374646258757
+    n: 1.0
+    ellipticity: 0.4524
+    pa_deg: 74.4299
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 5.8548805633535
+    abs_mag: -16.703129128633577
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7428
+    pa_deg: -73.4694
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -13.787446462587571
+- name: ESO440-049
+  redshift: 0.007083138720224194
+  distance_mpc: 30.33
+  color_shift_3p6_minus_i: 0.7450500821150285
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.24007504552511166
+    abs_mag: -15.615912133668346
+    n: 1.4041
+    ellipticity: 0.24409999999999998
+    pa_deg: -36.9487
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.579297881135243
+    abs_mag: -19.226412133668344
+    n: 1.0
+    ellipticity: 0.2118
+    pa_deg: 63.1406
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.2091425314002682
+    abs_mag: -17.183512133668344
+    n: 1.0
+    ellipticity: 0.2118
+    pa_deg: 63.1406
+- name: ESO445-089
+  redshift: 0.008477347034096217
+  distance_mpc: 36.3
+  color_shift_3p6_minus_i: 0.6196002844174302
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 6.537777290408374
+    abs_mag: -20.836033409597988
+    n: 1.0
+    ellipticity: 0.1643
+    pa_deg: -62.543
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.9640056203655267
+    abs_mag: -17.967004715996566
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.544
+    pa_deg: -45.4093
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.518933409597988
+- name: ESO485-021
+  redshift: 0.0037365716954694066
+  distance_mpc: 16.0
+  color_shift_3p6_minus_i: 0.6381809796207136
+  components:
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -12.08968089290034
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.378986735710833
+    abs_mag: -18.504180892900337
+    n: 1.0
+    ellipticity: 0.016199999999999992
+    pa_deg: -55.17
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.8429086409318307
+    abs_mag: -15.552218202057219
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7031000000000001
+    pa_deg: -68.8749
+- name: ESO505-013
+  redshift: 0.004138253152732368
+  distance_mpc: 17.72
+  color_shift_3p6_minus_i: 0.5647948681224619
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.993750360470927
+    abs_mag: -18.99171345587762
+    n: 1.0
+    ellipticity: 0.3539
+    pa_deg: 37.4294
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.2838537427881502
+    abs_mag: -16.10590721610475
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.656
+    pa_deg: -21.056
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -12.78841345587762
+- name: ESO509-026
+  redshift: 0.006328818309201308
+  distance_mpc: 27.1
+  color_shift_3p6_minus_i: 0.8043839167774252
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.044243732927795425
+    abs_mag: -17.41953037114945
+    n: 14.3921
+    ellipticity: 0.09999999999999998
+    pa_deg: -16.4282
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.8648402625867972
+    abs_mag: -17.997630371149448
+    n: 1.0
+    ellipticity: 0.09750000000000003
+    pa_deg: -88.1025
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.939747731470464
+    abs_mag: -17.607141676650535
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6835
+    pa_deg: 1.897
+- name: ESO570-019
+  redshift: 0.006503970107426436
+  distance_mpc: 27.85
+  color_shift_3p6_minus_i: 0.6051696094239531
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.290416613112958
+    abs_mag: -18.558195606972692
+    n: 1.0
+    ellipticity: 0.3256
+    pa_deg: 73.5325
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.6697965106921795
+    abs_mag: -17.334671741733896
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4678
+    pa_deg: -73.7706
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.926095606972694
+- name: ESO576-001
+  redshift: 0.019990658570761325
+  distance_mpc: 85.6
+  color_shift_3p6_minus_i: 0.33333167349565684
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 6.1176495616336535
+    abs_mag: -21.617300496881427
+    n: 1.0
+    ellipticity: 0.49119999999999997
+    pa_deg: -24.299
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.8012534494508983
+    abs_mag: -18.568716142366316
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5858
+    pa_deg: 37.0445
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -18.697800496881428
+- name: ESO576-032
+  redshift: 0.005077066791219056
+  distance_mpc: 21.74
+  color_shift_3p6_minus_i: 0.44846495920657503
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.9614315768189967
+    abs_mag: -20.133062657957957
+    n: 1.0
+    ellipticity: 0.29000000000000004
+    pa_deg: -45.448
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.6486274376474583
+    abs_mag: -16.08990191176281
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.8378
+    pa_deg: -26.753
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.146062657957955
+- name: IC0167
+  redshift: 0.005193834656702475
+  distance_mpc: 22.24
+  color_shift_3p6_minus_i: 0.6511233699192722
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.8397548224751596
+    abs_mag: -17.83679728446937
+    n: 0.2844
+    ellipticity: 0.2812
+    pa_deg: 22.984
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 7.935405879628297
+    abs_mag: -18.68859728446937
+    n: 1.0
+    ellipticity: 0.44410000000000005
+    pa_deg: 88.4431
+  - type: ferrer
+    id: bar
+    r_out_kpc: 1.0733628292107957
+    abs_mag: -16.345104425726827
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5227999999999999
+    pa_deg: -47.3279
+- name: IC0529
+  redshift: 0.006496964035497431
+  distance_mpc: 27.82
+  color_shift_3p6_minus_i: 0.5496296226458313
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 6.261043155249756
+    abs_mag: -20.82391525092597
+    n: 1.0
+    ellipticity: 0.5656
+    pa_deg: -38.567
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.2644562540662467
+    abs_mag: -17.510933162106973
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6194999999999999
+    pa_deg: -30.4845
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -15.008315250925968
+- name: IC0600
+  redshift: 0.005060719290051378
+  distance_mpc: 21.67
+  color_shift_3p6_minus_i: 0.6477442208007851
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.135376495630898
+    abs_mag: -18.687238777399873
+    n: 1.0
+    ellipticity: 0.5550999999999999
+    pa_deg: 25.7067
+  - type: ferrer
+    id: DISK
+    r_out_kpc: 2.9659372816956844
+    abs_mag: -17.388807395772517
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.2531
+    pa_deg: -16.0425
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.4353256410370672
+    abs_mag: -16.172123063969533
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6085
+    pa_deg: -4.1201
+- name: IC0797
+  redshift: 0.0037972909855207852
+  distance_mpc: 16.26
+  color_shift_3p6_minus_i: 0.5289066359782062
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.846916707195476
+    abs_mag: -18.590209342268448
+    n: 1.0
+    ellipticity: 0.40180000000000005
+    pa_deg: -76.822
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 0.8277223977583109
+    abs_mag: -14.31065062911097
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5388
+    pa_deg: -20.1244
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -11.80580934226845
+- name: IC1014
+  redshift: 0.005658570761326483
+  distance_mpc: 24.23
+  color_shift_3p6_minus_i: 0.4889952616115707
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.107793247566452
+    abs_mag: -19.4627623322991
+    n: 1.0
+    ellipticity: 0.3256
+    pa_deg: 87.2466
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.24327263297499
+    abs_mag: -15.981617877465887
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7297
+    pa_deg: 52.3355
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -12.867462332299102
+- name: IC1067
+  redshift: 0.0049346099953292855
+  distance_mpc: 21.13
+  color_shift_3p6_minus_i: 0.3996319090364686
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.2770981368073526
+    abs_mag: -16.62402939429803
+    n: 0.3799
+    ellipticity: 0.3399
+    pa_deg: -48.3286
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.655085079268628
+    abs_mag: -19.57202939429803
+    n: 1.0
+    ellipticity: 0.2148
+    pa_deg: -62.641
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.7671095066181755
+    abs_mag: -17.35778602408428
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6482
+    pa_deg: -28.8865
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -15.973929394298032
+- name: IC1438
+  redshift: 0.0079985987856142
+  distance_mpc: 34.25
+  color_shift_3p6_minus_i: 0.46068617659842204
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.4279697315122689
+    abs_mag: -20.17848905574064
+    n: 1.5599
+    ellipticity: 0.19930000000000003
+    pa_deg: -40.982
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 7.292116150179636
+    abs_mag: -20.85228905574064
+    n: 1.0
+    ellipticity: 0.10289999999999999
+    pa_deg: -13.9887
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 6.083770622733975
+    abs_mag: -19.738005170807845
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5593
+    pa_deg: -57.7007
+- name: IC1558
+  redshift: 0.002585240541802896
+  distance_mpc: 11.07
+  color_shift_3p6_minus_i: 0.7698134545324997
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.4907293815728724
+    abs_mag: -17.87385155892611
+    n: 1.0
+    ellipticity: 0.5056
+    pa_deg: -33.759
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.3749844891631506
+    abs_mag: -14.521014195769883
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.41379999999999995
+    pa_deg: 54.994
+- name: IC1914
+  redshift: 0.004682391405885101
+  distance_mpc: 20.05
+  color_shift_3p6_minus_i: 0.6090343929235367
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.643248500045611
+    abs_mag: -19.04300627770454
+    n: 1.0
+    ellipticity: 0.5487
+    pa_deg: -73.04
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.186488745732641
+    abs_mag: -16.147228635705623
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4992
+    pa_deg: 86.9918
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.014606277704537
+- name: IC1953
+  redshift: 0.005705277907519851
+  distance_mpc: 24.43
+  color_shift_3p6_minus_i: 0.5401900736937861
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.17263219619416417
+    abs_mag: -16.340207408560964
+    n: 1.0908
+    ellipticity: 0.44020000000000004
+    pa_deg: -30.7842
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 6.4124930358109475
+    abs_mag: -20.887007408560965
+    n: 1.0
+    ellipticity: 0.33440000000000003
+    pa_deg: -57.723
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.0430896945897787
+    abs_mag: -17.175187382837247
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6832
+    pa_deg: -22.3944
+- name: IC2035
+  redshift: 0.002772069126576366
+  distance_mpc: 11.87
+  color_shift_3p6_minus_i: 0.4686645947716457
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 0.4893726076541763
+    abs_mag: -18.932218189544603
+    n: 1.0
+    ellipticity: 0.1471
+    pa_deg: 85.784
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 0.39025758424134055
+    abs_mag: -17.312117348041824
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4578
+    pa_deg: 40.6317
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.2409181895446
+- name: IC2056
+  redshift: 0.004808500700607193
+  distance_mpc: 20.59
+  color_shift_3p6_minus_i: 0.47149120727618765
+  components:
+  - type: sersic
+    id: DISK_1
+    r_eff_kpc: 0.9004595979282075
+    abs_mag: -19.71797294036634
+    n: 0.4221
+    ellipticity: 0.10870000000000002
+    pa_deg: 29.5111
+  - type: sersic
+    id: DISK_2
+    r_eff_kpc: 1.8271000066333674
+    abs_mag: -19.795472940366338
+    n: 1.0
+    ellipticity: 0.11660000000000004
+    pa_deg: 16.0097
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -16.093772940366343
+- name: IC3021
+  redshift: 0.0085007006071929
+  distance_mpc: 36.4
+  color_shift_3p6_minus_i: 0.7246391257876432
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.539507390424136
+    abs_mag: -18.58184604403293
+    n: 1.0
+    ellipticity: 0.22960000000000003
+    pa_deg: 9.4503
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.58824961931484
+    abs_mag: -13.70306407350752
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.8784
+    pa_deg: 38.5708
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -13.147746044032928
+- name: IC4316
+  redshift: 0.001004203643157403
+  distance_mpc: 4.3
+  color_shift_3p6_minus_i: 0.5410654353060131
+  components:
+  - type: sersic
+    id: DISK_1
+    r_eff_kpc: 0.3133583773984704
+    abs_mag: -12.811007713203944
+    n: 0.95
+    ellipticity: 0.26859999999999995
+    pa_deg: 24.703
+  - type: sersic
+    id: DISK_2
+    r_eff_kpc: 1.1534119346128109
+    abs_mag: -14.920707713203944
+    n: 1.0
+    ellipticity: 0.4192
+    pa_deg: 57.0264
+- name: IC4901
+  redshift: 0.005221858944418496
+  distance_mpc: 22.36
+  color_shift_3p6_minus_i: 0.5556393640769031
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 8.710324718727875
+    abs_mag: -20.339598360148834
+    n: 1.0
+    ellipticity: 0.30789999999999995
+    pa_deg: -57.123
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.2680108354838917
+    abs_mag: -20.243398360148834
+    n: 1.0
+    ellipticity: 0.30789999999999995
+    pa_deg: -57.123
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.0725581682018905
+    abs_mag: -17.120490799450018
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7888999999999999
+    pa_deg: -57.1829
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -15.962698360148835
+- name: IC5069
+  redshift: 0.008846333489023821
+  distance_mpc: 37.88
+  color_shift_3p6_minus_i: 0.6213667151391995
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 2.828950806571319
+    abs_mag: -18.418716566795375
+    n: 0.2667
+    ellipticity: 0.1935
+    pa_deg: 64.0424
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.096299164091617
+    abs_mag: -19.203616566795375
+    n: 1.0
+    ellipticity: 0.06169999999999998
+    pa_deg: -19.9994
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 4.2651471087418455
+    abs_mag: -17.637613964859362
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6224000000000001
+    pa_deg: 58.1853
+- name: IC5240
+  redshift: 0.005943484353106025
+  distance_mpc: 25.45
+  color_shift_3p6_minus_i: 0.3436881493405153
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 2.2735305335521896
+    abs_mag: -20.2687270827044
+    n: 3.36
+    ellipticity: 0.6708000000000001
+    pa_deg: -87.1265
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.797829796477143
+    abs_mag: -20.692427082704402
+    n: 1.0
+    ellipticity: 0.2924
+    pa_deg: -81.4043
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 4.256785323562003
+    abs_mag: -17.37721101250247
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7126
+    pa_deg: 80.4364
+- name: NGC0255
+  redshift: 0.0042363381597384404
+  distance_mpc: 18.14
+  color_shift_3p6_minus_i: 0.6366738072007898
+  components:
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -13.518560220821172
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.2901926219146262
+    abs_mag: -19.75086022082117
+    n: 1.0
+    ellipticity: 0.08779999999999999
+    pa_deg: -4.813
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.0652296603463491
+    abs_mag: -16.309916835890455
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7945
+    pa_deg: 54.8268
+- name: NGC0275
+  redshift: 0.008311536665109762
+  distance_mpc: 35.59
+  color_shift_3p6_minus_i: 0.5486553859045209
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.19213621923154
+    abs_mag: -20.430095325923748
+    n: 1.0
+    ellipticity: 0.0393
+    pa_deg: 85.3367
+  - type: ferrer
+    id: DISK
+    r_out_kpc: 7.9784593488942175
+    abs_mag: -20.16840525986398
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4619
+    pa_deg: -48.8082
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 4.446825986403156
+    abs_mag: -18.9089359027086
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5347
+    pa_deg: -89.287
+- name: NGC0473
+  redshift: 0.00695936478281177
+  distance_mpc: 29.8
+  color_shift_3p6_minus_i: 0.39882911028960066
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.21579069066527476
+    abs_mag: -18.24101043067088
+    n: 1.4429
+    ellipticity: 0.31079999999999997
+    pa_deg: -11.3585
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.058141670212243
+    abs_mag: -20.28301043067088
+    n: 1.0
+    ellipticity: 0.3329
+    pa_deg: -26.827
+  - type: ferrer
+    id: DISK
+    r_out_kpc: 2.6810814945207593
+    abs_mag: -19.067137870604824
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.376
+    pa_deg: -9.5167
+- name: NGC0578
+  redshift: 0.004245679588977113
+  distance_mpc: 18.18
+  color_shift_3p6_minus_i: 0.5849228076909903
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.331295595031642
+    abs_mag: -20.842292202120735
+    n: 1.0
+    ellipticity: 0.46430000000000005
+    pa_deg: -72.402
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.150347914751181
+    abs_mag: -17.40849432340106
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7724
+    pa_deg: 87.7747
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -15.644792202120733
+- name: NGC0613
+  redshift: 0.004871555347968239
+  distance_mpc: 20.86
+  color_shift_3p6_minus_i: 0.3829643073063522
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.43015541824284925
+    abs_mag: -20.370835827758917
+    n: 0.7991
+    ellipticity: 0.42710000000000004
+    pa_deg: -62.8087
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 7.664279683431716
+    abs_mag: -22.269835827758918
+    n: 1.0
+    ellipticity: 0.22130000000000005
+    pa_deg: -54.065
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 7.205664538910756
+    abs_mag: -20.326575136812387
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7076
+    pa_deg: -53.2426
+- name: NGC0718
+  redshift: 0.004997664642690331
+  distance_mpc: 21.4
+  color_shift_3p6_minus_i: 0.38613618368529856
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.268484580610705
+    abs_mag: -19.361605050431255
+    n: 3.2961
+    ellipticity: 0.2006
+    pa_deg: -6.0806
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.077344767092758
+    abs_mag: -20.386205050431254
+    n: 1.0
+    ellipticity: 0.15390000000000004
+    pa_deg: 14.835
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.5609533849419828
+    abs_mag: -18.59392791341493
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5859
+    pa_deg: -31.4369
+- name: NGC0986
+  redshift: 0.0021181690798692202
+  distance_mpc: 9.07
+  color_shift_3p6_minus_i: 0.34782356229561273
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.13267632999502668
+    abs_mag: -17.908059997596087
+    n: 1.1416
+    ellipticity: 0.2764
+    pa_deg: -51.9333
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.2097256466931388
+    abs_mag: -19.30055999759609
+    n: 1.0
+    ellipticity: 0.10150000000000003
+    pa_deg: -72.402
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.8468492368186664
+    abs_mag: -17.902784601670053
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5732999999999999
+    pa_deg: 61.5488
+- name: NGC0991
+  redshift: 0.002050443717888837
+  distance_mpc: 8.78
+  color_shift_3p6_minus_i: 0.5164210561896709
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.732912015909557
+    abs_mag: -18.100493635720184
+    n: 1.0
+    ellipticity: 0.05400000000000005
+    pa_deg: -61.7
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 0.7477149776837952
+    abs_mag: -14.13892577121517
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.43779999999999997
+    pa_deg: 80.9558
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -11.184993635720186
+- name: NGC1042
+  redshift: 0.0017538533395609528
+  distance_mpc: 7.51
+  color_shift_3p6_minus_i: 0.5513719259798968
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.13504741432540013
+    abs_mag: -14.796171611000736
+    n: 0.8618
+    ellipticity: 0.14839999999999998
+    pa_deg: -42.0166
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.881895466644315
+    abs_mag: -19.009971611000733
+    n: 1.0
+    ellipticity: 0.22060000000000002
+    pa_deg: 6.7408
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -13.428271611000735
+- name: NGC1047
+  redshift: 0.0010812704343764596
+  distance_mpc: 4.63
+  color_shift_3p6_minus_i: 0.4594176644460948
+  components:
+  - type: sersic
+    id: DISK_1
+    r_eff_kpc: 0.3927877371525202
+    abs_mag: -14.71012261953586
+    n: 0.9737
+    ellipticity: 0.6267
+    pa_deg: 87.0393
+  - type: sersic
+    id: DISK_2
+    r_eff_kpc: 0.9082220457244733
+    abs_mag: -14.855122619535859
+    n: 1.0
+    ellipticity: 0.25680000000000003
+    pa_deg: -71.587
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -10.305522619535859
+- name: NGC1076
+  redshift: 0.0071929005137786085
+  distance_mpc: 30.8
+  color_shift_3p6_minus_i: 0.39358209188802107
+  components:
+  - type: sersic
+    id: DISK_1
+    r_eff_kpc: 1.5404270160337776
+    abs_mag: -20.05543567439024
+    n: 1.1689
+    ellipticity: 0.5166
+    pa_deg: -79.5672
+  - type: sersic
+    id: DISK_2
+    r_eff_kpc: 4.767281107548818
+    abs_mag: -19.54073567439024
+    n: 1.0
+    ellipticity: 0.2609
+    pa_deg: -78.874
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -15.18433567439024
+- name: NGC1079
+  redshift: 0.005885100420364315
+  distance_mpc: 25.2
+  color_shift_3p6_minus_i: 0.3539256354183138
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.41198584259788745
+    abs_mag: -19.21912833932603
+    n: 1.2266
+    ellipticity: 0.32230000000000003
+    pa_deg: 84.0854
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.6709365157758835
+    abs_mag: -21.08492833932603
+    n: 1.0
+    ellipticity: 0.3903
+    pa_deg: 79.0921
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.5735616434583903
+    abs_mag: -19.040178005222046
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.34109999999999996
+    pa_deg: -50.0471
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.061428339326028
+- name: NGC1097
+  redshift: 0.004007473143390939
+  distance_mpc: 17.16
+  color_shift_3p6_minus_i: 0.33338280812740706
+  components:
+  - type: sersic
+    id: DISK_1
+    r_eff_kpc: 0.770603400027374
+    abs_mag: -21.263669225690837
+    n: 0.1906
+    ellipticity: 0.125
+    pa_deg: -35.7309
+  - type: sersic
+    id: DISK_2
+    r_eff_kpc: 11.43597210882943
+    abs_mag: -22.255269225690835
+    n: 1.0
+    ellipticity: 0.33209999999999995
+    pa_deg: -53.508
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 8.111417698643645
+    abs_mag: -21.119291419420023
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5845
+    pa_deg: -32.992
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -18.34206922569084
+- name: NGC1179
+  redshift: 0.0037155534796823914
+  distance_mpc: 15.91
+  color_shift_3p6_minus_i: 0.5264974610847339
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.2945095702647205
+    abs_mag: -19.71364835931764
+    n: 1.0
+    ellipticity: 0.17510000000000003
+    pa_deg: 48.9789
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.1570078499679075
+    abs_mag: -15.750987881084548
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6558999999999999
+    pa_deg: -22.6731
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -13.827748359317638
+- name: NGC1258
+  redshift: 0.005948155067725362
+  distance_mpc: 25.47
+  color_shift_3p6_minus_i: 0.5692190103322474
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.8553567356031486
+    abs_mag: -19.36896373515032
+    n: 1.0
+    ellipticity: 0.2682
+    pa_deg: 16.5457
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.2965614680752875
+    abs_mag: -14.88284676399832
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6999
+    pa_deg: 89.1748
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -13.00286373515032
+- name: NGC1302
+  redshift: 0.002617935544138253
+  distance_mpc: 11.21
+  color_shift_3p6_minus_i: 0.4016365947990934
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.7342552821084184
+    abs_mag: -19.408264657773962
+    n: 4.23
+    ellipticity: 0.09550000000000003
+    pa_deg: 0.1812
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.65790212002076
+    abs_mag: -19.74486465777396
+    n: 1.0
+    ellipticity: 0.0373
+    pa_deg: 11.5604
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.602159665604882
+    abs_mag: -17.43201929646918
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5962000000000001
+    pa_deg: -9.8561
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.662364657773962
+- name: NGC1313
+  redshift: 0.001
+  distance_mpc: 4.13
+  color_shift_3p6_minus_i: 0.6144813106962701
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.6830777850520517
+    abs_mag: -19.210831568978275
+    n: 1.0
+    ellipticity: 0.10870000000000002
+    pa_deg: -1.5329
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.0857165326819107
+    abs_mag: -16.569632214621883
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6333
+    pa_deg: 18.5628
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -11.593731568978274
+- name: NGC1350
+  redshift: 0.004397477814105558
+  distance_mpc: 18.83
+  color_shift_3p6_minus_i: 0.3878241260195807
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.5381022289718048
+    abs_mag: -20.017975726102907
+    n: 1.3003
+    ellipticity: 0.32989999999999997
+    pa_deg: 6.3836
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 7.823718705449499
+    abs_mag: -21.671475726102905
+    n: 1.0
+    ellipticity: 0.4728
+    pa_deg: 4.6958
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 5.477424969175536
+    abs_mag: -19.454367402690295
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.48050000000000004
+    pa_deg: 47.1502
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.075575726102905
+- name: NGC1357
+  redshift: 0.006410555815039701
+  distance_mpc: 27.45
+  color_shift_3p6_minus_i: 0.30450725982368
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.8350688703707287
+    abs_mag: -19.89131900375424
+    n: 4.1013
+    ellipticity: 0.1975
+    pa_deg: 78.1123
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 10.547060008372123
+    abs_mag: -20.98421900375424
+    n: 1.0
+    ellipticity: 0.20999999999999996
+    pa_deg: 80.9978
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.523750956520172
+    abs_mag: -20.908119003754237
+    n: 1.0
+    ellipticity: 0.20999999999999996
+    pa_deg: 80.9978
+- name: NGC1365
+  redshift: 0.0038673517048108358
+  distance_mpc: 16.56
+  color_shift_3p6_minus_i: 0.28161589062741044
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.761115222981526
+    abs_mag: -21.172617552871714
+    n: 0.8566
+    ellipticity: 0.42300000000000004
+    pa_deg: 33.3115
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 12.807852969300182
+    abs_mag: -22.011317552871713
+    n: 1.0
+    ellipticity: 0.41159999999999997
+    pa_deg: 31.6631
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 7.225663103256524
+    abs_mag: -20.562693388599893
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4959
+    pa_deg: 88.5113
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -19.787917552871715
+- name: NGC1433
+  redshift: 0.0022115833722559553
+  distance_mpc: 9.47
+  color_shift_3p6_minus_i: 0.3865312253288451
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.22994608538880434
+    abs_mag: -18.721381120345207
+    n: 1.3793
+    ellipticity: 0.23870000000000002
+    pa_deg: 30.0982
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.925192656663531
+    abs_mag: -20.565281120345208
+    n: 1.0
+    ellipticity: 0.13949999999999996
+    pa_deg: 24.3305
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.5811247368836985
+    abs_mag: -18.496422320262486
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5876
+    pa_deg: -83.2437
+- name: NGC1452
+  redshift: 0.0048808967772069126
+  distance_mpc: 20.9
+  color_shift_3p6_minus_i: 0.30263188618048886
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.34520521845448054
+    abs_mag: -19.08996331673576
+    n: 1.5778
+    ellipticity: 0.1351
+    pa_deg: -77.5216
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.203966915007152
+    abs_mag: -20.291563316735758
+    n: 1.0
+    ellipticity: 0.4024
+    pa_deg: -66.263
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.0397817805567904
+    abs_mag: -19.074311955226392
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5046999999999999
+    pa_deg: 30.9721
+- name: NGC1512
+  redshift: 0.0029168612797758056
+  distance_mpc: 12.49
+  color_shift_3p6_minus_i: 0.42344086508961
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.3510300948444968
+    abs_mag: -19.00525305696029
+    n: 1.0593
+    ellipticity: 0.1613
+    pa_deg: 70.4775
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.762811547938414
+    abs_mag: -20.654253056960286
+    n: 1.0
+    ellipticity: 0.26480000000000004
+    pa_deg: 74.4517
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 4.269002628325963
+    abs_mag: -18.47650426152562
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6323
+    pa_deg: 43.0652
+- name: NGC1566
+  redshift: 0.0022396076599719757
+  distance_mpc: 9.59
+  color_shift_3p6_minus_i: 0.4439518634255286
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.3306422653727128
+    abs_mag: -20.106044899278846
+    n: 1.0
+    ellipticity: 0.21950000000000003
+    pa_deg: -23.2793
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 10.272606043198067
+    abs_mag: -19.887244899278844
+    n: 1.0
+    ellipticity: 0.1543
+    pa_deg: 85.9188
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 9.135730190891577
+    abs_mag: -19.884773521317296
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4034
+    pa_deg: 13.7835
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.771444899278844
+- name: NGC1640
+  redshift: 0.0034493227463801963
+  distance_mpc: 14.77
+  color_shift_3p6_minus_i: 0.42299208199154137
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.23031490254857162
+    abs_mag: -17.11159455855129
+    n: 0.7389
+    ellipticity: 0.19130000000000003
+    pa_deg: 41.1525
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.4054557220544237
+    abs_mag: -19.726794558551287
+    n: 1.0
+    ellipticity: 0.08679999999999999
+    pa_deg: 42.7535
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.148209420996354
+    abs_mag: -17.854089644143667
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6302
+    pa_deg: 44.054
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -16.13519455855129
+- name: NGC1672
+  redshift: 0.002758056982718356
+  distance_mpc: 11.81
+  color_shift_3p6_minus_i: 0.4388186296958807
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.27772120116980153
+    abs_mag: -19.996568117763452
+    n: 0.7486
+    ellipticity: 0.15549999999999997
+    pa_deg: -47.2186
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.7724252401850835
+    abs_mag: -21.10976811776345
+    n: 1.0
+    ellipticity: 0.10570000000000002
+    pa_deg: -31.485
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 4.122467693210607
+    abs_mag: -19.27325079022085
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5687
+    pa_deg: -84.0724
+- name: NGC1688
+  redshift: 0.0032881830920130782
+  distance_mpc: 14.08
+  color_shift_3p6_minus_i: 0.64321311939716
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.1008160790988235
+    abs_mag: -19.40042639342763
+    n: 1.0
+    ellipticity: 0.36160000000000003
+    pa_deg: 1.5364
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.8705549968509545
+    abs_mag: -17.616238156620614
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.796
+    pa_deg: -46.7109
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.700326393427627
+- name: NGC1705
+  redshift: 0.0012424100887435778
+  distance_mpc: 5.32
+  color_shift_3p6_minus_i: 0.7340511679466832
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 0.49952821175304346
+    abs_mag: -16.165609329421926
+    n: 1.0
+    ellipticity: 0.32330000000000003
+    pa_deg: 48.1971
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.597309329421929
+- name: NGC1744
+  redshift: 0.0023330219523587108
+  distance_mpc: 9.99
+  color_shift_3p6_minus_i: 0.6948694486655285
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.456262509153518
+    abs_mag: -19.113296889795436
+    n: 1.0
+    ellipticity: 0.5782
+    pa_deg: -12.4146
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.7280766566100754
+    abs_mag: -16.3063964798016
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.8231999999999999
+    pa_deg: -3.4369
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -11.522996889795436
+- name: NGC1800
+  redshift: 0.0018005604857543203
+  distance_mpc: 7.71
+  color_shift_3p6_minus_i: 0.6014438942098721
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 0.8973056465650958
+    abs_mag: -17.105415784464654
+    n: 1.0
+    ellipticity: 0.38339999999999996
+    pa_deg: -75.04
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.064598876538063
+    abs_mag: -15.474114287080608
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7585999999999999
+    pa_deg: -66.0278
+- name: NGC1879
+  redshift: 0.004507239607659972
+  distance_mpc: 19.3
+  color_shift_3p6_minus_i: 0.673944838084136
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.7544112161046446
+    abs_mag: -18.970031383123004
+    n: 1.0
+    ellipticity: 0.3097
+    pa_deg: 52.2821
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 5.5913139206036275
+    abs_mag: -16.75492605824028
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7274
+    pa_deg: 71.4927
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -12.608931383123007
+- name: NGC2500
+  redshift: 0.002800093414292387
+  distance_mpc: 11.99
+  color_shift_3p6_minus_i: 0.5818975401411457
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.114407990724511
+    abs_mag: -19.506393455635386
+    n: 1.0
+    ellipticity: 0.12119999999999997
+    pa_deg: 63.7255
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.3679215598321295
+    abs_mag: -15.075585184659761
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6209
+    pa_deg: 11.5808
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -12.406093455635386
+- name: NGC2537
+  redshift: 0.0028351237739374126
+  distance_mpc: 12.14
+  color_shift_3p6_minus_i: 0.545471956918604
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.5567943484666764
+    abs_mag: -18.5282653906148
+    n: 1.0
+    ellipticity: 0.1734
+    pa_deg: -9.9299
+  - type: ferrer
+    id: DISK
+    r_out_kpc: 2.5639428636529447
+    abs_mag: -18.471088308590662
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.07940000000000003
+    pa_deg: -36.0662
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 0.5749532707869279
+    abs_mag: -14.427345333079785
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6165
+    pa_deg: 2.83
+- name: NGC2543
+  redshift: 0.0076809901914992994
+  distance_mpc: 32.89
+  color_shift_3p6_minus_i: 0.37820505134211757
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.25819786452663307
+    abs_mag: -19.21442441875539
+    n: 0.9961
+    ellipticity: 0.5006999999999999
+    pa_deg: 31.2034
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.926071119348226
+    abs_mag: -20.88222441875539
+    n: 1.0
+    ellipticity: 0.4978
+    pa_deg: 40.5985
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.6310111253292856
+    abs_mag: -18.26769809647983
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.38670000000000004
+    pa_deg: -84.3079
+- name: NGC2750
+  redshift: 0.004771134983652499
+  distance_mpc: 20.43
+  color_shift_3p6_minus_i: 0.4762053307931282
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.0920101147903275
+    abs_mag: -18.143647163955368
+    n: 1.945
+    ellipticity: 0.13170000000000004
+    pa_deg: 27.3823
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.9143109990933835
+    abs_mag: -20.00014716395537
+    n: 1.0
+    ellipticity: 0.10899999999999999
+    pa_deg: -81.6026
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.001498567600704
+    abs_mag: -17.069695155398847
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5184
+    pa_deg: 59.1214
+- name: NGC2805
+  redshift: 0.0029799159271368517
+  distance_mpc: 12.76
+  color_shift_3p6_minus_i: 0.6681795424025445
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.241606065220929
+    abs_mag: -19.584832914328263
+    n: 1.0
+    ellipticity: 0.21540000000000004
+    pa_deg: -40.4
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 0.7932754624484242
+    abs_mag: -17.259232914328262
+    n: 1.0
+    ellipticity: 0.28590000000000004
+    pa_deg: 83.6479
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -12.965132914328265
+- name: NGC2859
+  redshift: 0.0042620270901447925
+  distance_mpc: 18.25
+  color_shift_3p6_minus_i: 0.342718870831181
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.4152141017571466
+    abs_mag: -20.03603321479365
+    n: 1.5288
+    ellipticity: 0.19620000000000004
+    pa_deg: 70.6627
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 9.183366503718759
+    abs_mag: -20.59953321479365
+    n: 1.0
+    ellipticity: 0.20330000000000004
+    pa_deg: 81.775
+  - type: ferrer
+    id: DISK
+    r_out_kpc: 5.70882726638964
+    abs_mag: -19.572046857911815
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.24309999999999998
+    pa_deg: -24.5245
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.8488146109083288
+    abs_mag: -18.66907598786039
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5281
+    pa_deg: -19.7799
+- name: NGC2893
+  redshift: 0.006258757589911256
+  distance_mpc: 26.8
+  color_shift_3p6_minus_i: 0.39920338298382774
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.074586354695769
+    abs_mag: -18.65857735312777
+    n: 1.2478
+    ellipticity: 0.0048000000000000265
+    pa_deg: -7.7992
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.0056981696547846
+    abs_mag: -19.01227735312777
+    n: 1.0
+    ellipticity: 0.045599999999999974
+    pa_deg: 49.0962
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.955158406989157
+    abs_mag: -18.460487697637067
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4606
+    pa_deg: -25.2222
+- name: NGC3055
+  redshift: 0.006062587575899113
+  distance_mpc: 25.96
+  color_shift_3p6_minus_i: 0.49622300855078905
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.067093262883792
+    abs_mag: -20.612746449192446
+    n: 1.0
+    ellipticity: 0.41779999999999995
+    pa_deg: 63.8499
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.1493224525952654
+    abs_mag: -17.566917222600885
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7432000000000001
+    pa_deg: 77.62
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.276646449192445
+- name: NGC3184
+  redshift: 0.0028654834189631015
+  distance_mpc: 12.27
+  color_shift_3p6_minus_i: 0.49756236120423125
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.35411354985348215
+    abs_mag: -17.461385174839254
+    n: 1.3932
+    ellipticity: 0.04179999999999995
+    pa_deg: 4.8246
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 6.109914374508041
+    abs_mag: -21.416785174839255
+    n: 1.0
+    ellipticity: 0.03969999999999996
+    pa_deg: 45.176
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.934685174839252
+- name: NGC3254
+  redshift: 0.00678654834189631
+  distance_mpc: 29.06
+  color_shift_3p6_minus_i: 0.48892734170535235
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.5136488207933992
+    abs_mag: -19.407905391515367
+    n: 1.7151
+    ellipticity: 0.49439999999999995
+    pa_deg: 52.1545
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 8.185026504206489
+    abs_mag: -21.128705391515368
+    n: 1.0
+    ellipticity: 0.7133
+    pa_deg: 45.8736
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.6890025634739687
+    abs_mag: -18.59433590019664
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.637
+    pa_deg: 46.6857
+- name: NGC3266
+  redshift: 0.005520784680056049
+  distance_mpc: 23.64
+  color_shift_3p6_minus_i: 0.4289457798458294
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.17566267682424888
+    abs_mag: -18.486183140891914
+    n: 1.6704
+    ellipticity: 0.11680000000000001
+    pa_deg: 78.4148
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.3637829422466665
+    abs_mag: -19.491183140891916
+    n: 1.0
+    ellipticity: 0.09819999999999995
+    pa_deg: -88.1495
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.5138399064837833
+    abs_mag: -17.785340303728123
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5061
+    pa_deg: 7.0723
+- name: NGC3310
+  redshift: 0.0030593180756655768
+  distance_mpc: 13.1
+  color_shift_3p6_minus_i: 0.536603772395523
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.312635947826018
+    abs_mag: -19.290360250674347
+    n: 1.0
+    ellipticity: 0.11599999999999999
+    pa_deg: -17.7772
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 0.6973852606667112
+    abs_mag: -19.968360250674344
+    n: 1.0
+    ellipticity: 0.11599999999999999
+    pa_deg: -17.7772
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.028360250674346
+- name: NGC3329
+  redshift: 0.007076132648295189
+  distance_mpc: 30.3
+  color_shift_3p6_minus_i: 0.42729508849020803
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.6601524247339894
+    abs_mag: -20.66750823100173
+    n: 1.0
+    ellipticity: 0.35150000000000003
+    pa_deg: -41.085
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.334228073161047
+    abs_mag: -19.133483487766508
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.38480000000000003
+    pa_deg: -42.0715
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.50540823100173
+- name: NGC3353
+  redshift: 0.004472209248014946
+  distance_mpc: 19.15
+  color_shift_3p6_minus_i: 0.5912383145079545
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.50491789561771
+    abs_mag: -18.649782206031162
+    n: 1.0
+    ellipticity: 0.26449999999999996
+    pa_deg: 83.0813
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 0.9748391092909995
+    abs_mag: -17.710173268565953
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4488
+    pa_deg: 37.6491
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -15.357482206031161
+- name: NGC3380
+  redshift: 0.0022816440915460062
+  distance_mpc: 9.77
+  color_shift_3p6_minus_i: 0.4384011123695579
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.5776071202727401
+    abs_mag: -16.889173930963427
+    n: 3.3353
+    ellipticity: 0.47750000000000004
+    pa_deg: 19.5119
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.3445282916910797
+    abs_mag: -17.102573930963427
+    n: 1.0
+    ellipticity: 0.06499999999999995
+    pa_deg: 47.3677
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.8213454167743581
+    abs_mag: -16.650253077781503
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5971
+    pa_deg: 19.9167
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.591473930963426
+- name: NGC3507
+  redshift: 0.0032928538066324146
+  distance_mpc: 14.1
+  color_shift_3p6_minus_i: 0.4373724573700706
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.1384366801081557
+    abs_mag: -17.429868020646968
+    n: 2.7596
+    ellipticity: 0.20420000000000005
+    pa_deg: -82.9069
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.3383333311893733
+    abs_mag: -20.211468020646965
+    n: 1.0
+    ellipticity: 0.13170000000000004
+    pa_deg: 80.116
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.864857937965937
+    abs_mag: -17.141328041495875
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7203999999999999
+    pa_deg: -65.4482
+- name: NGC3583
+  redshift: 0.006478281177020083
+  distance_mpc: 27.74
+  color_shift_3p6_minus_i: 0.32303008666628585
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.15166134528313582
+    abs_mag: -19.008762370352613
+    n: 1.2096
+    ellipticity: 0.49150000000000005
+    pa_deg: -58.8741
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.056582574304409
+    abs_mag: -21.426562370352613
+    n: 1.0
+    ellipticity: 0.21799999999999997
+    pa_deg: -48.743
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.9164442407419402
+    abs_mag: -18.657565906820672
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5067999999999999
+    pa_deg: 71.1677
+- name: NGC3599
+  redshift: 0.004925268566090612
+  distance_mpc: 21.09
+  color_shift_3p6_minus_i: 0.4198149811938947
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.34797535777391203
+    abs_mag: -19.11139787989132
+    n: 5.0398
+    ellipticity: 0.11380000000000001
+    pa_deg: -83.8998
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.255605280393328
+    abs_mag: -19.811497879891323
+    n: 1.0
+    ellipticity: 0.0796
+    pa_deg: 41.9476
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.026412474856154
+    abs_mag: -18.04839992259015
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.3647
+    pa_deg: -74.056
+- name: NGC3627
+  redshift: 0.0022466137319009805
+  distance_mpc: 9.62
+  color_shift_3p6_minus_i: 0.33462570964443117
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.21802951903547568
+    abs_mag: -19.368301069833496
+    n: 2.0886
+    ellipticity: 0.4161
+    pa_deg: -9.1016
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.223234466630017
+    abs_mag: -21.693401069833495
+    n: 1.0
+    ellipticity: 0.4165
+    pa_deg: -13.7723
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 4.674746533564661
+    abs_mag: -19.75754950456066
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7797000000000001
+    pa_deg: -22.8134
+- name: NGC3637
+  redshift: 0.005628211116300795
+  distance_mpc: 24.1
+  color_shift_3p6_minus_i: 0.17675502502547147
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.3208487487716128
+    abs_mag: -19.293840237899815
+    n: 1.7133
+    ellipticity: 0.06840000000000002
+    pa_deg: 15.9996
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.6917104623669625
+    abs_mag: -20.24344023789981
+    n: 1.0
+    ellipticity: 0.10909999999999997
+    pa_deg: -41.928
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.628902185816459
+    abs_mag: -18.814715526823566
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.38849999999999996
+    pa_deg: 35.9074
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -16.783740237899814
+- name: NGC3673
+  redshift: 0.005270901447921532
+  distance_mpc: 22.57
+  color_shift_3p6_minus_i: 0.3427995819163705
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.39965728400242034
+    abs_mag: -18.152257377305187
+    n: 1.2202
+    ellipticity: 0.3923
+    pa_deg: 69.7515
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.21369497998723
+    abs_mag: -21.015857377305185
+    n: 1.0
+    ellipticity: 0.3933
+    pa_deg: 76.6849
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 4.103341793490835
+    abs_mag: -17.89388366983034
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6845
+    pa_deg: 87.0057
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -16.952657377305183
+- name: NGC3686
+  redshift: 0.0037692666978047643
+  distance_mpc: 16.14
+  color_shift_3p6_minus_i: 0.4388816482036084
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.11217961959191829
+    abs_mag: -16.79319930013386
+    n: 1.8582
+    ellipticity: 0.36360000000000003
+    pa_deg: 83.1485
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.4038106726206636
+    abs_mag: -20.58709930013386
+    n: 1.0
+    ellipticity: 0.1825
+    pa_deg: 19.4654
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.5167789621759957
+    abs_mag: -16.45296502896959
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.8133
+    pa_deg: 81.8786
+- name: NGC3718
+  redshift: 0.003425969173283512
+  distance_mpc: 14.67
+  color_shift_3p6_minus_i: 0.37746038376585744
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 3.320324142837824
+    abs_mag: -20.953710952982266
+    n: 9.0228
+    ellipticity: 0.07920000000000005
+    pa_deg: 25.6573
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 10.069637790359902
+    abs_mag: -18.855410952982268
+    n: 1.0
+    ellipticity: 0.6153
+    pa_deg: 7.598
+  - type: ferrer
+    id: DISK
+    r_out_kpc: 10.841434629284848
+    abs_mag: -19.66891663492487
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4132
+    pa_deg: -20.7351
+- name: NGC3913
+  redshift: 0.001938346567024755
+  distance_mpc: 8.3
+  color_shift_3p6_minus_i: 0.6061717585418869
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.11202686692134271
+    abs_mag: -13.984762220422258
+    n: 0.6013
+    ellipticity: 0.1997
+    pa_deg: -8.1164
+  - type: sersic
+    id: DISK_1
+    r_eff_kpc: 0.4473604938435734
+    abs_mag: -15.774062220422257
+    n: 1.0
+    ellipticity: 0.08750000000000002
+    pa_deg: 76.9035
+  - type: sersic
+    id: DISK_2
+    r_eff_kpc: 1.5930193000660071
+    abs_mag: -17.036662220422258
+    n: 1.0
+    ellipticity: 0.08750000000000002
+    pa_deg: 76.9035
+- name: NGC3930
+  redshift: 0.003028958430639888
+  distance_mpc: 12.97
+  color_shift_3p6_minus_i: 0.4755844718987916
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.4411982945892452
+    abs_mag: -15.18768435231919
+    n: 0.5963
+    ellipticity: 0.37070000000000003
+    pa_deg: 51.005
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.2532086996718315
+    abs_mag: -18.79178435231919
+    n: 1.0
+    ellipticity: 0.3892
+    pa_deg: 33.8441
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.2235587730534627
+    abs_mag: -14.931502319176857
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6698
+    pa_deg: 71.5323
+- name: NGC3941
+  redshift: 0.0027603923400280244
+  distance_mpc: 11.82
+  color_shift_3p6_minus_i: 0.38261553494065126
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.1942681702665119
+    abs_mag: -19.04290291766683
+    n: 1.2164
+    ellipticity: 0.22660000000000002
+    pa_deg: 14.7069
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.0476751393348556
+    abs_mag: -20.413002917666827
+    n: 1.0
+    ellipticity: 0.36839999999999995
+    pa_deg: 8.4844
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.8056139279225336
+    abs_mag: -18.489616964024666
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5831
+    pa_deg: -9.759
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -16.96800291766683
+- name: NGC3953
+  redshift: 0.003874357776739841
+  distance_mpc: 16.59
+  color_shift_3p6_minus_i: 0.4627845035786251
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.30236874813867076
+    abs_mag: -19.15601643370043
+    n: 1.3939
+    ellipticity: 0.3336
+    pa_deg: 14.77
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 6.4210453804193
+    abs_mag: -22.012716433700426
+    n: 1.0
+    ellipticity: 0.47529999999999994
+    pa_deg: 13.9838
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.7746839834968706
+    abs_mag: -18.997261413828497
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.681
+    pa_deg: 53.5035
+- name: NGC3992
+  redshift: 0.004810836057916862
+  distance_mpc: 20.6
+  color_shift_3p6_minus_i: 0.4663339839337546
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.5816797697241141
+    abs_mag: -19.63117008577952
+    n: 1.1535
+    ellipticity: 0.36639999999999995
+    pa_deg: 70.2879
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 11.259799848902697
+    abs_mag: -22.51397008577952
+    n: 1.0
+    ellipticity: 0.4285
+    pa_deg: 70.1161
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 5.992297098513865
+    abs_mag: -19.395228480013504
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6093999999999999
+    pa_deg: 33.6862
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.37927008577952
+- name: NGC4030
+  redshift: 0.005119103222793088
+  distance_mpc: 21.92
+  color_shift_3p6_minus_i: 0.3422226460294908
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.4905028643951124
+    abs_mag: -21.06102539509115
+    n: 1.0
+    ellipticity: 0.21250000000000002
+    pa_deg: 42.7907
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.470505346951696
+    abs_mag: -21.907825395091148
+    n: 1.0
+    ellipticity: 0.22309999999999997
+    pa_deg: 29.5762
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.456025395091146
+- name: NGC4037
+  redshift: 0.002659971975712284
+  distance_mpc: 11.39
+  color_shift_3p6_minus_i: 0.42339537579294273
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.8977250628514035
+    abs_mag: -18.546613996188448
+    n: 1.0
+    ellipticity: 0.14559999999999995
+    pa_deg: -18.1865
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.944053950835098
+    abs_mag: -15.862810697985669
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7791
+    pa_deg: 13.0858
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.634413996188446
+- name: NGC4067
+  redshift: 0.00960999532928538
+  distance_mpc: 41.15
+  color_shift_3p6_minus_i: 0.5045245614692391
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.24336607472369828
+    abs_mag: -18.519773759210683
+    n: 0.7377
+    ellipticity: 0.5102
+    pa_deg: 50.3698
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.25673224834596
+    abs_mag: -21.020773759210684
+    n: 1.0
+    ellipticity: 0.256
+    pa_deg: 44.2246
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.2443843349864583
+    abs_mag: -18.67359068844269
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7199
+    pa_deg: 62.3035
+- name: NGC4102
+  redshift: 0.0045586174684726765
+  distance_mpc: 19.52
+  color_shift_3p6_minus_i: 0.24027878066354091
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.18277925684925575
+    abs_mag: -20.10077784731691
+    n: 0.4488
+    ellipticity: 0.3972
+    pa_deg: 39.7149
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.618336669911211
+    abs_mag: -20.917277847316914
+    n: 1.0
+    ellipticity: 0.44989999999999997
+    pa_deg: 39.65
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.71698370867854
+    abs_mag: -19.73520320732991
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4558
+    pa_deg: 62.5755
+- name: NGC4123
+  redshift: 0.003640822045773003
+  distance_mpc: 15.59
+  color_shift_3p6_minus_i: 0.5229441853468906
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.05930010297223056
+    abs_mag: -18.025874761291096
+    n: 6.2139
+    ellipticity: 0.27590000000000003
+    pa_deg: -68.5884
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.758769387089964
+    abs_mag: -20.191574761291097
+    n: 1.0
+    ellipticity: 0.3166
+    pa_deg: -57.279
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.4012103798239495
+    abs_mag: -17.177237616251464
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7545
+    pa_deg: -76.2396
+- name: NGC4133
+  redshift: 0.0035497431106959365
+  distance_mpc: 15.2
+  color_shift_3p6_minus_i: 0.3807662158351057
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.04783511147403459
+    abs_mag: -17.386284155558965
+    n: 2.1863
+    ellipticity: 0.4619
+    pa_deg: -36.2081
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.4663393249145609
+    abs_mag: -19.066984155558966
+    n: 1.0
+    ellipticity: 0.35319999999999996
+    pa_deg: -45.663
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.3791213594587926
+    abs_mag: -17.51164005115343
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5570999999999999
+    pa_deg: -6.1969
+- name: NGC4136
+  redshift: 0.0026879962634283046
+  distance_mpc: 11.51
+  color_shift_3p6_minus_i: 0.597708505265004
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.08018336744362962
+    abs_mag: -14.826785123413966
+    n: 1.7388
+    ellipticity: 0.16549999999999998
+    pa_deg: 55.2252
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.572266675508629
+    abs_mag: -19.281885123413964
+    n: 1.0
+    ellipticity: 0.11150000000000004
+    pa_deg: 44.6373
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.3586433168064753
+    abs_mag: -14.890224189302835
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6658999999999999
+    pa_deg: 16.289
+- name: NGC4141
+  redshift: 0.0063872022419430175
+  distance_mpc: 27.35
+  color_shift_3p6_minus_i: 0.601799863536602
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.493875071344685
+    abs_mag: -17.878786516883846
+    n: 1.0
+    ellipticity: 0.2569
+    pa_deg: 75.576
+  - type: ferrer
+    id: DISK
+    r_out_kpc: 3.1799402097915257
+    abs_mag: -17.12955525035858
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.17679999999999996
+    pa_deg: 16.9407
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.6211850125431226
+    abs_mag: -16.14841046433284
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6641
+    pa_deg: 83.3147
+- name: NGC4245
+  redshift: 0.003323213451658104
+  distance_mpc: 14.23
+  color_shift_3p6_minus_i: 0.33513075759903543
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.23415207072282548
+    abs_mag: -18.508855258020457
+    n: 1.0921
+    ellipticity: 0.15080000000000005
+    pa_deg: -18.9134
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.793479479815579
+    abs_mag: -19.96615525802046
+    n: 1.0
+    ellipticity: 0.16410000000000002
+    pa_deg: 0.2359
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.5870870058207616
+    abs_mag: -18.048987015700657
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5258
+    pa_deg: -46.6875
+- name: NGC4254
+  redshift: 0.003547407753386268
+  distance_mpc: 15.19
+  color_shift_3p6_minus_i: 0.4187353842887731
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.4684701586185417
+    abs_mag: -18.684024253602708
+    n: 1.5731
+    ellipticity: 0.41279999999999994
+    pa_deg: 43.2221
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.7012594995986614
+    abs_mag: -20.178524253602706
+    n: 1.0
+    ellipticity: 0.18689999999999996
+    pa_deg: 85.0636
+  - type: sersic
+    id: DISK_2
+    r_eff_kpc: 4.839491408984741
+    abs_mag: -21.76602425360271
+    n: 1.0
+    ellipticity: 0.2106
+    pa_deg: 53.7985
+- name: NGC4293
+  redshift: 0.003379262027090145
+  distance_mpc: 14.47
+  color_shift_3p6_minus_i: 0.44025052406486864
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.4319853086971027
+    abs_mag: -17.939893179660057
+    n: 0.6467
+    ellipticity: 0.363
+    pa_deg: 73.4597
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.900972919305686
+    abs_mag: -21.037093179660058
+    n: 1.0
+    ellipticity: 0.532
+    pa_deg: 64.04
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 4.630067617332291
+    abs_mag: -19.24096129108748
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6989000000000001
+    pa_deg: 82.5326
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.847393179660056
+- name: NGC4314
+  redshift: 0.002265296590378328
+  distance_mpc: 9.7
+  color_shift_3p6_minus_i: 0.35389178776283714
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.32527584914134855
+    abs_mag: -18.49685045909406
+    n: 1.0901
+    ellipticity: 0.1977
+    pa_deg: -46.6785
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.695088790316739
+    abs_mag: -19.82625045909406
+    n: 1.0
+    ellipticity: 0.06299999999999994
+    pa_deg: 51.5779
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.4564791394704364
+    abs_mag: -18.909099519439383
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6408
+    pa_deg: -32.637
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -15.58045045909406
+- name: NGC4351
+  redshift: 0.005011676786548342
+  distance_mpc: 21.46
+  color_shift_3p6_minus_i: 0.5927199182151703
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 11.635722717881913
+    abs_mag: -19.289768506364826
+    n: 1.0
+    ellipticity: 0.32799999999999996
+    pa_deg: 61.7945
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.775323005310842
+    abs_mag: -19.37996850636483
+    n: 1.0
+    ellipticity: 0.32799999999999996
+    pa_deg: 61.7945
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.3149275823384348
+    abs_mag: -16.697894599806073
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5174000000000001
+    pa_deg: 81.3467
+- name: NGC4355
+  redshift: 0.005364315740308267
+  distance_mpc: 22.97
+  color_shift_3p6_minus_i: 0.3794941693541567
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.13063562921985059
+    abs_mag: -18.355399145329283
+    n: 3.8838
+    ellipticity: 0.37870000000000004
+    pa_deg: 33.5266
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.3678151377599597
+    abs_mag: -19.059499145329287
+    n: 1.0
+    ellipticity: 0.49850000000000005
+    pa_deg: 62.5361
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.7622321258458356
+    abs_mag: -16.877957307596834
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4847
+    pa_deg: 61.0616
+- name: NGC4385
+  redshift: 0.0033348902382064455
+  distance_mpc: 14.28
+  color_shift_3p6_minus_i: 0.4581806437421818
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.9739871428518687
+    abs_mag: -18.715121680942957
+    n: 1.0
+    ellipticity: 0.4105
+    pa_deg: 77.5327
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.6096299026517704
+    abs_mag: -16.889205170658098
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7555000000000001
+    pa_deg: -72.2755
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -16.953221680942956
+- name: NGC4390
+  redshift: 0.005263895375992526
+  distance_mpc: 22.54
+  color_shift_3p6_minus_i: 0.5848758462593544
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.9250493161656035
+    abs_mag: -19.555745404809795
+    n: 1.0
+    ellipticity: 0.2358
+    pa_deg: 87.3916
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.1474085390819388
+    abs_mag: -15.065100746546584
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6731
+    pa_deg: -62.1297
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -13.141645404809797
+- name: NGC4394
+  redshift: 0.004156936011209715
+  distance_mpc: 17.8
+  color_shift_3p6_minus_i: 0.44066350271295107
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.2563210174432958
+    abs_mag: -19.137863514257422
+    n: 1.5603
+    ellipticity: 0.1251
+    pa_deg: -60.6584
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.287457078775661
+    abs_mag: -20.94076351425742
+    n: 1.0
+    ellipticity: 0.1372
+    pa_deg: -70.206
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.624467079974891
+    abs_mag: -18.94615510290371
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5948
+    pa_deg: -34.5248
+- name: NGC4405
+  redshift: 0.004168612797758057
+  distance_mpc: 17.85
+  color_shift_3p6_minus_i: 0.432694909026651
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.6592517368498867
+    abs_mag: -19.789986011267715
+    n: 1.0
+    ellipticity: 0.23919999999999997
+    pa_deg: 18.9016
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.038470904936626
+    abs_mag: -16.72988810577475
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7349
+    pa_deg: 4.716
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.541286011267715
+- name: NGC4412
+  redshift: 0.00831387202241943
+  distance_mpc: 35.6
+  color_shift_3p6_minus_i: 0.433178747618129
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.7566301355876983
+    abs_mag: -21.030528737482506
+    n: 1.0
+    ellipticity: 0.04400000000000004
+    pa_deg: 57.3997
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.9772408156936607
+    abs_mag: -17.33825667926349
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.8033
+    pa_deg: -61.281
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.965828737482504
+- name: NGC4413
+  redshift: 0.003675852405418029
+  distance_mpc: 15.74
+  color_shift_3p6_minus_i: 0.4925805554270788
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.5726134667310454
+    abs_mag: -19.438804195542307
+    n: 1.0
+    ellipticity: 0.28779999999999994
+    pa_deg: 69.296
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.0934794650804618
+    abs_mag: -17.081048092772257
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6637
+    pa_deg: 12.1498
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.299504195542308
+- name: NGC4430
+  redshift: 0.0045025688930406356
+  distance_mpc: 19.28
+  color_shift_3p6_minus_i: 0.49622575974100513
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.4501693141236887
+    abs_mag: -20.105660907575068
+    n: 1.0
+    ellipticity: 0.1493
+    pa_deg: 74.1319
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.682497398922534
+    abs_mag: -16.430958936139092
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7385999999999999
+    pa_deg: -62.1875
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.308360907575068
+- name: NGC4449
+  redshift: 0.001
+  distance_mpc: 3.87
+  color_shift_3p6_minus_i: 0.7396903838972193
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.3660977134636203
+    abs_mag: -18.740345208991776
+    n: 1.0
+    ellipticity: 0.2935
+    pa_deg: 71.0306
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.3049055054382988
+    abs_mag: -16.96056972110714
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6852
+    pa_deg: 40.1623
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.512945208991775
+- name: NGC4450
+  redshift: 0.003521718822979916
+  distance_mpc: 15.08
+  color_shift_3p6_minus_i: 0.40257157630216156
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.3236374358504493
+    abs_mag: -19.01857828397094
+    n: 1.1011
+    ellipticity: 0.2378
+    pa_deg: -4.4322
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.761764400528346
+    abs_mag: -21.52447828397094
+    n: 1.0
+    ellipticity: 0.3043
+    pa_deg: -6.5332
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.0706159306753573
+    abs_mag: -19.061763067840293
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.45289999999999997
+    pa_deg: 6.8811
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.45757828397094
+- name: NGC4451
+  redshift: 0.006067258290518449
+  distance_mpc: 25.98
+  color_shift_3p6_minus_i: 0.45079099741598583
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.9334111416291
+    abs_mag: -19.508886731101033
+    n: 1.0
+    ellipticity: 0.2976
+    pa_deg: -19.4838
+  - type: ferrer
+    id: DISK
+    r_out_kpc: 2.8787930175963257
+    abs_mag: -19.440302893650202
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.48160000000000003
+    pa_deg: -21.9462
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.368986731101032
+- name: NGC4454
+  redshift: 0.00732134516581037
+  distance_mpc: 31.35
+  color_shift_3p6_minus_i: 0.3762941155709143
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.43837832975577185
+    abs_mag: -18.515881841404592
+    n: 0.9901
+    ellipticity: 0.043200000000000016
+    pa_deg: 58.1586
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.999913038679219
+    abs_mag: -21.23968184140459
+    n: 1.0
+    ellipticity: 0.04700000000000004
+    pa_deg: 25.9488
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 4.445680854064307
+    abs_mag: -18.36185987264025
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5766
+    pa_deg: 22.2624
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.651481841404593
+- name: NGC4491
+  redshift: 0.0015833722559551611
+  distance_mpc: 6.78
+  color_shift_3p6_minus_i: 0.4510148902937985
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.039215170281206746
+    abs_mag: -13.770363359629112
+    n: 1.0224
+    ellipticity: 0.38270000000000004
+    pa_deg: -36.9377
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 0.8494692001705285
+    abs_mag: -17.149563359629113
+    n: 1.0
+    ellipticity: 0.48550000000000004
+    pa_deg: -33.851
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 0.5423610650572379
+    abs_mag: -14.280950407445008
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6812
+    pa_deg: -58.4824
+- name: NGC4506
+  redshift: 0.0017491826249416162
+  distance_mpc: 7.49
+  color_shift_3p6_minus_i: 0.4759861357968731
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.6275483686480852
+    abs_mag: -16.69259522429421
+    n: 1.0
+    ellipticity: 0.22350000000000003
+    pa_deg: -75.565
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 0.49397932030047575
+    abs_mag: -16.459695224294208
+    n: 1.0
+    ellipticity: 0.22350000000000003
+    pa_deg: -75.565
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -11.951195224294207
+- name: NGC4525
+  redshift: 0.003122372723026623
+  distance_mpc: 13.37
+  color_shift_3p6_minus_i: 0.5279794035328287
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.3652625473671556
+    abs_mag: -18.65523643984275
+    n: 1.0
+    ellipticity: 0.45209999999999995
+    pa_deg: 53.2009
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.1181379130849505
+    abs_mag: -14.563724770550923
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6754
+    pa_deg: 89.5731
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -11.027736439842748
+- name: NGC4531
+  redshift: 0.0035380663241475945
+  distance_mpc: 15.15
+  color_shift_3p6_minus_i: 0.4246748435850307
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.0057951010824837
+    abs_mag: -19.951938007776647
+    n: 1.0
+    ellipticity: 0.3336
+    pa_deg: -25.503
+  - type: ferrer
+    id: DISK
+    r_out_kpc: 2.3468199449891096
+    abs_mag: -17.670494089595707
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.32799999999999996
+    pa_deg: -27.0649
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.355938007776647
+- name: NGC4593
+  redshift: 0.008017281644091545
+  distance_mpc: 34.33
+  color_shift_3p6_minus_i: 0.2811617190252562
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.7058989613844978
+    abs_mag: -20.590530736154008
+    n: 1.2038
+    ellipticity: 0.23650000000000004
+    pa_deg: -85.9784
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 10.838768264839636
+    abs_mag: -22.07303073615401
+    n: 1.0
+    ellipticity: 0.1653
+    pa_deg: -75.593
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 9.362055190775834
+    abs_mag: -20.493429626766904
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5974999999999999
+    pa_deg: 56.045
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -20.042030736154008
+- name: NGC4606
+  redshift: 0.0034890238206445583
+  distance_mpc: 14.94
+  color_shift_3p6_minus_i: 0.49815695203827204
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.3823822223240291
+    abs_mag: -17.761909939435174
+    n: 1.7391
+    ellipticity: 0.482
+    pa_deg: 31.1431
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.926048522563437
+    abs_mag: -19.338309939435177
+    n: 1.0
+    ellipticity: 0.49060000000000004
+    pa_deg: 41.6287
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 4.495612215053064
+    abs_mag: -17.246514614684266
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6990000000000001
+    pa_deg: 34.8961
+- name: NGC4668
+  redshift: 0.003862680990191499
+  distance_mpc: 16.54
+  color_shift_3p6_minus_i: 0.6184592186294218
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.337318514892488
+    abs_mag: -17.92963674471206
+    n: 1.0
+    ellipticity: 0.44489999999999996
+    pa_deg: 7.0679
+  - type: ferrer
+    id: DISK
+    r_out_kpc: 3.065886917433847
+    abs_mag: -17.60382497101011
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5085999999999999
+    pa_deg: 4.1676
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.1426816056911206
+    abs_mag: -14.846784756419414
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7883
+    pa_deg: -10.0379
+- name: NGC4680
+  redshift: 0.007340028024287716
+  distance_mpc: 31.43
+  color_shift_3p6_minus_i: 0.26855464769565884
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.5932984146631655
+    abs_mag: -20.58567655278356
+    n: 1.0
+    ellipticity: 0.22550000000000003
+    pa_deg: 38.3818
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.257109754774999
+    abs_mag: -16.85454733500338
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.8449
+    pa_deg: -3.1857
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.077876552783565
+- name: NGC4795
+  redshift: 0.008727230266230733
+  distance_mpc: 37.37
+  color_shift_3p6_minus_i: 0.3063646399733244
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.3079882247284455
+    abs_mag: -19.63568012922151
+    n: 1.8677
+    ellipticity: 0.07150000000000001
+    pa_deg: -28.9895
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 6.184652533021775
+    abs_mag: -21.35978012922151
+    n: 1.0
+    ellipticity: 0.2773
+    pa_deg: -65.246
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.320364714470727
+    abs_mag: -19.454003479450158
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.43620000000000003
+    pa_deg: 23.0054
+- name: NGC4802
+  redshift: 0.002697337692666978
+  distance_mpc: 11.55
+  color_shift_3p6_minus_i: 0.4504888314680926
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 1.2502376481088628
+    abs_mag: -19.03849875260891
+    n: 4.6081
+    ellipticity: 0.32089999999999996
+    pa_deg: 17.9485
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 0.8709792021828688
+    abs_mag: -17.96679875260891
+    n: 1.0
+    ellipticity: 0.24450000000000005
+    pa_deg: 9.4594
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.2243688981264773
+    abs_mag: -18.371698752608907
+    n: 1.0
+    ellipticity: 0.24450000000000005
+    pa_deg: 9.4594
+- name: NGC4826
+  redshift: 0.0012657636618402615
+  distance_mpc: 5.42
+  color_shift_3p6_minus_i: 0.3576841616826023
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.5707343009304924
+    abs_mag: -19.79838059437453
+    n: 4.1636
+    ellipticity: 0.3013
+    pa_deg: -77.6198
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.479949958699515
+    abs_mag: -20.754880594374534
+    n: 1.0
+    ellipticity: 0.44599999999999995
+    pa_deg: -64.118
+  - type: sersic
+    id: DISK_2
+    r_eff_kpc: 0.7663866204406128
+    abs_mag: -17.737180594374532
+    n: 1.0
+    ellipticity: 0.44599999999999995
+    pa_deg: -64.118
+- name: NGC4941
+  redshift: 0.003190098085007006
+  distance_mpc: 13.66
+  color_shift_3p6_minus_i: 0.39346457173097704
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.5707185347895827
+    abs_mag: -18.965418068458543
+    n: 6.743
+    ellipticity: 0.39270000000000005
+    pa_deg: 13.5226
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.7417862285833765
+    abs_mag: -19.650518068458542
+    n: 1.0
+    ellipticity: 0.23360000000000003
+    pa_deg: 23.4809
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 7.31305391329324
+    abs_mag: -19.257571513962787
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5882000000000001
+    pa_deg: 16.3403
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -16.539718068458544
+- name: NGC4942
+  redshift: 0.006557683325548808
+  distance_mpc: 28.08
+  color_shift_3p6_minus_i: 0.5567265965628785
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.2042288945310755
+    abs_mag: -19.778512113851715
+    n: 1.0
+    ellipticity: 0.24139999999999995
+    pa_deg: -39.157
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.2252211349000195
+    abs_mag: -15.24459662486056
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5819
+    pa_deg: 6.2487
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.614612113851717
+- name: NGC5033
+  redshift: 0.0038463334890238205
+  distance_mpc: 16.47
+  color_shift_3p6_minus_i: 0.3702499790244609
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.18679831378428574
+    abs_mag: -19.41441797487323
+    n: 2.0
+    ellipticity: 0.1814
+    pa_deg: -49.1121
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 8.67393490299359
+    abs_mag: -21.21151797487323
+    n: 1.0
+    ellipticity: 0.4645
+    pa_deg: -8.3968
+  - type: sersic
+    id: DISK_2
+    r_eff_kpc: 1.9504222252648022
+    abs_mag: -21.30081797487323
+    n: 1.0
+    ellipticity: 0.5987
+    pa_deg: -9.5648
+- name: NGC5055
+  redshift: 0.0018005604857543203
+  distance_mpc: 7.71
+  color_shift_3p6_minus_i: 0.3662088942098727
+  components:
+  - type: sersic
+    id: DISK_1
+    r_eff_kpc: 0.940097668375405
+    abs_mag: -19.925880784464656
+    n: 1.0
+    ellipticity: 0.44389999999999996
+    pa_deg: -78.551
+  - type: sersic
+    id: DISK_2
+    r_eff_kpc: 4.615525358935787
+    abs_mag: -21.623980784464653
+    n: 1.0
+    ellipticity: 0.44389999999999996
+    pa_deg: -78.551
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.342080784464653
+- name: NGC5068
+  redshift: 0.001373190098085007
+  distance_mpc: 5.88
+  color_shift_3p6_minus_i: 0.48667335813946266
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.8557613477383614
+    abs_mag: -19.59615998852015
+    n: 1.0
+    ellipticity: 0.026000000000000023
+    pa_deg: -80.8581
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.5265137457468338
+    abs_mag: -16.134338684615052
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7257
+    pa_deg: -25.9181
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -12.113059988520149
+- name: NGC5101
+  redshift: 0.004023820644558617
+  distance_mpc: 17.23
+  color_shift_3p6_minus_i: 0.2567352010014332
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.5931518588946014
+    abs_mag: -20.211361588241576
+    n: 2.6571
+    ellipticity: 0.05020000000000002
+    pa_deg: -10.8134
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 7.373396566479017
+    abs_mag: -21.304061588241577
+    n: 1.0
+    ellipticity: 0.07310000000000005
+    pa_deg: -55.066
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 6.313151355980929
+    abs_mag: -19.926928100382376
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6562
+    pa_deg: -58.269
+- name: NGC5134
+  redshift: 0.002043437645959832
+  distance_mpc: 8.75
+  color_shift_3p6_minus_i: 0.2799094623012195
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.1713572440838902
+    abs_mag: -16.344049727412788
+    n: 0.8146
+    ellipticity: 0.2248
+    pa_deg: -27.0661
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.6538428726970582
+    abs_mag: -18.978449727412787
+    n: 1.0
+    ellipticity: 0.03280000000000005
+    pa_deg: 78.97
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.7816902780775448
+    abs_mag: -17.199233671715245
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5346
+    pa_deg: -27.3585
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -15.867449727412785
+- name: NGC5195
+  redshift: 0.0016861279775805698
+  distance_mpc: 7.22
+  color_shift_3p6_minus_i: 0.29933120714432704
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.20187246073437293
+    abs_mag: -19.47041719499252
+    n: 2.5805
+    ellipticity: 0.15980000000000005
+    pa_deg: -53.7215
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.6924038737208225
+    abs_mag: -20.32101719499252
+    n: 1.0
+    ellipticity: 0.24209999999999998
+    pa_deg: -75.694
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.7973470244302643
+    abs_mag: -19.345093705576396
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.07279999999999998
+    pa_deg: 53.318
+- name: NGC5205
+  redshift: 0.007424100887435777
+  distance_mpc: 31.79
+  color_shift_3p6_minus_i: 0.44497637029985526
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 1.4615414790580339
+    abs_mag: -19.222629009873714
+    n: 4.3764
+    ellipticity: 0.5049
+    pa_deg: -71.6281
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.194497887716402
+    abs_mag: -19.845529009873715
+    n: 1.0
+    ellipticity: 0.4558
+    pa_deg: -13.2625
+  - type: ferrer
+    id: DISK
+    r_out_kpc: 5.701560697132041
+    abs_mag: -18.814304314582685
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.43189999999999995
+    pa_deg: -39.514
+- name: NGC5218
+  redshift: 0.012008407286314807
+  distance_mpc: 51.42
+  color_shift_3p6_minus_i: 0.3397451849605382
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.730683856620044
+    abs_mag: -21.669205546494748
+    n: 1.0
+    ellipticity: 0.14980000000000004
+    pa_deg: -51.607
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 6.0737431353131575
+    abs_mag: -20.805475713455873
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7087
+    pa_deg: -86.0177
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -19.839705546494745
+- name: NGC5300
+  redshift: 0.004581971041569361
+  distance_mpc: 19.62
+  color_shift_3p6_minus_i: 0.3622663285766201
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.2727627679674045
+    abs_mag: -20.28606134379627
+    n: 1.0
+    ellipticity: 0.3548
+    pa_deg: -30.283
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 0.7591538874179816
+    abs_mag: -15.234558812227192
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4625
+    pa_deg: -20.2226
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.527661343796268
+- name: NGC5334
+  redshift: 0.00778141055581504
+  distance_mpc: 33.32
+  color_shift_3p6_minus_i: 0.4257233664633304
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 9.096588432313393
+    abs_mag: -21.441648330137077
+    n: 1.0
+    ellipticity: 0.24009999999999998
+    pa_deg: 15.1156
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.665408656004007
+    abs_mag: -16.433853348344062
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6692
+    pa_deg: 50.3556
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -13.333848330137076
+- name: NGC5347
+  redshift: 0.004570294255021018
+  distance_mpc: 19.57
+  color_shift_3p6_minus_i: 0.32477422014815005
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.4147568459578714
+    abs_mag: -19.369128348438153
+    n: 1.0
+    ellipticity: 0.07799999999999996
+    pa_deg: 89.4077
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.8463411217940857
+    abs_mag: -17.27015325358946
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7022999999999999
+    pa_deg: -79.6111
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -18.719428348438157
+- name: NGC5375
+  redshift: 0.009196637085474078
+  distance_mpc: 39.38
+  color_shift_3p6_minus_i: 0.41981396136746696
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.5983182480105586
+    abs_mag: -19.402592520377965
+    n: 1.2276
+    ellipticity: 0.23939999999999995
+    pa_deg: 1.08
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 8.730270645216041
+    abs_mag: -21.541992520377967
+    n: 1.0
+    ellipticity: 0.13249999999999995
+    pa_deg: -20.7362
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 5.298019666480954
+    abs_mag: -19.69494869017018
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.573
+    pa_deg: -10.0327
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.892792520377967
+- name: NGC5383
+  redshift: 0.00792620270901448
+  distance_mpc: 33.94
+  color_shift_3p6_minus_i: 0.42314640962844763
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.2359073423054623
+    abs_mag: -20.243205599536733
+    n: 0.4075
+    ellipticity: 0.53
+    pa_deg: 76.8606
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 7.3914981309496275
+    abs_mag: -21.719705599536734
+    n: 1.0
+    ellipticity: 0.17779999999999996
+    pa_deg: -69.407
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 8.268424609270971
+    abs_mag: -19.413615084485766
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6069
+    pa_deg: -53.92
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.710505599536734
+- name: NGC5604
+  redshift: 0.009761793554413825
+  distance_mpc: 41.8
+  color_shift_3p6_minus_i: 0.3360371310856678
+  components:
+  - type: sersic
+    id: DISK_1
+    r_eff_kpc: 2.3157226144982452
+    abs_mag: -21.243018539960843
+    n: 1.0
+    ellipticity: 0.37329999999999997
+    pa_deg: 20.2145
+  - type: sersic
+    id: DISK_2
+    r_eff_kpc: 15.731802644600108
+    abs_mag: -19.351418539960846
+    n: 1.0
+    ellipticity: 0.37329999999999997
+    pa_deg: 20.2145
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.501418539960845
+- name: NGC5701
+  redshift: 0.003594114899579636
+  distance_mpc: 15.39
+  color_shift_3p6_minus_i: 0.36125537830198695
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.36347451421347554
+    abs_mag: -18.956548477459382
+    n: 2.0781
+    ellipticity: 0.022800000000000042
+    pa_deg: 35.132
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.458795467897093
+    abs_mag: -20.11504847745938
+    n: 1.0
+    ellipticity: 0.03480000000000005
+    pa_deg: 50.1752
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.9489304238078966
+    abs_mag: -19.082561146461714
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5192
+    pa_deg: -2.2135
+- name: NGC5713
+  redshift: 0.004838860345632881
+  distance_mpc: 20.72
+  color_shift_3p6_minus_i: 0.4542579575110075
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.13492648846095515
+    abs_mag: -18.465606712876987
+    n: 1.0785
+    ellipticity: 0.20479999999999998
+    pa_deg: -18.9823
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.1100348623609673
+    abs_mag: -20.966006712876986
+    n: 1.0
+    ellipticity: 0.11960000000000004
+    pa_deg: 13.7797
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.473552822878071
+    abs_mag: -19.840859763979378
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.581
+    pa_deg: -84.0613
+- name: NGC5750
+  redshift: 0.007027090144792153
+  distance_mpc: 30.09
+  color_shift_3p6_minus_i: 0.35207107059459375
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.4612301765432137
+    abs_mag: -18.377982009295
+    n: 0.5199
+    ellipticity: 0.25849999999999995
+    pa_deg: 70.8717
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.857180977108435
+    abs_mag: -21.552882009295
+    n: 1.0
+    ellipticity: 0.5032
+    pa_deg: 62.8832
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.844668514594258
+    abs_mag: -18.69222589294248
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.35819999999999996
+    pa_deg: -55.2779
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.533982009295
+- name: NGC5770
+  redshift: 0.004803829985987856
+  distance_mpc: 20.57
+  color_shift_3p6_minus_i: 0.3779352927413022
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.383848782290129
+    abs_mag: -19.615406751214923
+    n: 1.0
+    ellipticity: 0.0756
+    pa_deg: 38.4399
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 0.24781703927191195
+    abs_mag: -18.32440675121492
+    n: 1.0
+    ellipticity: 0.0756
+    pa_deg: 38.4399
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.3186335502483835
+    abs_mag: -18.221470425672056
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.49850000000000005
+    pa_deg: -69.2329
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.43910675121492
+- name: NGC5806
+  redshift: 0.005751985053713218
+  distance_mpc: 24.63
+  color_shift_3p6_minus_i: 0.3401356839109475
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.31065604048437623
+    abs_mag: -19.155457743106467
+    n: 0.9614
+    ellipticity: 0.4024
+    pa_deg: -18.0408
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.40264057240295
+    abs_mag: -21.283957743106466
+    n: 1.0
+    ellipticity: 0.4474
+    pa_deg: -13.3507
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.3136166679894843
+    abs_mag: -16.24667397574845
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.8113
+    pa_deg: 16.3592
+- name: NGC5832
+  redshift: 0.002323680523120037
+  distance_mpc: 9.95
+  color_shift_3p6_minus_i: 0.38356211987622757
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.1546709595944766
+    abs_mag: -18.13247752360485
+    n: 1.0
+    ellipticity: 0.36550000000000005
+    pa_deg: 48.4215
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.157735070489572
+    abs_mag: -14.178942847271198
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.358
+    pa_deg: -17.2004
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -11.242477523604855
+- name: NGC5850
+  redshift: 0.004367118169079869
+  distance_mpc: 18.7
+  color_shift_3p6_minus_i: 0.34927388768038625
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.44645594988067117
+    abs_mag: -19.49538192036288
+    n: 1.8415
+    ellipticity: 0.1553
+    pa_deg: 41.6874
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 7.578868181076364
+    abs_mag: -20.90088192036288
+    n: 1.0
+    ellipticity: 0.19069999999999998
+    pa_deg: -10.5932
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 5.779585095927056
+    abs_mag: -19.127515928395272
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.61
+    pa_deg: -63.5467
+- name: NGC5885
+  redshift: 0.0051494628678187765
+  distance_mpc: 22.05
+  color_shift_3p6_minus_i: 0.48083509771953103
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.846482820841486
+    abs_mag: -20.88297806673881
+    n: 1.0
+    ellipticity: 0.1915
+    pa_deg: 61.6979
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 0.9156106339040502
+    abs_mag: -16.300313119022437
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.46340000000000003
+    pa_deg: -77.9671
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -15.917778066738812
+- name: NGC5921
+  redshift: 0.004056515646893975
+  distance_mpc: 17.37
+  color_shift_3p6_minus_i: 0.4615547866753431
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.14368064183715878
+    abs_mag: -18.62635387891084
+    n: 1.6352
+    ellipticity: 0.10870000000000002
+    pa_deg: -9.6112
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.2663908364718335
+    abs_mag: -20.82105387891084
+    n: 1.0
+    ellipticity: 0.16569999999999996
+    pa_deg: -35.38
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.652682296874882
+    abs_mag: -17.89810222968307
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6235999999999999
+    pa_deg: 19.4995
+- name: NGC5956
+  redshift: 0.005910789350770667
+  distance_mpc: 25.31
+  color_shift_3p6_minus_i: 0.4990282705609488
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.7507154441590949
+    abs_mag: -19.90058899635222
+    n: 1.0
+    ellipticity: 0.04079999999999995
+    pa_deg: 88.2282
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.178477850500596
+    abs_mag: -18.008086690911774
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6268
+    pa_deg: 30.7514
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.64468899635222
+- name: NGC5957
+  redshift: 0.005674918262494162
+  distance_mpc: 24.3
+  color_shift_3p6_minus_i: 0.26416237147801525
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.29969026769378987
+    abs_mag: -17.728893739469573
+    n: 2.213
+    ellipticity: 0.15469999999999995
+    pa_deg: -89.4896
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 6.468975286157347
+    abs_mag: -19.647493739469574
+    n: 1.0
+    ellipticity: 0.09670000000000001
+    pa_deg: 2.7866
+  - type: ferrer
+    id: DISK
+    r_out_kpc: 7.109112961051455
+    abs_mag: -19.544464650058508
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.25249999999999995
+    pa_deg: -89.4248
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.739076094848601
+    abs_mag: -17.490235192176286
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5683
+    pa_deg: -84.7726
+- name: NGC5958
+  redshift: 0.0062821111630079396
+  distance_mpc: 26.9
+  color_shift_3p6_minus_i: 0.5148439290028293
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.8954655133381664
+    abs_mag: -20.038505329014864
+    n: 1.0
+    ellipticity: 0.11780000000000002
+    pa_deg: 7.2186
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.1737339219661866
+    abs_mag: -15.44657156060876
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.9854
+    pa_deg: -39.1404
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.962305329014864
+- name: NGC5963
+  redshift: 0.006347501167678655
+  distance_mpc: 27.18
+  color_shift_3p6_minus_i: 0.48887310656585825
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.405625376850905
+    abs_mag: -19.70672036854823
+    n: 1.0
+    ellipticity: 0.19789999999999996
+    pa_deg: 46.5685
+  - type: ferrer
+    id: DISK
+    r_out_kpc: 3.339579356910757
+    abs_mag: -19.485486309083722
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.35329999999999995
+    pa_deg: 58.4973
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -16.07842036854823
+- name: NGC6181
+  redshift: 0.00730499766464269
+  distance_mpc: 31.28
+  color_shift_3p6_minus_i: 0.3988884246556772
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.3257181078435023
+    abs_mag: -21.697222146594726
+    n: 1.0
+    ellipticity: 0.5282
+    pa_deg: -3.2501
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.8197966334127544
+    abs_mag: -18.74813650349697
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6669
+    pa_deg: 6.7126
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -18.191622146594728
+- name: NGC6217
+  redshift: 0.004820177487155535
+  distance_mpc: 20.64
+  color_shift_3p6_minus_i: 0.4708488892223279
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.7644801101929652
+    abs_mag: -20.854897353998194
+    n: 1.0
+    ellipticity: 0.0826
+    pa_deg: -86.6242
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.9025562074593205
+    abs_mag: -18.710175513135813
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7682
+    pa_deg: -29.1312
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -18.886097353998196
+- name: NGC6412
+  redshift: 0.0035684259691732834
+  distance_mpc: 15.28
+  color_shift_3p6_minus_i: 0.5387799412316134
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.692415285785176
+    abs_mag: -19.822396712429967
+    n: 1.0
+    ellipticity: 0.051899999999999946
+    pa_deg: 1.4117
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 0.791708314041571
+    abs_mag: -16.111607228574933
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5744
+    pa_deg: -16.4011
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.044496712429968
+- name: NGC7079
+  redshift: 0.005773003269500233
+  distance_mpc: 24.72
+  color_shift_3p6_minus_i: 0.4075619480397137
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.25898408444922
+    abs_mag: -19.407804280123603
+    n: 1.3313
+    ellipticity: 0.19979999999999998
+    pa_deg: -76.5398
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.1110733076473798
+    abs_mag: -20.907304280123604
+    n: 1.0
+    ellipticity: 0.37539999999999996
+    pa_deg: 75.5224
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.7976891295541595
+    abs_mag: -17.927336631668172
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.34240000000000004
+    pa_deg: 40.8874
+- name: NGC7098
+  redshift: 0.006795889771134984
+  distance_mpc: 29.1
+  color_shift_3p6_minus_i: 0.24757926205844072
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.7829983356759562
+    abs_mag: -20.37404420698798
+    n: 1.4182
+    ellipticity: 0.27280000000000004
+    pa_deg: 66.7947
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 10.971010172424194
+    abs_mag: -21.430744206987978
+    n: 1.0
+    ellipticity: 0.42600000000000005
+    pa_deg: 72.2383
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 8.4648468721725
+    abs_mag: -19.954213081813048
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.43400000000000005
+    pa_deg: 61.9959
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -18.001844206987975
+- name: NGC7140
+  redshift: 0.007043437645959832
+  distance_mpc: 30.16
+  color_shift_3p6_minus_i: 0.4731068212073417
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.3994213336680638
+    abs_mag: -19.425263507196025
+    n: 0.8498
+    ellipticity: 0.33540000000000003
+    pa_deg: 13.9712
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 7.856785646388054
+    abs_mag: -21.290963507196025
+    n: 1.0
+    ellipticity: 0.35440000000000005
+    pa_deg: 3.512
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 7.895869536022346
+    abs_mag: -18.64677655641009
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.724
+    pa_deg: 20.7867
+- name: NGC7188
+  redshift: 0.003503035964502569
+  distance_mpc: 15.0
+  color_shift_3p6_minus_i: 0.510307229390424
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.9856586312613647
+    abs_mag: -18.26566352466883
+    n: 1.0
+    ellipticity: 0.515
+    pa_deg: 46.2668
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 0.5999569303730508
+    abs_mag: -13.84070152152007
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5357000000000001
+    pa_deg: -42.1952
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -13.00416352466883
+- name: NGC7218
+  redshift: 0.005240541802895843
+  distance_mpc: 22.44
+  color_shift_3p6_minus_i: 0.5243268517863449
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.5831439392996502
+    abs_mag: -20.542841114706967
+    n: 1.0
+    ellipticity: 0.5409999999999999
+    pa_deg: 20.4948
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 0.9791297103688189
+    abs_mag: -17.87108921664711
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5516
+    pa_deg: -83.6205
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.334541114706965
+- name: NGC7219
+  redshift: 0.009614666043904718
+  distance_mpc: 41.17
+  color_shift_3p6_minus_i: 0.43544751872204657
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.18878458210341528
+    abs_mag: -19.62565185370948
+    n: 1.7921
+    ellipticity: 0.235
+    pa_deg: 42.8387
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 6.023624451963507
+    abs_mag: -20.61745185370948
+    n: 1.0
+    ellipticity: 0.3621
+    pa_deg: 28.7243
+  - type: ferrer
+    id: DISK
+    r_out_kpc: 3.3412820164986434
+    abs_mag: -20.041527045686458
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.27080000000000004
+    pa_deg: 69.1714
+- name: NGC7418A
+  redshift: 0.007286314806165343
+  distance_mpc: 31.2
+  color_shift_3p6_minus_i: 0.8156466479716684
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.6125981134379455
+    abs_mag: -18.88461961806388
+    n: 1.0
+    ellipticity: 0.498
+    pa_deg: 82.8836
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.243837689366417
+    abs_mag: -17.45530463840744
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.30610000000000004
+    pa_deg: 62.0729
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -16.99721961806388
+- name: NGC7421
+  redshift: 0.006480616534329752
+  distance_mpc: 27.75
+  color_shift_3p6_minus_i: 0.4839540102639681
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.21778654738698236
+    abs_mag: -17.297068947557445
+    n: 1.0533
+    ellipticity: 0.23329999999999995
+    pa_deg: -89.1027
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.571903846548835
+    abs_mag: -21.025668947557445
+    n: 1.0
+    ellipticity: 0.11599999999999999
+    pa_deg: 64.5538
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.825251726665821
+    abs_mag: -17.313824514655256
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7432000000000001
+    pa_deg: -89.7453
+- name: NGC7496
+  redshift: 0.0026015880429705747
+  distance_mpc: 11.14
+  color_shift_3p6_minus_i: 0.4962000992343114
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.6342773740297196
+    abs_mag: -19.609126053422866
+    n: 1.0
+    ellipticity: 0.04079999999999995
+    pa_deg: 33.2358
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.146827702005192
+    abs_mag: -17.192882996515227
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7638
+    pa_deg: -33.0818
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.067426053422864
+- name: NGC7531
+  redshift: 0.005210182157870153
+  distance_mpc: 22.31
+  color_shift_3p6_minus_i: 0.46167199508350976
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.37936445714476563
+    abs_mag: -19.088969846502696
+    n: 1.6446
+    ellipticity: 0.40690000000000004
+    pa_deg: 18.2455
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.184546551851354
+    abs_mag: -20.691769846502698
+    n: 1.0
+    ellipticity: 0.46330000000000005
+    pa_deg: 21.2909
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 5.574057577581464
+    abs_mag: -19.77196046642062
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6617999999999999
+    pa_deg: 10.9132
+- name: NGC7552
+  redshift: 0.002692666978047641
+  distance_mpc: 11.53
+  color_shift_3p6_minus_i: 0.35536943607127114
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.18357796314819966
+    abs_mag: -19.57791597254477
+    n: 2.6262
+    ellipticity: 0.12360000000000004
+    pa_deg: 89.572
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.826786961853837
+    abs_mag: -19.70101597254477
+    n: 1.0
+    ellipticity: 0.037799999999999945
+    pa_deg: 38.5017
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 4.457840432063256
+    abs_mag: -19.386582000016276
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7192000000000001
+    pa_deg: -86.3436
+- name: NGC7723
+  redshift: 0.0065483418963101355
+  distance_mpc: 28.04
+  color_shift_3p6_minus_i: 0.41241416092118044
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.2002625981211542
+    abs_mag: -18.768804207394282
+    n: 1.1053
+    ellipticity: 0.33799999999999997
+    pa_deg: 31.6924
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.314881363794617
+    abs_mag: -21.872604207394282
+    n: 1.0
+    ellipticity: 0.3278
+    pa_deg: 40.1855
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.854776879845392
+    abs_mag: -18.340434623108397
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7569
+    pa_deg: 70.2346
+- name: NGC7757
+  redshift: 0.004600653900046707
+  distance_mpc: 19.7
+  color_shift_3p6_minus_i: 0.5619778157398727
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.8204534388672187
+    abs_mag: -19.37850894654784
+    n: 1.0
+    ellipticity: 0.37139999999999995
+    pa_deg: -67.603
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.106230107328917
+    abs_mag: -16.73230816227677
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4151
+    pa_deg: 46.8741
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.650608946547838
+- name: PGC006626
+  redshift: 0.004624007473143391
+  distance_mpc: 19.8
+  color_shift_3p6_minus_i: 0.6949865985572998
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.480618837676356
+    abs_mag: -18.825112549864954
+    n: 1.0
+    ellipticity: 0.0998
+    pa_deg: -88.0709
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.495391261189744
+    abs_mag: -15.516577477555096
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5819
+    pa_deg: 30.5207
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -12.113512549864954
+- name: PGC011744
+  redshift: 0.0023820644558617465
+  distance_mpc: 10.2
+  color_shift_3p6_minus_i: 0.4883452018202554
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 0.58578339293013
+    abs_mag: -16.483246060629845
+    n: 1.0
+    ellipticity: 0.4599
+    pa_deg: 58.5782
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 0.3977046859934439
+    abs_mag: -15.422228346066822
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6448
+    pa_deg: 67.3174
+- name: PGC036217
+  redshift: 0.006375525455394676
+  distance_mpc: 27.3
+  color_shift_3p6_minus_i: 0.4875961102728894
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.7006805697137635
+    abs_mag: -19.558409345476676
+    n: 1.0
+    ellipticity: 0.20779999999999998
+    pa_deg: 8.9343
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.443065417550328
+    abs_mag: -16.260585981444596
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7389
+    pa_deg: -13.698
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -12.916509345476676
+- name: PGC042068
+  redshift: 0.0017561886968706212
+  distance_mpc: 7.52
+  color_shift_3p6_minus_i: 0.5894159626951794
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.42944047320359063
+    abs_mag: -14.541305165653387
+    n: 0.9367
+    ellipticity: 0.41269999999999996
+    pa_deg: 37.7169
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.3853999574123792
+    abs_mag: -15.533205165653387
+    n: 1.0
+    ellipticity: 0.40280000000000005
+    pa_deg: 27.2486
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -9.648705165653388
+- name: PGC042868
+  redshift: 0.005931807566557683
+  distance_mpc: 25.4
+  color_shift_3p6_minus_i: 0.6023596170284264
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 7.258484913747015
+    abs_mag: -20.10182820012812
+    n: 1.0
+    ellipticity: 0.18669999999999998
+    pa_deg: -27.113
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 6.594105532335071
+    abs_mag: -17.513060962713524
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.5328999999999999
+    pa_deg: -14.3769
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -13.77302820012812
+- name: PGC047721
+  redshift: 0.0072769733769266695
+  distance_mpc: 31.16
+  color_shift_3p6_minus_i: 0.1572270025756204
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.658292049388944
+    abs_mag: -20.671514247578255
+    n: 1.0
+    ellipticity: 0.4243
+    pa_deg: -58.966
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.374907116535748
+    abs_mag: -18.353869635360024
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4605
+    pa_deg: -59.8812
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -17.566014247578252
+- name: PGC048087
+  redshift: 0.008524054180289585
+  distance_mpc: 36.5
+  color_shift_3p6_minus_i: 0.5145391157363584
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.28667162973228
+    abs_mag: -19.817503438018736
+    n: 1.0
+    ellipticity: 0.05059999999999998
+    pa_deg: -54.793
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.6053007588863029
+    abs_mag: -15.902003285644373
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.41359999999999997
+    pa_deg: 32.4114
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.054403438018735
+- name: PGC050229
+  redshift: 0.005079402148528725
+  distance_mpc: 21.75
+  color_shift_3p6_minus_i: 0.36691963201651845
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 0.7208498109131164
+    abs_mag: -18.108115938469794
+    n: 1.0
+    ellipticity: 0.35840000000000005
+    pa_deg: -27.478
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.3160733108585365
+    abs_mag: -18.259415938469793
+    n: 1.0
+    ellipticity: 0.35840000000000005
+    pa_deg: -27.478
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.576515938469797
+- name: PGC051291
+  redshift: 0.007928538066324148
+  distance_mpc: 33.95
+  color_shift_3p6_minus_i: 0.664641739874412
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.6636893495809986
+    abs_mag: -18.39364063295702
+    n: 1.0
+    ellipticity: 0.5336000000000001
+    pa_deg: -67.056
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.900315750115152
+    abs_mag: -16.884919454055506
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.8240000000000001
+    pa_deg: -78.3344
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.54924063295702
+- name: PGC053779
+  redshift: 0.004507239607659972
+  distance_mpc: 19.3
+  color_shift_3p6_minus_i: 0.45492483808413553
+  components:
+  - type: sersic
+    id: DISK_1
+    r_eff_kpc: 3.4210061299911327
+    abs_mag: -18.513111383123007
+    n: 1.0
+    ellipticity: 0.3328
+    pa_deg: -81.9233
+  - type: ferrer
+    id: DISK_2
+    r_out_kpc: 3.2166018506578844
+    abs_mag: -17.818854576717797
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4101
+    pa_deg: 78.7158
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 0.8157348946791964
+    abs_mag: -14.551694903056042
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6623
+    pa_deg: 68.8329
+- name: PGC072252
+  redshift: 0.005887435777673984
+  distance_mpc: 25.21
+  color_shift_3p6_minus_i: 0.7284830936698228
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.0021288097308023
+    abs_mag: -18.971347322052054
+    n: 1.0
+    ellipticity: 0.3891
+    pa_deg: 55.1679
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.024982842940922
+    abs_mag: -16.86559844954012
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.694
+    pa_deg: 34.7285
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.389747322052056
+- name: PGC1063216
+  redshift: 0.008559084539934609
+  distance_mpc: 36.65
+  color_shift_3p6_minus_i: 0.6764319252981501
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.8298554854361897
+    abs_mag: -18.378601820183885
+    n: 1.0
+    ellipticity: 0.1866
+    pa_deg: 9.7005
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 4.108369977982752
+    abs_mag: -15.919510516655226
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6411
+    pa_deg: 57.869
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -13.701801820183885
+- name: UGC01551
+  redshift: 0.00831387202241943
+  distance_mpc: 35.6
+  color_shift_3p6_minus_i: 0.5196587476181307
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 6.518460101508118
+    abs_mag: -20.388308737482507
+    n: 1.0
+    ellipticity: 0.15059999999999996
+    pa_deg: -57.431
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 3.106686068549907
+    abs_mag: -15.468819696717116
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6989000000000001
+    pa_deg: 73.4719
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -13.540908737482507
+- name: UGC04988
+  redshift: 0.004915927136851938
+  distance_mpc: 21.05
+  color_shift_3p6_minus_i: 0.5473912177017333
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.8445656570101665
+    abs_mag: -17.45535171856017
+    n: 1.0
+    ellipticity: 0.243
+    pa_deg: 74.5346
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -11.943751718560172
+- name: UGC05841
+  redshift: 0.005908453993460999
+  distance_mpc: 25.3
+  color_shift_3p6_minus_i: 0.41869161238158625
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.03830605009045855
+    abs_mag: -16.565894218260674
+    n: 1.1208
+    ellipticity: 0.05889999999999995
+    pa_deg: -77.0069
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.701220590021732
+    abs_mag: -18.422694218260673
+    n: 1.0
+    ellipticity: 0.4335
+    pa_deg: -48.334
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.2998348997633613
+    abs_mag: -16.301472666100636
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7773
+    pa_deg: -44.5952
+- name: UGC06309
+  redshift: 0.011349836524988324
+  distance_mpc: 48.6
+  color_shift_3p6_minus_i: 0.40120261638319477
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 5.739150998306403
+    abs_mag: -21.197983962694657
+    n: 1.0
+    ellipticity: 0.1472
+    pa_deg: -54.374
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 4.417864669110647
+    abs_mag: -18.270019456239304
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.9105
+    pa_deg: -42.9296
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -16.958383962694658
+- name: UGC07129
+  redshift: 0.0042363381597384404
+  distance_mpc: 18.14
+  color_shift_3p6_minus_i: 0.39109880720079104
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.4120852698071469
+    abs_mag: -18.528885220821174
+    n: 1.0
+    ellipticity: 0.2992
+    pa_deg: 71.2419
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.1213013223541903
+    abs_mag: -16.274076657256927
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7392000000000001
+    pa_deg: 61.7187
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -15.504085220821175
+- name: UGC07257
+  redshift: 0.0038066324147594584
+  distance_mpc: 16.3
+  color_shift_3p6_minus_i: 0.6815004351746516
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 1.4761687580405456
+    abs_mag: -17.21733845719444
+    n: 1.0
+    ellipticity: 0.34750000000000003
+    pa_deg: -13.6526
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.89464118775474
+    abs_mag: -15.550128024923023
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.7143999999999999
+    pa_deg: -4.7835
+- name: UGC08041
+  redshift: 0.0035707613264829518
+  distance_mpc: 15.29
+  color_shift_3p6_minus_i: 0.4625037953594777
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.294183369001267
+    abs_mag: -19.03944122242108
+    n: 1.0
+    ellipticity: 0.492
+    pa_deg: -16.3178
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.1522827322184024
+    abs_mag: -15.397166334003336
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6389
+    pa_deg: 74.4488
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.091641222421082
+- name: UGC08056
+  redshift: 0.009061186361513311
+  distance_mpc: 38.8
+  color_shift_3p6_minus_i: 0.6152822775731934
+  components:
+  - type: sersic
+    id: BULGE
+    r_eff_kpc: 0.43725166518207037
+    abs_mag: -14.284240905544227
+    n: 0.3933
+    ellipticity: 0.3526
+    pa_deg: 87.4927
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.879051037336948
+    abs_mag: -18.642840905544226
+    n: 1.0
+    ellipticity: 0.5171
+    pa_deg: -20.79
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.539454061651749
+    abs_mag: -15.578096989086678
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.6148
+    pa_deg: -5.5623
+- name: UGC08658
+  redshift: 0.006996730499766465
+  distance_mpc: 29.96
+  color_shift_3p6_minus_i: 0.6758066256072297
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 4.976176379250588
+    abs_mag: -20.072415670744377
+    n: 1.0
+    ellipticity: 0.4132
+    pa_deg: -65.259
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.8117744747609397
+    abs_mag: -16.52264247817973
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.4273
+    pa_deg: -78.3635
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -14.156815670744376
+- name: UGC09245
+  redshift: 0.004448855674918263
+  distance_mpc: 19.05
+  color_shift_3p6_minus_i: 0.6407366015136731
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 3.7178575368188644
+    abs_mag: -17.94021150157186
+    n: 1.0
+    ellipticity: 0.27280000000000004
+    pa_deg: -2.8408
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 2.4659389936869576
+    abs_mag: -15.789807537944942
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.8176
+    pa_deg: 17.7373
+- name: UGC10803
+  redshift: 0.003921064922933208
+  distance_mpc: 16.79
+  color_shift_3p6_minus_i: 0.6047295679622096
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.466828468256386
+    abs_mag: -17.480083048652457
+    n: 1.0
+    ellipticity: 0.2613
+    pa_deg: 15.0875
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 0.8117473845703962
+    abs_mag: -19.12688304865246
+    n: 0.8001
+    ellipticity: 0.2763
+    pa_deg: 11.4378
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -15.232683048652458
+- name: UGC11782
+  redshift: 0.0037902849135917796
+  distance_mpc: 16.23
+  color_shift_3p6_minus_i: 0.43701926079582165
+  components:
+  - type: sersic
+    id: DISK
+    r_eff_kpc: 2.575120715764264
+    abs_mag: -17.392911859926983
+    n: 1.0
+    ellipticity: 0.43610000000000004
+    pa_deg: 26.7964
+  - type: ferrer
+    id: BAR
+    r_out_kpc: 1.534362578659515
+    abs_mag: -13.503743419486842
+    alpha: 2.0
+    beta: 0.0
+    ellipticity: 0.8011
+    pa_deg: 45.0228
+  - type: psf
+    id: NUCLEUS
+    abs_mag: -10.536011859926983
