@@ -69,8 +69,8 @@
 
 ## Run-Manifest Loader Behavior
 
-- `mockgal.load_image_configs` (Section 7) reads `pixel_scale`, `zeropoint`, PSF, sky, and noise fields directly from each `configs:` entry. A sibling `defaults:` block in the same YAML is **ignored** by the raw `python -m mockgal` CLI. Only `inputs/huang2013/scripts/generate_huang2013_mocks.py` merges `defaults + configs` before instantiating `ImageConfig`.
-- CS4G-style manifests (`inputs/cs4g/runs/*.yaml`) therefore cannot be invoked through `python -m mockgal` as-is — values silently fall back to `DEFAULT_PIXEL_SCALE=0.3`, `DEFAULT_ZEROPOINT=27.0`, etc. Drive CS4G renders by calling `generate_mock_image(...)` from Python with an explicit `ImageConfig`, or flatten the manifest so each `configs:` entry carries its full parameter set.
+- `mockgal.load_image_configs` (Section 7) merges a top-level `defaults:` dict into every `configs[]` entry, with per-entry keys winning on conflict. The legacy `image_configs:` list still works and also picks up `defaults:`. Unknown top-level keys (`run_name`, `model_file`, `output_root`, `description`) are silently ignored so one manifest can drive both `python -m mockgal --config ...` and higher-level runners like `inputs/huang2013/scripts/generate_huang2013_mocks.py`. The Huang2013 runner does its own manifest resolution (validating, recording `run_metadata.json`) and does **not** call `load_image_configs`.
+- Historical note: before this fix, a sibling `defaults:` block was silently ignored by the raw CLI path and every CS4G-style manifest fell back to `DEFAULT_PIXEL_SCALE=0.3` / `DEFAULT_ZEROPOINT=27.0`. The symptom was a rendered image at the wrong pixel scale with no warning. The contract is now covered by `tests/test_mockgal.py::TestLoadImageConfigs`.
 
 ## CS4G Band Convention
 

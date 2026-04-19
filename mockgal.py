@@ -1633,18 +1633,36 @@ def load_image_configs(
     """
     Load image generation configurations from a config file.
 
-    The config file format:
+    Supports three top-level layouts:
+
+    1. `image_configs:` list (legacy key):
     ```yaml
     image_configs:
       - name: "clean"
         pixel_scale: 0.3
         zeropoint: 27.0
-
-      - name: "with_psf"
-        pixel_scale: 0.3
-        psf_enabled: true
-        psf_fwhm: 1.0
     ```
+
+    2. `configs:` list, optionally with a sibling `defaults:` block that is
+       merged into every entry. Per-entry keys override defaults. This is
+       the Huang2013/CS4G run-manifest layout:
+    ```yaml
+    defaults:
+      pixel_scale: 0.75
+      zeropoint: 21.097
+      psf_enabled: true
+    configs:
+      - name: clean
+      - name: with_noise
+        noise_enabled: true
+    ```
+
+    3. A flat dict: the whole document is treated as a single config.
+
+    Unknown top-level keys (e.g. `run_name`, `model_file`, `output_root`,
+    `description`) are ignored so a single manifest can drive both
+    `mockgal` directly and higher-level runners like the Huang2013
+    generator.
 
     Parameters
     ----------
@@ -1660,14 +1678,24 @@ def load_image_configs(
     """
     data = load_file(filepath)
 
-    # Handle both formats: with 'image_configs' key or direct list
+    # Extract defaults (if present) and the list of config entries.
+    defaults: dict = {}
     if isinstance(data, dict):
+        raw_defaults = data.get('defaults') or {}
+        if not isinstance(raw_defaults, dict):
+            raise ValueError(
+                f"Top-level 'defaults' in {filepath} must be a mapping, "
+                f"got {type(raw_defaults).__name__}"
+            )
+        defaults = raw_defaults
         config_list = data.get('image_configs', data.get('configs', [data]))
     else:
         config_list = data
 
     image_configs = []
-    for cfg_dict in config_list:
+    for row in config_list:
+        # Merge defaults into each entry; per-entry keys win on conflict.
+        cfg_dict = {**defaults, **row} if defaults else row
         # CLI override takes precedence over config file
         profit_cli_path = profit_cli_override or cfg_dict.get('profit_cli_path')
 

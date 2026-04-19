@@ -36,6 +36,7 @@ from mockgal import (
     generate_mock_image,
     generate_mock_image_from_model,
     kpc_to_arcsec,
+    load_image_configs,
     load_model_file,
     parse_huang2013,
     save_fits,
@@ -377,6 +378,114 @@ class TestImageConfig:
         """Invalid size_pixels type should raise error."""
         with pytest.raises(ValueError, match="size_pixels must be int or tuple"):
             ImageConfig(size_pixels="100")
+
+
+# =============================================================================
+# Test Run-Manifest Loader
+# =============================================================================
+
+class TestLoadImageConfigs:
+    """Test load_image_configs manifest parsing, in particular the
+    top-level `defaults:` merge semantics introduced for CS4G-style
+    run manifests."""
+
+    def _write_yaml(self, tmp_path, text):
+        p = tmp_path / "run.yaml"
+        p.write_text(text)
+        return str(p)
+
+    def test_configs_only_no_defaults(self, tmp_path):
+        """Legacy behavior: flat configs list, no defaults block."""
+        path = self._write_yaml(tmp_path, """
+configs:
+  - name: plain
+    pixel_scale: 0.168
+    zeropoint: 27.0
+""")
+        configs = load_image_configs(path)
+        assert len(configs) == 1
+        assert configs[0].name == "plain"
+        assert configs[0].pixel_scale == 0.168
+        assert configs[0].zeropoint == 27.0
+
+    def test_defaults_merged_into_every_row(self, tmp_path):
+        """CS4G-style manifest: defaults apply to every configs entry."""
+        path = self._write_yaml(tmp_path, """
+defaults:
+  pixel_scale: 0.75
+  zeropoint: 21.097
+  psf_enabled: true
+  psf_fwhm: 1.66
+configs:
+  - name: clean
+  - name: noisy
+    noise_enabled: true
+""")
+        configs = load_image_configs(path)
+        assert len(configs) == 2
+        for cfg in configs:
+            assert cfg.pixel_scale == 0.75
+            assert cfg.zeropoint == 21.097
+            assert cfg.psf_enabled is True
+            assert cfg.psf_fwhm == 1.66
+        assert configs[0].noise_enabled is False
+        assert configs[1].noise_enabled is True
+
+    def test_per_row_overrides_defaults(self, tmp_path):
+        """A key present in a configs[] entry must win over the same key in defaults."""
+        path = self._write_yaml(tmp_path, """
+defaults:
+  pixel_scale: 0.75
+  zeropoint: 21.097
+configs:
+  - name: override
+    pixel_scale: 0.168
+""")
+        configs = load_image_configs(path)
+        assert len(configs) == 1
+        assert configs[0].pixel_scale == 0.168  # row wins
+        assert configs[0].zeropoint == 21.097    # default
+
+    def test_unknown_top_level_keys_ignored(self, tmp_path):
+        """Manifest wrappers use run_name/model_file/output_root/description
+        fields that load_image_configs must not choke on."""
+        path = self._write_yaml(tmp_path, """
+run_name: cs4g_test
+description: dev manifest
+model_file: inputs/cs4g/models/cs4g_sample_models.yaml
+output_root: output/cs4g_s4g_irac1_test
+defaults:
+  pixel_scale: 0.75
+configs:
+  - name: only_row
+""")
+        configs = load_image_configs(path)
+        assert len(configs) == 1
+        assert configs[0].pixel_scale == 0.75
+
+    def test_image_configs_key_still_supported(self, tmp_path):
+        """The legacy `image_configs:` key must keep working; defaults still merge."""
+        path = self._write_yaml(tmp_path, """
+defaults:
+  pixel_scale: 0.5
+image_configs:
+  - name: legacy
+""")
+        configs = load_image_configs(path)
+        assert len(configs) == 1
+        assert configs[0].pixel_scale == 0.5
+
+    def test_non_dict_defaults_raises(self, tmp_path):
+        """A malformed defaults block (list/scalar) should fail loudly."""
+        path = self._write_yaml(tmp_path, """
+defaults:
+  - this
+  - is_not_a_mapping
+configs:
+  - name: oops
+""")
+        with pytest.raises(ValueError, match="must be a mapping"):
+            load_image_configs(path)
 
 
 # =============================================================================
