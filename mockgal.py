@@ -320,6 +320,103 @@ class FerrerComponent(Component):
 
 
 @dataclass
+class PointSourceComponent(Component):
+    """Unresolved point source convolved with the PSF (galaxy nucleus).
+
+    The point source contributes its full flux at a single sub-pixel
+    location offset from the galaxy center. PSF convolution (which
+    spreads the flux into a stellar profile) is REQUIRED — rendering
+    a point source without a PSF would produce a single bright pixel,
+    which is unphysical. ``MockImageGenerator.generate()`` enforces
+    ``ImageConfig.psf_enabled=True`` whenever any PointSourceComponent
+    is in the galaxy's component list.
+
+    Offsets default to (0, 0) — i.e. the point source sits at the
+    galaxy center. For nuclei measured at non-zero offsets in the
+    GALFIT model file, supply either ``x_offset_pix``/``y_offset_pix``
+    (image-plane) or ``x_offset_kpc``/``y_offset_kpc`` (physical),
+    not both.
+    """
+    abs_mag: float
+    x_offset_pix: Optional[float] = None
+    y_offset_pix: Optional[float] = None
+    x_offset_kpc: Optional[float] = None
+    y_offset_kpc: Optional[float] = None
+    pa_deg: float = 0.0  # unused but kept for ABC contract uniformity
+    component_id: Optional[str] = None
+    index: Optional[int] = None
+
+    def __post_init__(self):
+        if self.x_offset_pix is not None and self.x_offset_kpc is not None:
+            raise ValueError(
+                "Provide x_offset_pix OR x_offset_kpc, not both"
+            )
+        if self.y_offset_pix is not None and self.y_offset_kpc is not None:
+            raise ValueError(
+                "Provide y_offset_pix OR y_offset_kpc, not both"
+            )
+
+    def _resolve_offset_pix(self, ctx: RenderContext) -> Tuple[float, float]:
+        """Return (dx_pix, dy_pix). 0 if no offset provided."""
+        dx = 0.0
+        dy = 0.0
+        if self.x_offset_pix is not None:
+            dx = self.x_offset_pix
+        elif self.x_offset_kpc is not None:
+            dx = (kpc_to_arcsec(self.x_offset_kpc, ctx.redshift)
+                  / ctx.pixel_scale_arcsec_per_pix)
+        if self.y_offset_pix is not None:
+            dy = self.y_offset_pix
+        elif self.y_offset_kpc is not None:
+            dy = (kpc_to_arcsec(self.y_offset_kpc, ctx.redshift)
+                  / ctx.pixel_scale_arcsec_per_pix)
+        return dx, dy
+
+    def angular_extent_arcsec(self, ctx: RenderContext) -> float:
+        # Point sources have no intrinsic spatial extent. The image-size
+        # auto-sizing path falls back to a minimum extent in
+        # MockImageGenerator._compute_image_shape when max_re_arcsec==0.
+        return 0.0
+
+    def derived_params(self, ctx: RenderContext) -> Dict[str, Any]:
+        dx, dy = self._resolve_offset_pix(ctx)
+        return {
+            'profile': 'psf',
+            'app_mag': abs_to_app_mag(self.abs_mag, ctx.redshift),
+            'abs_mag': self.abs_mag,
+            'x_offset_pix': dx,
+            'y_offset_pix': dy,
+            'x_offset_kpc': self.x_offset_kpc,
+            'y_offset_kpc': self.y_offset_kpc,
+        }
+
+    def to_libprofit_spec(self, ctx: RenderContext) -> str:
+        dx, dy = self._resolve_offset_pix(ctx)
+        app_mag = abs_to_app_mag(self.abs_mag, ctx.redshift)
+        return (
+            f"psf:xcen={ctx.xcen_pix + dx}:"
+            f"ycen={ctx.ycen_pix + dy}:mag={app_mag}"
+        )
+
+    def to_astropy_image(self, ctx: RenderContext, shape: Tuple[int, int]) -> np.ndarray:
+        """Stamp total flux at the rounded pixel position.
+
+        PSF convolution happens at the image level (after summing
+        components) in MockImageGenerator.generate(), so this method
+        returns an unconvolved sparse delta that the engine convolves.
+        """
+        dx, dy = self._resolve_offset_pix(ctx)
+        app_mag = abs_to_app_mag(self.abs_mag, ctx.redshift)
+        total_flux = 10 ** (-0.4 * (app_mag - ctx.zeropoint))
+        image = np.zeros(shape, dtype=np.float64)
+        ix = int(round(ctx.xcen_pix + dx))
+        iy = int(round(ctx.ycen_pix + dy))
+        if 0 <= iy < shape[0] and 0 <= ix < shape[1]:
+            image[iy, ix] = total_flux
+        return image
+
+
+@dataclass
 class MockGalaxy:
     """Complete mock galaxy definition."""
     name: str
@@ -906,7 +1003,13 @@ SersicEngine = RenderEngine
 _COMPONENT_REGISTRY: Dict[str, type] = {
     "sersic": SersicComponent,
     "ferrer": FerrerComponent,
+    "psf": PointSourceComponent,
 }
+
+# Minimum image extent (pixels) for galaxies whose components have no
+# intrinsic spatial size — e.g. a PSF-only galaxy. Used by
+# MockImageGenerator._compute_image_shape when ``overall_re_pix == 0``.
+MIN_IMAGE_EXTENT_PIX = 51
 
 
 def _build_component_from_dict(d: dict) -> Component:
@@ -967,6 +1070,16 @@ class MockImageGenerator:
         metadata : dict
             Image metadata including WCS info and component parameters
         """
+        # 0. Pre-render guards — fail fast on configurations that would
+        # silently produce unphysical images.
+        if any(isinstance(c, PointSourceComponent) for c in galaxy.components):
+            if not self.config.psf_enabled:
+                raise ValueError(
+                    "PointSourceComponent requires ImageConfig(psf_enabled=True). "
+                    "Rendering a point source without a PSF would produce a single "
+                    "bright pixel, which is unphysical for downstream isophote tests."
+                )
+
         # 1. Compute derived parameters
         params = self._compute_derived_params(galaxy)
 
@@ -1060,6 +1173,11 @@ class MockImageGenerator:
             # size_factor times the overall galaxy Re when available
             half_size = int(self.config.size_factor * params['overall_re_pix'])
             size = 2 * half_size + 1  # Odd for centering
+            # Galaxies whose components have zero intrinsic extent (e.g.
+            # PSF-only) collapse to size=1; fall back to a minimum so the
+            # PSF stamp + convolution produces a usable image.
+            if size < MIN_IMAGE_EXTENT_PIX:
+                size = MIN_IMAGE_EXTENT_PIX
             ny, nx = size, size
 
         # Check for excessively large images and apply cap
