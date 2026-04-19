@@ -573,9 +573,9 @@ class TestMockImageGenerator:
             def __init__(self):
                 self.received_psf = None
 
-            def render(self, **kwargs):
-                self.received_psf = kwargs.get("psf")
-                return np.ones(kwargs["shape"], dtype=np.float64)
+            def render_component(self, comp, shape, ctx, psf=None):
+                self.received_psf = psf
+                return np.ones(shape, dtype=np.float64)
 
         dummy_engine = DummyEngine()
         gen.engine = dummy_engine
