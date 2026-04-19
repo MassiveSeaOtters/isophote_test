@@ -45,3 +45,24 @@
 - Agent-facing files should reference lessons and workflows rather than duplicating long command catalogs or session history.
 - Session-specific status, commit hashes, and handoff notes belong in `docs/journal/` or dedicated session logs, not in `AGENTS.md` or `CLAUDE.md`.
 - When the canonical Huang2013 workflow changes, update `inputs/README.md` first and then fix any supporting references in `README.md`, `docs/QUICK_REFERENCE.md`, and migration notes.
+
+## Component Polymorphism
+
+- mockgal's render pipeline dispatches polymorphically over a `Component` ABC (`mockgal.py` Section 2). Every concrete profile must implement four methods: `to_libprofit_spec(ctx)`, `to_astropy_image(ctx, shape)`, `derived_params(ctx)`, and `angular_extent_arcsec(ctx)`. Adding a new profile is then a single class plus one registry entry in `_COMPONENT_REGISTRY`, not three dispersed `isinstance` branches.
+- `RenderContext` bundles per-render environment (`redshift`, `pixel_scale`, `zeropoint`, image-center xy) so components can convert their intrinsic kpc/abs_mag fields into image-plane parameters without holding a reference to `ImageConfig` or `MockGalaxy`.
+- The libprofit backend (via `profit-cli`) renders all three current profile types natively (`sersic:`, `ferrer:`, `psf:`). The astropy backend renders Sersic and PointSource directly; `FerrerComponent.to_astropy_image` raises `NotImplementedError` because astropy.modeling has no native Ferrer profile, and a custom Fittable2DModel was deemed out of scope for a fallback path.
+- `PointSourceComponent` requires `ImageConfig.psf_enabled=True`. `MockImageGenerator.generate()` enforces this at the top of the call rather than silently rendering a single bright pixel — that would be an isophote-fitting footgun.
+- Image-size auto-sizing falls back to `MIN_IMAGE_EXTENT_PIX = 51` when every component has zero intrinsic extent (e.g. PSF-only galaxies). Without the fallback the `2*size_factor*overall_re_pix + 1` formula collapses to size 1.
+- The polymorphic refactor was behavior-preserving: `max abs diff = 0.0` against a pre-refactor reference render of a two-Sersic galaxy. Always keep a stash of pre-refactor outputs around when restructuring a render pipeline.
+
+## GALFIT-Backed Reference Renders
+
+- `mockgal_galfit.py` wraps the GALFIT 3.0.7 binary (default `/Users/shuang/code/galfit/galfit`, overridable via `GALFIT_BIN`) in `P) 1` model-only mode. It supports two input modes: a `MockGalaxy` (translated through `mockgalaxy_to_galfit_dict`) or a galfit_io `from_dict`-shaped dict (used to re-render parsed Salo+2015 P4 outgals against their original `*_subcomps.fits`).
+- For the same single-Sersic input, mockgal-libprofit/astropy and mockgal-galfit agree at correlation > 0.95 with flux ratio within 2%. Differences come from independent numerical quadratures and sub-pixel sampling, not bugs.
+- Use `mockgal_galfit.py` as the canonical reference renderer when pixel-perfect parity matters; use the libprofit/astropy paths in mockgal for production scale.
+- The bundled `/galfit` skill at `~/.claude/skills/galfit/scripts/galfit_io.py` provides `read_galfit`, `write_galfit`, `from_dict`, `to_dict`. mockgal_galfit imports it via `sys.path` insertion at module load — keep the skill installed.
+
+## libprofit Operational Notes
+
+- Built `profit-cli` binaries on this machine often have a hardcoded `@rpath` that resolves to a non-existent `/Users/mac/...` path. Set `DYLD_LIBRARY_PATH` to the directory containing `libprofit.dylib` before invoking the binary, or rebuild with the correct rpath.
+- Treat profit-cli as available only if it can actually start. mockgal's `engine='auto'` selection runs a health check and falls back to astropy when the binary fails to load — preserve that behavior in any future refactor.

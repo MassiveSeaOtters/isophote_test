@@ -33,11 +33,12 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from functools import lru_cache
 from multiprocessing import Pool, cpu_count
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 from scipy.ndimage import convolve
@@ -135,7 +136,61 @@ def sanitize_filename(name: str) -> str:
 # =============================================================================
 
 @dataclass
-class SersicComponent:
+class RenderContext:
+    """Per-render environment passed to each Component during image generation.
+
+    Carries everything a component needs to translate its intrinsic physical
+    parameters (kpc, abs_mag) into image-plane parameters (pixels, app_mag)
+    without holding a reference to the full ImageConfig or MockGalaxy.
+    """
+    redshift: float
+    pixel_scale_arcsec_per_pix: float
+    zeropoint: float
+    xcen_pix: float
+    ycen_pix: float
+
+
+class Component(ABC):
+    """Abstract base for renderable galaxy components.
+
+    Each subclass declares its own dataclass fields and implements four
+    methods: a libprofit profile-spec emitter, an astropy-path image
+    renderer, a derived-parameters dict, and an angular extent in arcsec
+    used by the image-size auto-sizing.
+
+    Concrete subclasses must declare the contract attributes ``abs_mag``,
+    ``pa_deg``, ``component_id``, ``index`` (typed as dataclass fields).
+    """
+
+    abs_mag: float
+    pa_deg: float
+    component_id: Optional[str]
+    index: Optional[int]
+
+    @abstractmethod
+    def to_libprofit_spec(self, ctx: RenderContext) -> str:
+        """Build a profit-cli profile-specification string."""
+
+    @abstractmethod
+    def to_astropy_image(self, ctx: RenderContext, shape: Tuple[int, int]) -> np.ndarray:
+        """Render the component's image array via the astropy path.
+
+        PSF convolution happens at the image level (after summing
+        components) in MockImageGenerator.generate(), so this method
+        returns the un-convolved per-component contribution.
+        """
+
+    @abstractmethod
+    def derived_params(self, ctx: RenderContext) -> Dict[str, Any]:
+        """Per-component metadata dict (sizes in arcsec/pix, app_mag, etc.)."""
+
+    @abstractmethod
+    def angular_extent_arcsec(self, ctx: RenderContext) -> float:
+        """Largest angular size (arcsec) used by image auto-sizing."""
+
+
+@dataclass
+class SersicComponent(Component):
     """Single Sersic component with intrinsic parameters."""
     r_eff_kpc: float      # Effective radius in kpc
     abs_mag: float        # Absolute magnitude
@@ -160,13 +215,213 @@ class SersicComponent:
         """Axis ratio b/a."""
         return 1.0 - self.ellipticity
 
+    def angular_extent_arcsec(self, ctx: RenderContext) -> float:
+        return kpc_to_arcsec(self.r_eff_kpc, ctx.redshift)
+
+    def derived_params(self, ctx: RenderContext) -> Dict[str, Any]:
+        re_arcsec = self.angular_extent_arcsec(ctx)
+        return {
+            're_arcsec': re_arcsec,
+            're_pix': re_arcsec / ctx.pixel_scale_arcsec_per_pix,
+            'app_mag': abs_to_app_mag(self.abs_mag, ctx.redshift),
+            'r_eff_kpc': self.r_eff_kpc,
+            'abs_mag': self.abs_mag,
+            'n': self.n,
+            'ellipticity': self.ellipticity,
+            'pa_deg': self.pa_deg,
+        }
+
+    def to_libprofit_spec(self, ctx: RenderContext) -> str:
+        re_pix = self.angular_extent_arcsec(ctx) / ctx.pixel_scale_arcsec_per_pix
+        app_mag = abs_to_app_mag(self.abs_mag, ctx.redshift)
+        return (
+            f"sersic:xcen={ctx.xcen_pix}:ycen={ctx.ycen_pix}:mag={app_mag}:"
+            f"re={re_pix}:nser={self.n}:axrat={self.axrat}:ang={self.pa_deg}"
+        )
+
+    def to_astropy_image(self, ctx: RenderContext, shape: Tuple[int, int]) -> np.ndarray:
+        re_pix = self.angular_extent_arcsec(ctx) / ctx.pixel_scale_arcsec_per_pix
+        app_mag = abs_to_app_mag(self.abs_mag, ctx.redshift)
+        return _render_astropy_sersic(
+            shape, ctx.xcen_pix, ctx.ycen_pix,
+            app_mag, re_pix, self.n, self.axrat, self.pa_deg,
+            ctx.zeropoint,
+        )
+
+
+@dataclass
+class FerrerComponent(Component):
+    """Truncated Ferrer profile (commonly used by GALFIT to fit galaxy bars).
+
+    The integrated magnitude (``abs_mag``) is the total flux of the bar;
+    if a GALFIT model gave you a central surface brightness instead, do
+    the SB->mag conversion upstream (e.g. in ``cs4g_to_mockgal.py``)
+    using the analytic Ferrer integral
+    ``m_total = mu(0) - 2.5*log10(2*pi*q*r_out_arcsec^2 / 6)`` for the
+    common ``alpha=2, beta=0`` Salo+2015 bar parameterization.
+
+    Rendering is libprofit-only; ``to_astropy_image`` raises
+    NotImplementedError because astropy.modeling has no native Ferrer
+    profile and a custom implementation is out of scope.
+    """
+    r_out_kpc: float        # outer truncation radius in kpc
+    abs_mag: float          # integrated absolute magnitude
+    alpha: float = 2.0      # outer truncation sharpness (Salo bar default)
+    beta: float = 0.0       # central slope (Salo bar default)
+    ellipticity: float = 0.0
+    pa_deg: float = 0.0
+    component_id: Optional[str] = None
+    index: Optional[int] = None
+
+    def __post_init__(self):
+        if self.r_out_kpc <= 0:
+            raise ValueError(f"r_out_kpc must be positive, got {self.r_out_kpc}")
+        if self.alpha <= 0:
+            raise ValueError(f"alpha must be positive, got {self.alpha}")
+        if not (0 <= self.ellipticity < 1):
+            raise ValueError(f"Ellipticity must be in [0, 1), got {self.ellipticity}")
+
+    @property
+    def axrat(self) -> float:
+        return 1.0 - self.ellipticity
+
+    def angular_extent_arcsec(self, ctx: RenderContext) -> float:
+        return kpc_to_arcsec(self.r_out_kpc, ctx.redshift)
+
+    def derived_params(self, ctx: RenderContext) -> Dict[str, Any]:
+        r_out_arcsec = self.angular_extent_arcsec(ctx)
+        return {
+            'profile': 'ferrer',
+            'r_out_arcsec': r_out_arcsec,
+            'r_out_pix': r_out_arcsec / ctx.pixel_scale_arcsec_per_pix,
+            'app_mag': abs_to_app_mag(self.abs_mag, ctx.redshift),
+            'r_out_kpc': self.r_out_kpc,
+            'abs_mag': self.abs_mag,
+            'alpha': self.alpha,
+            'beta': self.beta,
+            'ellipticity': self.ellipticity,
+            'pa_deg': self.pa_deg,
+        }
+
+    def to_libprofit_spec(self, ctx: RenderContext) -> str:
+        rout_pix = self.angular_extent_arcsec(ctx) / ctx.pixel_scale_arcsec_per_pix
+        app_mag = abs_to_app_mag(self.abs_mag, ctx.redshift)
+        return (
+            f"ferrer:xcen={ctx.xcen_pix}:ycen={ctx.ycen_pix}:mag={app_mag}:"
+            f"rout={rout_pix}:a={self.alpha}:b={self.beta}:"
+            f"axrat={self.axrat}:ang={self.pa_deg}"
+        )
+
+    def to_astropy_image(self, ctx: RenderContext, shape: Tuple[int, int]) -> np.ndarray:
+        raise NotImplementedError(
+            "FerrerComponent has no astropy renderer. "
+            "Use ImageConfig(engine='libprofit')."
+        )
+
+
+@dataclass
+class PointSourceComponent(Component):
+    """Unresolved point source convolved with the PSF (galaxy nucleus).
+
+    The point source contributes its full flux at a single sub-pixel
+    location offset from the galaxy center. PSF convolution (which
+    spreads the flux into a stellar profile) is REQUIRED — rendering
+    a point source without a PSF would produce a single bright pixel,
+    which is unphysical. ``MockImageGenerator.generate()`` enforces
+    ``ImageConfig.psf_enabled=True`` whenever any PointSourceComponent
+    is in the galaxy's component list.
+
+    Offsets default to (0, 0) — i.e. the point source sits at the
+    galaxy center. For nuclei measured at non-zero offsets in the
+    GALFIT model file, supply either ``x_offset_pix``/``y_offset_pix``
+    (image-plane) or ``x_offset_kpc``/``y_offset_kpc`` (physical),
+    not both.
+    """
+    abs_mag: float
+    x_offset_pix: Optional[float] = None
+    y_offset_pix: Optional[float] = None
+    x_offset_kpc: Optional[float] = None
+    y_offset_kpc: Optional[float] = None
+    pa_deg: float = 0.0  # unused but kept for ABC contract uniformity
+    component_id: Optional[str] = None
+    index: Optional[int] = None
+
+    def __post_init__(self):
+        if self.x_offset_pix is not None and self.x_offset_kpc is not None:
+            raise ValueError(
+                "Provide x_offset_pix OR x_offset_kpc, not both"
+            )
+        if self.y_offset_pix is not None and self.y_offset_kpc is not None:
+            raise ValueError(
+                "Provide y_offset_pix OR y_offset_kpc, not both"
+            )
+
+    def _resolve_offset_pix(self, ctx: RenderContext) -> Tuple[float, float]:
+        """Return (dx_pix, dy_pix). 0 if no offset provided."""
+        dx = 0.0
+        dy = 0.0
+        if self.x_offset_pix is not None:
+            dx = self.x_offset_pix
+        elif self.x_offset_kpc is not None:
+            dx = (kpc_to_arcsec(self.x_offset_kpc, ctx.redshift)
+                  / ctx.pixel_scale_arcsec_per_pix)
+        if self.y_offset_pix is not None:
+            dy = self.y_offset_pix
+        elif self.y_offset_kpc is not None:
+            dy = (kpc_to_arcsec(self.y_offset_kpc, ctx.redshift)
+                  / ctx.pixel_scale_arcsec_per_pix)
+        return dx, dy
+
+    def angular_extent_arcsec(self, ctx: RenderContext) -> float:
+        # Point sources have no intrinsic spatial extent. The image-size
+        # auto-sizing path falls back to a minimum extent in
+        # MockImageGenerator._compute_image_shape when max_re_arcsec==0.
+        return 0.0
+
+    def derived_params(self, ctx: RenderContext) -> Dict[str, Any]:
+        dx, dy = self._resolve_offset_pix(ctx)
+        return {
+            'profile': 'psf',
+            'app_mag': abs_to_app_mag(self.abs_mag, ctx.redshift),
+            'abs_mag': self.abs_mag,
+            'x_offset_pix': dx,
+            'y_offset_pix': dy,
+            'x_offset_kpc': self.x_offset_kpc,
+            'y_offset_kpc': self.y_offset_kpc,
+        }
+
+    def to_libprofit_spec(self, ctx: RenderContext) -> str:
+        dx, dy = self._resolve_offset_pix(ctx)
+        app_mag = abs_to_app_mag(self.abs_mag, ctx.redshift)
+        return (
+            f"psf:xcen={ctx.xcen_pix + dx}:"
+            f"ycen={ctx.ycen_pix + dy}:mag={app_mag}"
+        )
+
+    def to_astropy_image(self, ctx: RenderContext, shape: Tuple[int, int]) -> np.ndarray:
+        """Stamp total flux at the rounded pixel position.
+
+        PSF convolution happens at the image level (after summing
+        components) in MockImageGenerator.generate(), so this method
+        returns an unconvolved sparse delta that the engine convolves.
+        """
+        dx, dy = self._resolve_offset_pix(ctx)
+        app_mag = abs_to_app_mag(self.abs_mag, ctx.redshift)
+        total_flux = 10 ** (-0.4 * (app_mag - ctx.zeropoint))
+        image = np.zeros(shape, dtype=np.float64)
+        ix = int(round(ctx.xcen_pix + dx))
+        iy = int(round(ctx.ycen_pix + dy))
+        if 0 <= iy < shape[0] and 0 <= ix < shape[1]:
+            image[iy, ix] = total_flux
+        return image
+
 
 @dataclass
 class MockGalaxy:
     """Complete mock galaxy definition."""
     name: str
     redshift: float
-    components: List[SersicComponent]
+    components: List[Component]
     re_overall: Optional[float] = None
 
     def __post_init__(self):
@@ -476,16 +731,73 @@ def find_profit_cli(custom_path: Optional[str] = None) -> Optional[str]:
     return None
 
 
-class SersicEngine:
-    """
-    Sersic profile rendering engine.
+def _render_astropy_sersic(
+    shape: Tuple[int, int],
+    xcen: float,
+    ycen: float,
+    app_mag: float,
+    re_pix: float,
+    n: float,
+    axrat: float,
+    ang: float,
+    zeropoint: float,
+    psf: Optional[np.ndarray] = None,
+) -> np.ndarray:
+    """Render a Sersic component via astropy.modeling.Sersic2D.
 
-    Supports libprofit (via profit-cli), and astropy (fallback) backends.
+    Module-level helper shared by the back-compat ``RenderEngine.render()``
+    and ``SersicComponent.to_astropy_image()``. PSF convolution is
+    optional; when used by the component polymorphic path the caller omits
+    ``psf`` and convolves the summed image instead.
+
+    Convention differences from pyprofit:
+    - ellip = 1 - axrat (astropy uses ellipticity)
+    - theta: angle from +X axis in radians (pyprofit: from +Y in degrees)
+    - amplitude: intensity at Re (pyprofit uses total magnitude)
+    """
+    b_n = gammaincinv(2 * n, 0.5)
+    total_flux = 10 ** (-0.4 * (app_mag - zeropoint))
+    gamma_2n = gamma(2 * n)
+    amplitude = total_flux * b_n ** (2 * n) / (
+        2 * np.pi * n * re_pix**2 * np.exp(b_n) * gamma_2n * axrat
+    )
+
+    ellip = 1 - axrat
+    theta = np.radians(90 - ang)
+
+    model = Sersic2D(
+        amplitude=amplitude,
+        r_eff=re_pix,
+        n=n,
+        x_0=xcen,
+        y_0=ycen,
+        ellip=ellip,
+        theta=theta,
+    )
+
+    y, x = np.mgrid[:shape[0], :shape[1]]
+    image = model(x, y)
+
+    if psf is not None:
+        image = convolve(image, psf, mode='constant')
+
+    return image
+
+
+class RenderEngine:
+    """
+    Profile rendering engine supporting multiple Component types.
+
+    Backends:
+    - libprofit (via profit-cli): supports sersic, ferrer, psf, and more.
+    - astropy (fallback): supports sersic natively and delegates to the
+      component's ``to_astropy_image`` for other profiles (Ferrer raises
+      NotImplementedError; PointSource stamps a delta).
     """
 
     def __init__(self, engine: str = "auto", profit_cli_path: Optional[str] = None):
         """
-        Initialize the Sersic engine.
+        Initialize the rendering engine.
 
         Parameters
         ----------
@@ -533,79 +845,70 @@ class SersicEngine:
         psf: Optional[np.ndarray] = None
     ) -> np.ndarray:
         """
-        Render a single Sersic component.
+        Render a single Sersic component (back-compat API).
 
-        Parameters
-        ----------
-        shape : tuple
-            Image shape (ny, nx)
-        xcen, ycen : float
-            Center coordinates in pixels
-        mag : float
-            Total apparent magnitude
-        re_pix : float
-            Effective radius in pixels
-        n : float
-            Sersic index
-        axrat : float
-            Axis ratio (b/a)
-        ang : float
-            Position angle in degrees (from +Y, CCW)
-        zeropoint : float
-            Photometric zeropoint
-        psf : ndarray, optional
-            PSF kernel for convolution
-
-        Returns
-        -------
-        ndarray
-            Rendered 2D image
+        Kept for tests and external callers that work in image-plane
+        parameters directly. For new code prefer ``render_component``
+        which dispatches on Component subclass.
         """
         if self.engine == "libprofit":
-            return self._render_libprofit(
-                shape, xcen, ycen, mag, re_pix, n, axrat, ang, zeropoint, psf
+            spec = (
+                f"sersic:xcen={xcen}:ycen={ycen}:mag={mag}:"
+                f"re={re_pix}:nser={n}:axrat={axrat}:ang={ang}"
             )
+            return self._render_libprofit_spec(spec, shape, zeropoint, psf)
         else:
-            return self._render_astropy(
+            return _render_astropy_sersic(
                 shape, xcen, ycen, mag, re_pix, n, axrat, ang, zeropoint, psf
             )
 
-    def _render_libprofit(
+    def render_component(
         self,
+        comp: Component,
         shape: Tuple[int, int],
-        xcen: float,
-        ycen: float,
-        mag: float,
-        re_pix: float,
-        n: float,
-        axrat: float,
-        ang: float,
-        zeropoint: float,
-        psf: Optional[np.ndarray] = None
+        ctx: RenderContext,
+        psf: Optional[np.ndarray] = None,
     ) -> np.ndarray:
         """
-        Render using libprofit via profit-cli.
+        Polymorphic per-component render.
 
-        profit-cli parameters for Sersic:
-        -p sersic:xcen=X:ycen=Y:mag=M:re=R:nser=N:axrat=A:ang=PA
-        -w WIDTH -H HEIGHT -m ZEROPOINT
+        The libprofit path asks the component for its profile-spec string and
+        pipes it to profit-cli (optionally with per-component PSF convolution
+        via ``-P``). The astropy path delegates the full pixel render to the
+        component; PSF convolution happens at the image level in
+        ``MockImageGenerator.generate()`` after summing all components.
+        """
+        if self.engine == "libprofit":
+            spec = comp.to_libprofit_spec(ctx)
+            return self._render_libprofit_spec(spec, shape, ctx.zeropoint, psf)
+        return comp.to_astropy_image(ctx, shape)
+
+    def _render_libprofit_spec(
+        self,
+        profile_spec: str,
+        shape: Tuple[int, int],
+        zeropoint: float,
+        psf: Optional[np.ndarray] = None,
+    ) -> np.ndarray:
+        """
+        Profile-agnostic libprofit renderer.
+
+        Accepts an already-built profit-cli profile-spec string (e.g.
+        ``"sersic:xcen=50:..."`` or ``"ferrer:..."`` or ``"psf:..."``)
+        and returns the rendered 2D array. PSF convolution, when enabled,
+        is performed by libprofit via the ``-P`` flag with a transient
+        FITS file; falls back to Python-side convolution if profit-cli
+        rejects the PSF path.
         """
         height, width = shape
 
-        # Build profile specification
-        profile_spec = (
-            f"sersic:xcen={xcen}:ycen={ycen}:mag={mag}:"
-            f"re={re_pix}:nser={n}:axrat={axrat}:ang={ang}"
-        )
-
-        # Build command
         cmd = [
             self.profit_cli_path,
-            "-w", str(width),   # Width in pixels
-            "-H", str(height),  # Height in pixels
+            "-w", str(width),
+            "-H", str(height),
             "-m", str(zeropoint),
             "-p", profile_spec,
-            "-t"  # Output as text to stdout
+            "-t",
         ]
         
         def _run_profit_cli(parse_cmd: List[str]) -> np.ndarray:
@@ -689,63 +992,47 @@ class SersicEngine:
                 except OSError:
                     pass
 
-    def _render_astropy(
-        self,
-        shape: Tuple[int, int],
-        xcen: float,
-        ycen: float,
-        mag: float,
-        re_pix: float,
-        n: float,
-        axrat: float,
-        ang: float,
-        zeropoint: float,
-        psf: Optional[np.ndarray] = None
-    ) -> np.ndarray:
-        """
-        Render using astropy.modeling.models.Sersic2D.
 
-        Convention differences from pyprofit:
-        - ellip = 1 - axrat (astropy uses ellipticity)
-        - theta: angle from +X axis in radians (pyprofit: from +Y in degrees)
-        - amplitude: intensity at Re (pyprofit uses total magnitude)
-        """
-        # Convert magnitude to amplitude (intensity at Re)
-        # Total flux: F_tot = 2 * pi * n * I_e * R_e^2 * exp(b_n) * gamma(2n) / b_n^(2n)
-        b_n = gammaincinv(2 * n, 0.5)
-        total_flux = 10 ** (-0.4 * (mag - zeropoint))
-        gamma_2n = gamma(2 * n)
+# Back-compat alias: external callers and tests still import `SersicEngine`.
+SersicEngine = RenderEngine
 
-        # Solve for amplitude (I_e at the effective radius)
-        # Include axrat factor for elliptical profile
-        amplitude = total_flux * b_n ** (2 * n) / (
-            2 * np.pi * n * re_pix**2 * np.exp(b_n) * gamma_2n * axrat
+
+# Registry of dict-constructible Component types, keyed by a short ``type``
+# string that appears in YAML/JSON model files. Phases C/D extend this to
+# include ``ferrer`` and ``psf``.
+_COMPONENT_REGISTRY: Dict[str, type] = {
+    "sersic": SersicComponent,
+    "ferrer": FerrerComponent,
+    "psf": PointSourceComponent,
+}
+
+# Minimum image extent (pixels) for galaxies whose components have no
+# intrinsic spatial size — e.g. a PSF-only galaxy. Used by
+# MockImageGenerator._compute_image_shape when ``overall_re_pix == 0``.
+MIN_IMAGE_EXTENT_PIX = 51
+
+
+def _build_component_from_dict(d: dict) -> Component:
+    """Construct a Component subclass instance from a dict.
+
+    The dispatch key is ``d.get('type', 'sersic')`` — missing or absent
+    defaults to Sersic so existing manifests continue to load unchanged.
+    Keys that don't match the target dataclass's declared fields are
+    silently dropped (Huang2013 model files carry extras like
+    ``surface_brightness`` that mockgal doesn't need).
+    """
+    import dataclasses
+
+    comp_type = d.get("type", "sersic")
+    cls = _COMPONENT_REGISTRY.get(comp_type)
+    if cls is None:
+        raise ValueError(
+            f"Unknown component type '{comp_type}'. "
+            f"Valid types: {sorted(_COMPONENT_REGISTRY)}"
         )
-
-        # Convention conversion
-        ellip = 1 - axrat
-        # pyprofit: angle from +Y CCW in degrees
-        # astropy: angle from +X CCW in radians
-        theta = np.radians(90 - ang)
-
-        model = Sersic2D(
-            amplitude=amplitude,
-            r_eff=re_pix,
-            n=n,
-            x_0=xcen,
-            y_0=ycen,
-            ellip=ellip,
-            theta=theta
-        )
-
-        y, x = np.mgrid[:shape[0], :shape[1]]
-        image = model(x, y)
-
-        # Handle PSF convolution separately for astropy
-        if psf is not None:
-            image = convolve(image, psf, mode='constant')
-
-        return image
+    valid = {f.name for f in dataclasses.fields(cls)}
+    kwargs = {k: v for k, v in d.items() if k in valid}
+    return cls(**kwargs)
 
 
 # =============================================================================
@@ -765,7 +1052,7 @@ class MockImageGenerator:
             Image generation configuration
         """
         self.config = config
-        self.engine = SersicEngine(config.engine, config.profit_cli_path)
+        self.engine = RenderEngine(config.engine, config.profit_cli_path)
 
     def generate(self, galaxy: MockGalaxy) -> Tuple[np.ndarray, dict]:
         """
@@ -783,6 +1070,16 @@ class MockImageGenerator:
         metadata : dict
             Image metadata including WCS info and component parameters
         """
+        # 0. Pre-render guards — fail fast on configurations that would
+        # silently produce unphysical images.
+        if any(isinstance(c, PointSourceComponent) for c in galaxy.components):
+            if not self.config.psf_enabled:
+                raise ValueError(
+                    "PointSourceComponent requires ImageConfig(psf_enabled=True). "
+                    "Rendering a point source without a PSF would produce a single "
+                    "bright pixel, which is unphysical for downstream isophote tests."
+                )
+
         # 1. Compute derived parameters
         params = self._compute_derived_params(galaxy)
 
@@ -792,24 +1089,23 @@ class MockImageGenerator:
         # 3. Prepare PSF if needed
         psf = self._make_psf() if self.config.psf_enabled else None
 
-        # 4. Render all components
+        # 4. Render all components (polymorphic per-Component dispatch)
         image = np.zeros(shape, dtype=np.float64)
         xcen = shape[1] / 2.0
         ycen = shape[0] / 2.0
+        ctx = RenderContext(
+            redshift=galaxy.redshift,
+            pixel_scale_arcsec_per_pix=self.config.pixel_scale,
+            zeropoint=self.config.zeropoint,
+            xcen_pix=xcen,
+            ycen_pix=ycen,
+        )
 
-        for comp, comp_params in zip(galaxy.components, params['components']):
-            image += self.engine.render(
-                shape=shape,
-                xcen=xcen,
-                ycen=ycen,
-                mag=comp_params['app_mag'],
-                re_pix=comp_params['re_pix'],
-                n=comp.n,
-                axrat=comp.axrat,
-                ang=comp.pa_deg,
-                zeropoint=self.config.zeropoint,
-                psf=psf if self.config.psf_enabled and self.engine.engine == "libprofit" else None
-            )
+        libprofit_psf = (
+            psf if self.config.psf_enabled and self.engine.engine == "libprofit" else None
+        )
+        for comp in galaxy.components:
+            image += self.engine.render_component(comp, shape, ctx, psf=libprofit_psf)
 
         # 5. Apply PSF on combined image for non-libprofit engines.
         # libprofit path already handles PSF inside SersicEngine (with fallback).
@@ -830,26 +1126,23 @@ class MockImageGenerator:
         return image, metadata
 
     def _compute_derived_params(self, galaxy: MockGalaxy) -> dict:
-        """Convert intrinsic to observable parameters."""
-        params = {'components': []}
+        """Convert intrinsic to observable parameters (polymorphic per-Component)."""
+        # Image center is resolved later; use 0s here since the derived
+        # params we surface (re_pix, app_mag, re_arcsec) don't depend on it.
+        ctx = RenderContext(
+            redshift=galaxy.redshift,
+            pixel_scale_arcsec_per_pix=self.config.pixel_scale,
+            zeropoint=self.config.zeropoint,
+            xcen_pix=0.0,
+            ycen_pix=0.0,
+        )
 
-        max_re_arcsec = 0
+        params: Dict[str, Any] = {'components': []}
+
+        max_re_arcsec = 0.0
         for comp in galaxy.components:
-            re_arcsec = kpc_to_arcsec(comp.r_eff_kpc, galaxy.redshift)
-            re_pix = re_arcsec / self.config.pixel_scale
-            app_mag = abs_to_app_mag(comp.abs_mag, galaxy.redshift)
-
-            params['components'].append({
-                're_arcsec': re_arcsec,
-                're_pix': re_pix,
-                'app_mag': app_mag,
-                'r_eff_kpc': comp.r_eff_kpc,
-                'abs_mag': comp.abs_mag,
-                'n': comp.n,
-                'ellipticity': comp.ellipticity,
-                'pa_deg': comp.pa_deg
-            })
-            max_re_arcsec = max(max_re_arcsec, re_arcsec)
+            params['components'].append(comp.derived_params(ctx))
+            max_re_arcsec = max(max_re_arcsec, comp.angular_extent_arcsec(ctx))
 
         overall_re_kpc = galaxy.re_overall
         if overall_re_kpc is not None:
@@ -880,6 +1173,11 @@ class MockImageGenerator:
             # size_factor times the overall galaxy Re when available
             half_size = int(self.config.size_factor * params['overall_re_pix'])
             size = 2 * half_size + 1  # Odd for centering
+            # Galaxies whose components have zero intrinsic extent (e.g.
+            # PSF-only) collapse to size=1; fall back to a minimum so the
+            # PSF stamp + convolution produces a usable image.
+            if size < MIN_IMAGE_EXTENT_PIX:
+                size = MIN_IMAGE_EXTENT_PIX
             ny, nx = size, size
 
         # Check for excessively large images and apply cap
@@ -1036,7 +1334,7 @@ class MockImageGenerator:
 def generate_mock_image(
     name: str = "mock_galaxy",
     redshift: float = DEFAULT_REDSHIFT,
-    components: Optional[List[Union[SersicComponent, dict]]] = None,
+    components: Optional[List[Union[Component, dict]]] = None,
     config: Optional[Union[ImageConfig, dict]] = None,
     return_metadata: bool = True
 ) -> Union[np.ndarray, Tuple[np.ndarray, dict]]:
@@ -1064,14 +1362,14 @@ def generate_mock_image(
     if not components:
         raise ValueError("components must be provided")
 
-    built_components: List[SersicComponent] = []
+    built_components: List[Component] = []
     for comp in components:
-        if isinstance(comp, SersicComponent):
+        if isinstance(comp, Component):
             built_components.append(comp)
         elif isinstance(comp, dict):
-            built_components.append(SersicComponent(**comp))
+            built_components.append(_build_component_from_dict(comp))
         else:
-            raise TypeError("components must be SersicComponent or dict")
+            raise TypeError("components must be a Component subclass or dict")
 
     if config is None:
         image_config = ImageConfig()
@@ -1202,23 +1500,22 @@ def load_model_file(
         redshift = gal_dict.get('redshift', DEFAULT_REDSHIFT)
         re_overall = gal_dict.get('re_overall')
 
-        components = []
+        components: List[Component] = []
         for i, comp_dict in enumerate(gal_dict.get('components', [])):
-            # Clamp Sersic index if needed
-            n = comp_dict.get('n', 4.0)
-            if n > MAX_SERSIC_INDEX:
-                logger.warning(f"Galaxy {name}: Clamping n={n} to {MAX_SERSIC_INDEX}")
-                n = MAX_SERSIC_INDEX
-
-            components.append(SersicComponent(
-                r_eff_kpc=comp_dict['r_eff_kpc'],
-                abs_mag=comp_dict['abs_mag'],
-                n=n,
-                ellipticity=comp_dict.get('ellipticity', 0.0),
-                pa_deg=comp_dict.get('pa_deg', 0.0),
-                component_id=comp_dict.get('id'),
-                index=comp_dict.get('index', i)
-            ))
+            comp_type = comp_dict.get('type', 'sersic')
+            # Manifest files use 'id' as the human-friendly identifier key;
+            # translate to the dataclass field name ``component_id``.
+            raw: Dict[str, Any] = {k: v for k, v in comp_dict.items() if k != 'id'}
+            if 'id' in comp_dict and 'component_id' not in raw:
+                raw['component_id'] = comp_dict['id']
+            raw.setdefault('index', i)
+            # Sersic: clamp Sersic index to the supported range and log.
+            if comp_type == 'sersic':
+                n = raw.get('n', 4.0)
+                if n > MAX_SERSIC_INDEX:
+                    logger.warning(f"Galaxy {name}: Clamping n={n} to {MAX_SERSIC_INDEX}")
+                    raw['n'] = MAX_SERSIC_INDEX
+            components.append(_build_component_from_dict(raw))
 
         if components:
             galaxies.append(MockGalaxy(

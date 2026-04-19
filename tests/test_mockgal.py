@@ -234,6 +234,57 @@ class TestSersicComponent:
             SersicComponent(r_eff_kpc=1.0, abs_mag=-20.0, n=4.0, ellipticity=-0.1)
 
 
+class TestComponentABCContract:
+    """Lock the polymorphic Component contract.
+
+    Walks every concrete Component subclass that has been registered
+    in mockgal._COMPONENT_REGISTRY and asserts each one implements all
+    four abstract methods. Catches the case where a future profile type
+    is added without proper interface compliance — without this, an
+    incomplete subclass fails only at render time, often deep in the
+    libprofit/astropy dispatch.
+    """
+
+    REQUIRED_METHODS = (
+        "to_libprofit_spec",
+        "to_astropy_image",
+        "derived_params",
+        "angular_extent_arcsec",
+    )
+
+    def test_all_registered_components_inherit_component(self):
+        from mockgal import Component, _COMPONENT_REGISTRY
+        for name, cls in _COMPONENT_REGISTRY.items():
+            assert issubclass(cls, Component), \
+                f"Registry entry '{name}' -> {cls.__name__} does not inherit Component"
+
+    def test_all_registered_components_implement_required_methods(self):
+        from mockgal import _COMPONENT_REGISTRY
+        for name, cls in _COMPONENT_REGISTRY.items():
+            for method in self.REQUIRED_METHODS:
+                assert callable(getattr(cls, method, None)), (
+                    f"Component '{name}' ({cls.__name__}) missing method "
+                    f"'{method}' or it is not callable"
+                )
+
+    def test_no_registered_component_class_is_abstract(self):
+        """Each registered class must instantiate (no abstract methods left)."""
+        from mockgal import _COMPONENT_REGISTRY
+        # Minimal valid kwargs for each known type
+        kwargs_for = {
+            "sersic": {"r_eff_kpc": 1.0, "abs_mag": -20.0, "n": 4.0},
+            "ferrer": {"r_out_kpc": 1.0, "abs_mag": -18.0},
+            "psf": {"abs_mag": -15.0},
+        }
+        for name, cls in _COMPONENT_REGISTRY.items():
+            kwargs = kwargs_for.get(name)
+            if kwargs is None:
+                pytest.skip(f"No minimal-kwargs recipe for '{name}'; "
+                            f"add to kwargs_for in this test")
+            instance = cls(**kwargs)
+            assert instance is not None
+
+
 class TestMockGalaxy:
     """Test MockGalaxy data class."""
 
@@ -573,9 +624,9 @@ class TestMockImageGenerator:
             def __init__(self):
                 self.received_psf = None
 
-            def render(self, **kwargs):
-                self.received_psf = kwargs.get("psf")
-                return np.ones(kwargs["shape"], dtype=np.float64)
+            def render_component(self, comp, shape, ctx, psf=None):
+                self.received_psf = psf
+                return np.ones(shape, dtype=np.float64)
 
         dummy_engine = DummyEngine()
         gen.engine = dummy_engine
