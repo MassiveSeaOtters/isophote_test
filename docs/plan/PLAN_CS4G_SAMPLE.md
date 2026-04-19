@@ -116,7 +116,39 @@ The 366 calibrators are dwarfs (DG sub-sample). For S4G spirals the
 - One YAML entry per sampled galaxy, mirroring Huang2013 conventions.
 - Reference the per-galaxy model JSON from Phase 5.
 
-### Phase 8 — Validation (P8.9)
+### Phase 8 — Validation (P8.9, Done)
+
+**Status: Done.** Implementation in `inputs/cs4g/scripts/qa_mockgal_vs_s4g.py`;
+outputs in `output/cs4g_s4g_irac1_test/` (`qa_s4g_validation.png`,
+`qa_summary.json`, per-galaxy `mockgal.fits` + `s4g_reference.fits`).
+
+Measured metrics on the 3-galaxy set (see `qa_summary.json`):
+
+| Galaxy   | Components            | flux_ratio | corr   | peak_ratio |
+|----------|-----------------------|------------|--------|------------|
+| NGC1433  | sersic+sersic+ferrer  | 1.423      | 0.974  | 2.80       |
+| NGC0275  | sersic+ferrer+ferrer  | 1.642      | 0.9996 | 1.68       |
+| NGC1357  | sersic+sersic+sersic  | 1.309      | 0.877  | 5.27       |
+
+Shape agreement is excellent (correlation 0.88–0.9996). Two systematic
+biases were uncovered and filed as separate TODO rows:
+
+- **Run-manifest `defaults:` not merged** (P8.10): `load_image_configs`
+  reads `pixel_scale`/`zeropoint`/PSF from each `configs:` entry only,
+  ignoring a sibling `defaults:` block. P8.9 worked around it by driving
+  `generate_mock_image(...)` from Python with an explicit `ImageConfig`.
+- **`abs_mag` distance-catalog mismatch** (P8.11): `cs4g_to_mockgal.py`
+  used Salo's catalog distance when computing `abs_mag`, but mockgal
+  converts back via Hubble-flow `FlatLambdaCDM(70, 0.3).distmod(z)`.
+  The per-galaxy constant mag offset reproduces the measured flux
+  ratios to 0.1% (NGC1357: predicted 1.310 vs measured 1.309).
+- **Gaussian vs composite PSF** (P8.12, low priority): `peak_ratio`
+  5.3× for NGC1357's bulge reflects Gaussian-FWHM=1.66″ vs Salo's
+  tighter composite PSF core. Cubes ship `PSF-1.composite.fits`
+  locally at `output/cs4g_s4g_irac1_test/{name}/s4g_psf_composite.fits`
+  for a drop-in when needed.
+
+### Phase 8 — Original specification (reference)
 
 Compare mockgal renders of the CS4G sample against the original
 Salo+2015 `*_subcomps.fits` cubes hosted on IRSA. Both sides use

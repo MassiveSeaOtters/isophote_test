@@ -66,3 +66,19 @@
 
 - Built `profit-cli` binaries on this machine often have a hardcoded `@rpath` that resolves to a non-existent `/Users/mac/...` path. Set `DYLD_LIBRARY_PATH` to the directory containing `libprofit.dylib` before invoking the binary, or rebuild with the correct rpath.
 - Treat profit-cli as available only if it can actually start. mockgal's `engine='auto'` selection runs a health check and falls back to astropy when the binary fails to load — preserve that behavior in any future refactor.
+
+## Run-Manifest Loader Behavior
+
+- `mockgal.load_image_configs` (Section 7) reads `pixel_scale`, `zeropoint`, PSF, sky, and noise fields directly from each `configs:` entry. A sibling `defaults:` block in the same YAML is **ignored** by the raw `python -m mockgal` CLI. Only `inputs/huang2013/scripts/generate_huang2013_mocks.py` merges `defaults + configs` before instantiating `ImageConfig`.
+- CS4G-style manifests (`inputs/cs4g/runs/*.yaml`) therefore cannot be invoked through `python -m mockgal` as-is — values silently fall back to `DEFAULT_PIXEL_SCALE=0.3`, `DEFAULT_ZEROPOINT=27.0`, etc. Drive CS4G renders by calling `generate_mock_image(...)` from Python with an explicit `ImageConfig`, or flatten the manifest so each `configs:` entry carries its full parameter set.
+
+## CS4G Photometric Round-Trip
+
+- `cs4g_to_mockgal.py` stored `abs_mag = outgal_app_mag − DM_salo`, where `DM_salo` came from Salo+2015's distance catalog (Tully-Fisher / group-corrected / Cepheid for nearby galaxies). At render time, mockgal converts back via `FlatLambdaCDM(H0=70, Om=0.3).distmod(z)` using redshift alone, which does **not** round-trip for galaxies where catalog distance differs from Hubble flow. The mismatch appears as a per-galaxy constant magnitude offset on all components, producing a systematic flux-ratio bias (1.31–1.64 observed on P8.9's 3-galaxy set).
+- Fix path: in `cs4g_to_mockgal.py`, compute `DM` with the same cosmology mockgal uses (`FlatLambdaCDM(70, 0.3).distmod(z)`) instead of Salo's distance, and re-emit `cs4g_components.json` + the sample model YAML. Shape agreement is unaffected (pixel-wise correlation ran 0.88–0.9996 even with the wrong photometric normalisation); only total-flux accuracy suffers.
+
+## S4G Subcomps Cube Geometry
+
+- Salo+2015 `{name}_{tag}.outgal_subcomps.fits` on IRSA (`/data/SPITZER/S4G/galaxies/{name}/P4/`) has four HDUs: primary (empty), residual (data − model − sky), and one HDU per component (`OBJECT='sersic'|'expdisk'|'ferrer2'`). The S4G noise-free reference image is `sum(HDU2..HDUN)` — there is no separate sky plane to skip, and HDU1 is not needed for model validation.
+- Component headers store `N_XC` / `N_YC` in **full-mosaic FITS coordinates**, not cube-local. Parse `HDU1.OBJECT` (format `[xlo:xhi,ylo:yhi]`) to get the FITSECT origin; cube-local 0-indexed center is `(XC − xlo, YC − ylo)`. Galaxies whose cube is a crop of the mosaic (e.g. NGC0275 at `[437:749, 644:956]`) will otherwise be cropped around coordinates outside the cube.
+- Salo's per-galaxy composite PSF (`PSF-1.composite.fits`) is bundled in the same directory and is the right drop-in when a Gaussian FWHM=1.66" placeholder causes visible core residuals (NGC1357 showed peak_ratio=5.3× with the placeholder).
