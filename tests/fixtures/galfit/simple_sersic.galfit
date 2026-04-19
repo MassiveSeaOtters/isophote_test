@@ -1,0 +1,30 @@
+===============================================================================
+# IMAGE and GALFIT CONTROL PARAMETERS
+A) gal.fits            # Input data image (FITS file)
+B) imgblock.fits       # Output data image block
+C) none                # Sigma image name
+D) psf.fits            # Input PSF image
+E) 1                   # PSF fine sampling factor
+F) none                # Bad pixel mask
+G) none                # Constraint file
+H) 1    93   1    93   # Image region to fit
+I) 100    100          # Convolution box
+J) 26.563              # Magnitude zeropoint
+K) 0.038  0.038        # Plate scale
+O) regular             # Display type
+P) 0                   # Options
+
+ 0) sersic             # Object type
+ 1) 48.5  50.2 1 1     # position x, y
+ 3) 20.00       1      # total magnitude
+ 4) 4.30        1      # R_e
+ 5) 5.20        1      # Sersic exponent
+ 9) 0.30        1      # axis ratio b/a
+10) 10.0        1      # position angle
+ Z) 0                  # skip model
+
+ 0) sky
+ 1) 0.77         0     # sky background
+ 2) 0.000        0     # dsky/dx
+ 3) 0.000        0     # dsky/dy
+ Z) 0                  # skip model

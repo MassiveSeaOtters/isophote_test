@@ -1,0 +1,32 @@
+#  Input menu file: galfit.feedme
+#  Restart file: galfit.01
+#  Chi^2/nu = 1.123
+================================================================================
+A) gal.fits
+B) imgblock.fits
+C) sigma.fits
+D) psf.fits
+E) 1
+F) none
+G) none
+H) 1  100  1  100
+I) 50 50
+J) 27.0
+K) 0.168 0.168
+O) regular
+P) 0
+
+ 0) sersic
+ 1) 50.1234 50.9876 (0.0042 0.0039) 1 1    # position x,y
+ 3) 20.0890   (0.0123)   1    # integrated magnitude
+ 4) *0.3200*  (0.0500)   1    # R_e flagged suspicious
+ 5) [4.0000]              0    # n held fixed
+ 9) {0.3000}  (0.0200)   1    # q pinned by constraint
+10) 10.0000  (0.5000)   1    # PA
+ Z) 0
+
+ 0) sky
+ 1) 0.7700  (0.0100)   0
+ 2) 0.0  0
+ 3) 0.0  0
+ Z) 0

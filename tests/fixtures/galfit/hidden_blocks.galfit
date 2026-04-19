@@ -1,0 +1,59 @@
+================================================================================
+A) gal.fits
+B) imgblock.fits
+C) none
+D) psf.fits
+E) 1
+F) none
+G) none
+H) 1  200  1  200
+I) 60  60
+J) 27.0
+K) 0.168 0.168
+O) regular
+P) 0
+
+ 0) sersic
+ 1) 100.0 100.0 1 1
+ 3) 18.0 1
+ 4) 10.0 1
+ 5) 2.5  1
+ 9) 0.7  1
+10) 20.0 1
+C0) 0.2   1           # diskyness
+B1) 0.05  1           # bending mode 1
+B3) 0.02  1           # bending mode 3 (skipping 2)
+F1) 0.07 30.0 1 1     # Fourier mode 1
+F6) 0.03 10.5 1 1     # Fourier mode 6 (sparse)
+F20) 0.01 23.5 1 1    # Fourier mode 20 (very high)
+R0) powerlaw
+R1) 30.0  1
+R2) 100.0 1
+R3) 275.0 1
+R4) 0.5   1
+R9) 0.5   1
+R10) 30.0 1
+Ti) 3
+To) 2
+ Z) 0
+
+# Inner truncation
+T0) radial
+T1) 100.0 100.0 1 1
+T4) 4.4  1
+T5) 9.2  1
+T9) 0.7  1
+T10) -32.0 1
+F1) 0.1 30.0 1 1
+
+# Outer truncation
+T0) radial2-b
+T1) 100.0 100.0 1 1
+T2) 50.0 1
+T3) 70.0 1
+
+ 0) sky
+ 1) 0.0 0
+ 2) 0.0 0
+ 3) 0.0 0
+ Z) 0

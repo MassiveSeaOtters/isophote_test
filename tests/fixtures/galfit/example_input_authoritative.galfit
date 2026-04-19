@@ -1,0 +1,301 @@
+================================================================================
+# IMAGE and GALFIT CONTROL PARAMETERS
+A) gal.fits            # Input data image (FITS file)
+B) imgblock.fits       # Output data image block
+C) none                # Sigma image name (made from data if blank or "none") 
+D) psf.fits   #        # Input PSF image and (optional) diffusion kernel
+E) 1                   # PSF fine sampling factor relative to data 
+F) none                # Bad pixel mask (FITS image or ASCII coord list)
+G) none                # File with parameter constraints (ASCII file) 
+H) 1    93   1    93   # Image region to fit (xmin xmax ymin ymax)
+I) 100    100          # Size of the convolution box (x y)
+J) 26.563              # Magnitude photometric zeropoint 
+K) 0.038  0.038        # Plate scale (dx dy)   [arcsec per pixel]
+O) regular             # Display type (regular, curses, both)
+P) 0                   # Options: 0=normal run; 1,2=make model/imgblock & quit
+
+
+# THE OBJECT LIST BELOW can be however long or short as the complexity
+# requires.  The user has complete freedom to mix and match the components
+# by duplicating each object block.
+
+# INITIAL FITTING PARAMETERS
+#
+# column 1:  Parameter number
+# column 2: 
+#          -- Parameter 0: the allowed functions are: sersic, nuker, expdisk
+#	      edgedisk, devauc, king, moffat, gaussian, ferrer, psf, sky
+#	   -- Parameter 1-10: value of the initial parameters
+#          -- Parameter C0: For diskiness/boxiness
+#             <0 = disky
+#             >0 = boxy
+#          -- Parameter Z: Outputting image options, the options are:
+#             0 = normal, i.e. subtract final model from the data to create
+#		  the residual image
+#	      1 = Leave in the model -- do not subtract from the data
+#
+# column 3: allow parameter to vary (yes = 1, no = 0)
+# column 4: comment
+
+# Sersic function
+
+ 0) sersic             # Object type
+ 1) 300.  350.  1 1    # position x, y        [pixel]
+ 3) 20.00      1       # total magnitude    
+ 4) 4.30       1       #     R_e              [Pixels]
+ 5) 5.20       1       # Sersic exponent (deVauc=4, expdisk=1)  
+ 9) 0.30       1       # axis ratio (b/a)   
+10) 10.0       1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ Z) 0                  #  Skip this model in output image?  (yes=1, no=0)
+
+# Nuker function
+
+ 0) nuker              # Object type
+ 1) 250.  475.  1 1    # position x, y        [pixel]
+ 3) 17.2       1       #    mu(Rb)            [surface brightness mag. at Rb]
+ 4) 20.5       1       #     Rb               [pixels]
+ 5) 1.2        1       #    alpha  (sharpness of transition)
+ 6) 0.5        1       #    beta   (outer powerlaw slope)
+ 7) 0.7        1       #    gamma  (inner powerlaw slope)
+ 9) 0.72       1       # axis ratio (b/a)   
+10) -25.2      1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ Z) 0                  #  Skip this model in output image?  (yes=1, no=0)
+
+# deVaucouleur function
+
+ 0) devauc             # Object type
+ 1) 301.2 351.5 1 1    # position x, y        [pixel]
+ 3) 18.        1       # total magnitude    
+ 4) 32.        1       #     R_e              [Pixels]
+ 9) 0.5        1       # axis ratio (b/a)   
+10) 107.       1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ Z) 0                  #  Skip this model in output image?  (yes=1, no=0)
+
+# Exponential function
+
+ 0) expdisk            # Object type
+ 1) 405.  365  1 1     # position x, y        [pixel]
+ 3) 17.0       1       # total magnitude
+ 4) 20.5       1       #     Rs               [Pixels]
+ 9) 0.3        1       # axis ratio (b/a)   
+10) 25         1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ Z) 0                  #  Skip this model in output image?  (yes=1, no=0)
+
+# Edge-on disk function
+
+ 0) edgedisk            # Object type
+ 1) 405.  365  1 1     # position x, y        [pixel]
+ 3) 17.0       1       # central surface brightness  [mag/arcsec^2]
+ 4) 10.5       1       # disk scale-height    [Pixels]
+ 5) 20.5       1       # disk scale-length    [Pixels]
+10) 25         1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ Z) 0                  #  Skip this model in output image?  (yes=1, no=0)
+
+# Moffat function
+ 
+ 0) moffat             # object type
+ 1) 372.0  450.0 1 1   # position x, y        [pixel]
+ 3) 16.5       1       # total magnitude     
+ 4) 0.5        1       #   FWHM               [Pixels]
+ 5) 1.5        1       # powerlaw      
+ 9) 0.3        1       # axis ratio (b/a)   
+10) 25         1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ Z) 0                  #  Skip this model in output image?  (yes=1, no=0)
+
+# Ferrer function
+
+ 0) ferrer             #  Component type
+ 1) 100.0 100.0 0 0    #  Position x, y 
+ 3) 10.0000     0      #  Central surface brghtness [mag/arcsec^2]
+ 4) 50.0000     0      #  Outer truncation radius  [pix]
+ 5) 4.0000      0      #  Alpha (outer truncation sharpness) 
+ 6) 2.0000      0      #  Beta (central slope)
+ 9) 0.5000      1      #  Axis ratio (b/a)  
+10) 50.0000     1      #  Position angle (PA) [deg: Up=0, Left=90]
+ Z) 0                  #  Skip this model in output image?  (yes=1, no=0)
+
+# Gaussian function
+
+ 0) gaussian           # object type
+ 1) 402.3  345.9  1 1  # position x, y        [pixel]
+ 3) 18.5       1       # total magnitude     
+ 4) 0.5        0       #   FWHM               [pixels]
+ 9) 0.3        1       # axis ratio (b/a)   
+10) 25         1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ Z) 0                  # leave in [1] or subtract [0] this comp from data?
+
+# The Empirical King Profile
+
+ 0)       king         # Object type
+ 1) 49.9925 49.9705 1 1  #   position x, y
+ 3) 14.9805    1       #  mu(0) 
+ 4) 10.1328    1       #   Rc 
+ 5) 51.0968    1       #   Rt 
+ 6) 2.0485     1       # alpha 
+ 9) 0.9918     1       # axis ratio (b/a)  
+10) 20.7684    1       # position angle (PA) 
+ Z) 0                  #  Skip this model in output image?  (yes=1, no=0)
+
+# PSF fit.
+
+ 0) psf                # object type
+ 1) 402.3  345.9  1 1  # position x, y        [pixel]
+ 3) 18.5       1       # total magnitude     
+ Z) 0                  #  Skip this model in output image?  (yes=1, no=0)
+
+# sky
+
+ 0) sky
+ 1) 0.77       0       # sky background       [ADU counts]
+ 2) 0.000      0       # dsky/dx (sky gradient in x) 
+ 3) 0.000      0       # dsky/dy (sky gradient in y) 
+ Z) 0                  #  Skip this model in output image?  (yes=1, no=0)
+
+# The parameters C0, B1, B2, F1, F2, etc. listed below are hidden 
+# from the user unless he/she explicitly requests them.  These can 
+# be tagged on to the end of any previous components except, of 
+# course, the PSF and the sky -- although galfit won't bar you from doing 
+# so, and will just ignore them.  Note that a Fourier or Bending mode 
+# amplitude of exactly 0 will cause GALFIT to crash because the 
+# derivative image GALFIT computes internally will be entirely 0.  If a 
+# Fourier or Bending amplitude is set to 0 initially GALFIT will reset it  
+# to a value of 0.01.  To prevent GALFIT from doing so, one can set it to any 
+# other value.
+
+#  Bending modes
+B1)  0.07      1       # Bending mode 1 (shear)
+B2)  0.01      1       # Bending mode 2 (banana shape)
+B3)  0.03      1       # Bending mode 3 (S-shape)
+
+#  Azimuthal fourier modes
+F1)  0.07  30.1  1  1  # Az. Fourier mode 1, amplitude and phase angle
+F2)  0.01  10.5  1  1  # Az. Fourier mode 2, amplitude and phase angle
+F6)  0.03  10.5  1  1  # Az. Fourier mode 6, amplitude and phase angle
+F10)  0.08  20.5  1  1  # Az. Fourier mode 10, amplitude and phase angle
+F20)  0.01  23.5  1  1  # Az. Fourier mode 20, amplitude and phase angle
+
+#  Traditional Diskyness/Boxyness parameter c
+C0) 0.1         0      # traditional diskyness(-)/boxyness(+)
+
+#  PA rotation is used most often to create spiral galaxies, although
+#  it can be used to fit isophotal rotations too.  Note that the parameters
+#  R9 (inclination to line of sight) and R10 (sky position angle) differ 
+#  very subtly (but importantly) from the classical axis ratio (q, parameter 
+#  9) and position angle (PA, 10), so you need to understand the
+#  distinction well.  R9 and R10 should be set to 0 if one is modeling early
+#  type galaxies, because otherwise they are completely degenerate with
+#  the classical q and PA.  R9 and R10 are used to project a spiral galaxy 
+#  disk, assumed to be round viewed face on (i.e. inclination of 0 degrees, 
+#  R9=0), to other orientations and flattening.  The disk orientation, R10 
+#  is 0 when pointing up and increases counter-clockwise, just like usual.  
+#  When viewed face on, the thickness of the spiral arm is controlled by 
+#  classical parameter 9, i.e. the axis ratio.  When R9 and R10 are zero, 
+#  everything is what you are used to with the old GALFIT.  If R9 and R10 are 
+#  not 0, then the classical parameters 9 and 10 (q, PA) will be a bit 
+#  un-intuitive, but perfectly internally consistent with the scheme just 
+#  described.  For spiral galaxies, when and both R9 and R10 are 0, the 
+#  classical position angle corresponds to the PA of the galaxy bar.  This all 
+#  sounds pretty confusing because you're just reading.  But once you start 
+#  playing with it it'll become more clear what I'm talking about.
+#  To have GALFIT generate some example galaxies, set P=1.
+#
+#  Note that you can couple an arbitrary number of Fourier components with
+#  coordinate rotation.  If you do so, you can create very complex,
+#  multi-armed, spiral structures, and arms that have different
+#  thicknesses.
+
+R0) powerlaw	       # PA rotation function (power, log, none)
+R1) 30.        1       # bar radius  [pixels]
+R2) 100.       1       # 96% asymptotic radius (i.e. at 96% of tanh rotation)
+R3) 275.       1       # cumul. coord. rotation out to asymp. radius [degrees] 
+R4) 0.5	       1       # asymptotic spiral arm powerlaw 
+R9) 0.5	       1       # inclination to L.o.S. (controls projected axis ratio)
+R10) 30.       1       # sky position angle
+
+#  The other coordinate rotation function is the log function.
+
+R0) log                # PA rotation func. (tanh, sqrt, log, linear, none)
+R1) 30.        1       # bar radius  [pixels]
+R2) 100.       1       # 96% asymptotic radius (i.e. at 96% of tanh rotation)
+R3) -59.9192   1       # cumul. coord. rotation out to asymp. radius [degrees]
+R4) 10.	       1       # Logarithmic winding scale radius [pixels]
+R9) -56.2757   1       # Inclination to L.o.S. [degrees]
+R10) 157.9937  1       # Sky position angle
+
+#  Create a truncation by multiplying a profile function with a
+#  hyperbolic tangent transition.  The break radius, r_break, is defined
+#  as the radius which has 99% the flux of an original function, whereas
+#  the softening radius, r_soft, is where the function has only 1% of the 
+#  flux of the original.  Under normal circumstances, r_break < r_soft.  
+#  On the other hand, r_break > r_soft is also possible.  This happens,
+#  for instance, if one wants to generate a ring model with a hyperbolic
+#  tangent truncation in the inner region.
+#
+#  When multiple profiles are linked, mathematically they are linked by:
+#    f_net(r) = Sum{f_inner(r)} * (1-s(r)) + Sum{f_outer(r)} * s(r).
+#  The transition radii are shared by the inner & outer functions in the
+#  sense that r_break is where inner profiles reaches 99% of their normal 
+#  flux; it is also the radius where the outer functions reaches 1% of their 
+#  own normal flux, and vice versa.  When this happens, be careful that the 
+#  sense of the break vs. asymptotic radius are in the correct sense, or 
+#  else things can get very confusing very quickly.  So as to minimize 
+#  confusion when linking, consistently use r_break < r_soft.
+#  
+#  When linking two profiles, the flux parameter for the inner component 
+#  is the surface brightness at the original (untruncated) effective 
+#  radius "Re" for the Sersic profile instead of the total flux, or central
+#  surface brightness for all other profiles (gaussian, moffat, etc.).
+#  The outer component flux normalization is the surface brightness
+#  at the **break** radius.  
+#
+#  Note that the Fourier and bending modes can operate on the truncation
+#  parameters independently of the light component that the truncation 
+#  parameters are modifying.
+#  
+#        
+#        v---  r_break ---v
+#        
+#        ____           ___
+#       /                  \
+#   ___/                    \___
+#
+#      ^----   r_soft   ----^
+#
+#  There are 4 kinds of truncation modes, designated by, "radial", "radial-b",
+#  for Type 1, versus "radial2", and "radial2-b" for Type 2.  
+#
+#  The difference between Type 1 and Type 2 is in the definition of 
+#  parameters T4 and T5.  For Type 1, T3 is "Break radius", and T4 is
+#  the "Softening length", i.e. (R_break) and (Delta R).  For Type 2, T3 is 
+#  still the "Break radius", but T5 is the "Softening radius", i.e. 
+#  inner and outer break radius.  
+#
+#  As for Type "b" versus Type "a" (i.e. non-b), the difference is that
+#  "Type a" is intended for spiral structures, i.e. the truncation shape 
+#  (axis ratio and PA) are tilted and rotated by the same angles as the 
+#  spiral arms.  Whereas for "Type b" truncations, the shape parameters
+#  refer to how they appear in projection, i.e. in the plane of the sky.
+#  For non-spiral models, there's no difference between "Type a" and
+#  "Type b".
+
+# Truncated Sersic function
+ 0) sersic             # Object type
+ 1) 300.  350.  1 1    # position x, y        [pixel]
+ 3) 20.00      1       # total magnitude    
+ 4) 4.30       1       #     R_e              [Pixels]
+ 5) 5.20       1       # Sersic exponent (deVauc=4, expdisk=1)  
+ 9) 0.30       1       # axis ratio (b/a)   
+10) 10.0       1       # position angle (PA)  [Degrees: Up=0, Left=90]
+Ti) 5                  # Inner truncation by component 5
+To) 2                  # Outer truncation by component 2
+ Z) 0                  # leave in [1] or subtract [0] this comp from data?
+
+# Object number: 5
+T0) radial                 #  truncation 
+T1) 200.  150.  1 1        #  Centroid of truncation function (optional)
+T4) 4.4179      1          #  Break radius (99% normal flux)    [pixels]
+T5) 9.1777      1          #  Softening length (1% normal flux) [pixels]
+T9)  0.7        1          #  Axis ratio (optional)
+T10)  -32.      1          #  Position angle (optional)
+F1) 0.1  30     1          #  Fourier mode1 (now modifying truncation)
+

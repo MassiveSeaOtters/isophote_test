@@ -22,6 +22,14 @@
 | P6.1 | P6 | Replace the hardcoded Huang2013 batch script with a run-manifest workflow | Done | The production script now requires `--run-manifest` and resolves one row per mock configuration |
 | P6.2 | P6 | Add canonical Huang2013 production manifests | Done | Added baseline, HSC `i`-band `wide`, and HSC `i`-band `dud` manifests under `inputs/huang2013/runs/` |
 | P6.3 | P6 | Persist resolved production-run artifacts next to outputs | Done | The script now writes original/resolved manifests plus `run_metadata.json` into each output directory |
+| P7.1 | P7 | Phase 1 investigation of GALFIT format, docs, and community parsers | Done | Web docs + README.pdf + `/Users/shuang/code/galfit/EXAMPLE.INPUT` reviewed; GALFITools/EllipSect/galfit-python-parser evaluated; design approved in `docs/plan/PLAN_GALFIT_PARSER.md` |
+| P7.2 | P7 | Phase 2a: data model + tokenizer + value-envelope parser | Done | `FittedValue` handles `[]`/`{}`/`*`/`(err)` in any order |
+| P7.3 | P7 | Phase 2b: header + profile read/write round-trip | Done | All 11 profiles covered; `sersic{1,2,3}` suffix; EXAMPLE.INPUT round-trips cleanly |
+| P7.4 | P7 | Phase 2c: hidden blocks (Z, C0, B*, F*, R*, T*, Ti, To) | Done | Sparse indices; `R0` enum; truncation pseudo-components; `extra_params` absorbs GALFIT 3.0.7's reserved `6)/7)/8)` slots |
+| P7.5 | P7 | Phase 2d: constraint file reader/writer (six line grammars) | Done | `galfit_constraints.py`; EXAMPLE.CONSTRAINTS round-trips |
+| P7.6 | P7 | Phase 2e: YAML/JSON serialization + idempotent round-trip | Done | Both modules |
+| P7.7 | P7 | Phase 2f: integration test against real `/Users/shuang/code/galfit/galfit` | Done | GALFIT 3.0.7 accepts parser-written config; parser reads its `galfit.01` |
+| P7.8 | P7 | Phase 3: SKILL package for global install | Done | Installed at `~/.claude/skills/galfit/` (visible to Claude Code) and mirrored at `~/Dropbox/work/project/vibe/guangtou_vibe/skills/galfit/`; ships parser + CLI + 7 reference docs |
 
 ## Review
 
