@@ -250,6 +250,76 @@ class SersicComponent(Component):
 
 
 @dataclass
+class FerrerComponent(Component):
+    """Truncated Ferrer profile (commonly used by GALFIT to fit galaxy bars).
+
+    The integrated magnitude (``abs_mag``) is the total flux of the bar;
+    if a GALFIT model gave you a central surface brightness instead, do
+    the SB->mag conversion upstream (e.g. in ``cs4g_to_mockgal.py``)
+    using the analytic Ferrer integral
+    ``m_total = mu(0) - 2.5*log10(2*pi*q*r_out_arcsec^2 / 6)`` for the
+    common ``alpha=2, beta=0`` Salo+2015 bar parameterization.
+
+    Rendering is libprofit-only; ``to_astropy_image`` raises
+    NotImplementedError because astropy.modeling has no native Ferrer
+    profile and a custom implementation is out of scope.
+    """
+    r_out_kpc: float        # outer truncation radius in kpc
+    abs_mag: float          # integrated absolute magnitude
+    alpha: float = 2.0      # outer truncation sharpness (Salo bar default)
+    beta: float = 0.0       # central slope (Salo bar default)
+    ellipticity: float = 0.0
+    pa_deg: float = 0.0
+    component_id: Optional[str] = None
+    index: Optional[int] = None
+
+    def __post_init__(self):
+        if self.r_out_kpc <= 0:
+            raise ValueError(f"r_out_kpc must be positive, got {self.r_out_kpc}")
+        if self.alpha <= 0:
+            raise ValueError(f"alpha must be positive, got {self.alpha}")
+        if not (0 <= self.ellipticity < 1):
+            raise ValueError(f"Ellipticity must be in [0, 1), got {self.ellipticity}")
+
+    @property
+    def axrat(self) -> float:
+        return 1.0 - self.ellipticity
+
+    def angular_extent_arcsec(self, ctx: RenderContext) -> float:
+        return kpc_to_arcsec(self.r_out_kpc, ctx.redshift)
+
+    def derived_params(self, ctx: RenderContext) -> Dict[str, Any]:
+        r_out_arcsec = self.angular_extent_arcsec(ctx)
+        return {
+            'profile': 'ferrer',
+            'r_out_arcsec': r_out_arcsec,
+            'r_out_pix': r_out_arcsec / ctx.pixel_scale_arcsec_per_pix,
+            'app_mag': abs_to_app_mag(self.abs_mag, ctx.redshift),
+            'r_out_kpc': self.r_out_kpc,
+            'abs_mag': self.abs_mag,
+            'alpha': self.alpha,
+            'beta': self.beta,
+            'ellipticity': self.ellipticity,
+            'pa_deg': self.pa_deg,
+        }
+
+    def to_libprofit_spec(self, ctx: RenderContext) -> str:
+        rout_pix = self.angular_extent_arcsec(ctx) / ctx.pixel_scale_arcsec_per_pix
+        app_mag = abs_to_app_mag(self.abs_mag, ctx.redshift)
+        return (
+            f"ferrer:xcen={ctx.xcen_pix}:ycen={ctx.ycen_pix}:mag={app_mag}:"
+            f"rout={rout_pix}:a={self.alpha}:b={self.beta}:"
+            f"axrat={self.axrat}:ang={self.pa_deg}"
+        )
+
+    def to_astropy_image(self, ctx: RenderContext, shape: Tuple[int, int]) -> np.ndarray:
+        raise NotImplementedError(
+            "FerrerComponent has no astropy renderer. "
+            "Use ImageConfig(engine='libprofit')."
+        )
+
+
+@dataclass
 class MockGalaxy:
     """Complete mock galaxy definition."""
     name: str
@@ -835,6 +905,7 @@ SersicEngine = RenderEngine
 # include ``ferrer`` and ``psf``.
 _COMPONENT_REGISTRY: Dict[str, type] = {
     "sersic": SersicComponent,
+    "ferrer": FerrerComponent,
 }
 
 
