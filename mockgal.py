@@ -192,6 +192,7 @@ class ImageConfig:
     zeropoint: float = DEFAULT_ZEROPOINT
     size_factor: float = DEFAULT_SIZE_FACTOR
     size_pixels: Optional[Union[int, Tuple[int, int]]] = None
+    max_image_size: int = MAX_IMAGE_SIZE
 
     # PSF configuration
     psf_enabled: bool = False
@@ -882,13 +883,14 @@ class MockImageGenerator:
             ny, nx = size, size
 
         # Check for excessively large images and apply cap
-        if ny > MAX_IMAGE_SIZE or nx > MAX_IMAGE_SIZE:
+        max_size = self.config.max_image_size
+        if ny > max_size or nx > max_size:
             logger.warning(
-                f"Computed image size {ny}x{nx} exceeds maximum ({MAX_IMAGE_SIZE}). "
-                f"Capping to {min(ny, MAX_IMAGE_SIZE)}x{min(nx, MAX_IMAGE_SIZE)} pixels."
+                f"Computed image size {ny}x{nx} exceeds maximum ({max_size}). "
+                f"Capping to {min(ny, max_size)}x{min(nx, max_size)} pixels."
             )
-            ny = min(ny, MAX_IMAGE_SIZE)
-            nx = min(nx, MAX_IMAGE_SIZE)
+            ny = min(ny, max_size)
+            nx = min(nx, max_size)
 
         return (ny, nx)
 
