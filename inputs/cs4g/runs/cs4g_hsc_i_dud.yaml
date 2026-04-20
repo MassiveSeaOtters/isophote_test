@@ -1,0 +1,56 @@
+run_name: cs4g_hsc_i_dud
+description: CS4G production-oriented run set rendering the 198-galaxy S4G sub-sample at HSC i-band dud-depth survey settings. Emits four deep-depth redshift snapshots per galaxy. Mirrors the Huang2013 HSC-i dud manifest's defaults and config structure so downstream benchmark tools can consume either dataset uniformly.
+model_file: inputs/cs4g/models/cs4g_sample_models.yaml
+output_root: ~/Dropbox/work/data/s4g_mock
+
+# size_factor=4.0: see cs4g_hsc_i_wide.yaml and PLAN_CS4G_SAMPLE.md Phase 9.
+defaults:
+  pixel_scale: 0.168
+  zeropoint: 27.0
+  size_factor: 4.0
+  size_pixels: null
+  max_image_size: 4001
+  psf_enabled: true
+  psf_type: gaussian
+  psf_fwhm: 0.7
+  psf_moffat_beta: 4.765
+  psf_file: null
+  sky_enabled: false
+  sky_type: flat
+  sky_level: 0.0
+  sky_coeffs: [0.0]
+  sky_sb_value: null
+  noise_enabled: false
+  noise_sigma: null
+  noise_snr: null
+  noise_seed: 42
+  sky_sb_limit: null
+  gain: null
+  randomize_noise_seed: true
+  engine: auto
+  profit_cli_path: null
+
+configs:
+  - name: deep_z005
+    redshift: 0.05
+    size_factor: 4.0
+    noise_enabled: true
+    sky_sb_limit: 25.697653749397546
+
+  - name: deep_z020
+    redshift: 0.20
+    size_factor: 4.0
+    noise_enabled: true
+    sky_sb_limit: 25.697653749397546
+
+  - name: deep_z035
+    redshift: 0.35
+    size_factor: 4.0
+    noise_enabled: true
+    sky_sb_limit: 25.697653749397546
+
+  - name: deep_z050
+    redshift: 0.50
+    size_factor: 4.0
+    noise_enabled: true
+    sky_sb_limit: 25.697653749397546
