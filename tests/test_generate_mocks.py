@@ -11,19 +11,17 @@ import yaml
 
 MODULE_PATH = (
     Path(__file__).resolve().parents[1]
-    / "inputs"
-    / "huang2013"
     / "scripts"
-    / "generate_huang2013_mocks.py"
+    / "generate_mocks.py"
 )
 MODULE_SPEC = importlib.util.spec_from_file_location(
-    "generate_huang2013_mocks_module",
+    "generate_mocks_module",
     MODULE_PATH,
 )
-generate_huang2013_mocks = importlib.util.module_from_spec(MODULE_SPEC)
-assert MODULE_SPEC.loader is not None
-sys.modules[MODULE_SPEC.name] = generate_huang2013_mocks
-MODULE_SPEC.loader.exec_module(generate_huang2013_mocks)
+assert MODULE_SPEC is not None and MODULE_SPEC.loader is not None
+generate_mocks = importlib.util.module_from_spec(MODULE_SPEC)
+sys.modules[MODULE_SPEC.name] = generate_mocks
+MODULE_SPEC.loader.exec_module(generate_mocks)
 
 
 def write_manifest(tmp_path: Path, payload: dict) -> Path:
@@ -56,7 +54,7 @@ def test_resolve_run_manifest_applies_defaults_and_row_overrides(tmp_path: Path)
         },
     )
 
-    manifest = generate_huang2013_mocks.resolve_run_manifest(manifest_path)
+    manifest = generate_mocks.resolve_run_manifest(manifest_path)
 
     assert manifest.run_name == "test_run"
     assert manifest.rows[0].config_values["pixel_scale"] == pytest.approx(0.2)
@@ -80,7 +78,7 @@ def test_resolve_run_manifest_rejects_unknown_row_keys(tmp_path: Path) -> None:
     )
 
     with pytest.raises(ValueError, match="unknown keys"):
-        generate_huang2013_mocks.resolve_run_manifest(manifest_path)
+        generate_mocks.resolve_run_manifest(manifest_path)
 
 
 def test_resolve_run_manifest_rejects_duplicate_config_names(tmp_path: Path) -> None:
@@ -97,7 +95,7 @@ def test_resolve_run_manifest_rejects_duplicate_config_names(tmp_path: Path) -> 
     )
 
     with pytest.raises(ValueError, match="Duplicate config name"):
-        generate_huang2013_mocks.resolve_run_manifest(manifest_path)
+        generate_mocks.resolve_run_manifest(manifest_path)
 
 
 def test_resolve_run_manifest_requires_noise_driver_when_noise_enabled(tmp_path: Path) -> None:
@@ -113,7 +111,7 @@ def test_resolve_run_manifest_requires_noise_driver_when_noise_enabled(tmp_path:
     )
 
     with pytest.raises(ValueError, match="does not provide any noise driver"):
-        generate_huang2013_mocks.resolve_run_manifest(manifest_path)
+        generate_mocks.resolve_run_manifest(manifest_path)
 
 
 def test_select_rows_filters_by_requested_names(tmp_path: Path) -> None:
@@ -128,9 +126,9 @@ def test_select_rows_filters_by_requested_names(tmp_path: Path) -> None:
             ],
         },
     )
-    manifest = generate_huang2013_mocks.resolve_run_manifest(manifest_path)
+    manifest = generate_mocks.resolve_run_manifest(manifest_path)
 
-    rows = generate_huang2013_mocks.select_rows(manifest.rows, ["z020_noise"])
+    rows = generate_mocks.select_rows(manifest.rows, ["z020_noise"])
 
     assert [row.name for row in rows] == ["z020_noise"]
 
@@ -147,17 +145,17 @@ def test_write_resolved_manifest_and_metadata_record_selected_rows(tmp_path: Pat
             ],
         },
     )
-    manifest = generate_huang2013_mocks.resolve_run_manifest(manifest_path)
-    selected_rows = generate_huang2013_mocks.select_rows(manifest.rows, ["z050_noise"])
+    manifest = generate_mocks.resolve_run_manifest(manifest_path)
+    selected_rows = generate_mocks.select_rows(manifest.rows, ["z050_noise"])
     output_dir = tmp_path / "output"
     output_dir.mkdir()
 
-    resolved_manifest_path = generate_huang2013_mocks.write_resolved_manifest(
+    resolved_manifest_path = generate_mocks.write_resolved_manifest(
         output_dir,
         manifest,
         selected_rows,
     )
-    metadata_path = generate_huang2013_mocks.write_run_metadata(
+    metadata_path = generate_mocks.write_run_metadata(
         output_base=output_dir,
         manifest=manifest,
         rows=selected_rows,
@@ -193,14 +191,14 @@ def test_resolve_run_manifest_requires_row_level_size_factor(tmp_path: Path) -> 
     )
 
     with pytest.raises(ValueError, match="missing required keys: size_factor"):
-        generate_huang2013_mocks.resolve_run_manifest(manifest_path)
+        generate_mocks.resolve_run_manifest(manifest_path)
 
 
 def test_build_image_config_uses_descriptive_name() -> None:
-    config = generate_huang2013_mocks.build_image_config(
+    config = generate_mocks.build_image_config(
         "z020_baseline_noise",
         {
-            **generate_huang2013_mocks.SCRIPT_DEFAULTS,
+            **generate_mocks.SCRIPT_DEFAULTS,
             "noise_enabled": True,
             "sky_sb_limit": 24.5,
         },

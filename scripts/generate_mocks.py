@@ -1,20 +1,27 @@
 #!/usr/bin/env python
 """
-Generate systematic mock images for the Huang2013 sample from a run manifest.
-
-Each manifest row defines one reproducible mock configuration with explicit
-numeric values and a descriptive name. The script writes both the original
-manifest and a fully resolved manifest into the output directory so the run can
-be reproduced without inferring defaults from code.
+Generate systematic mock images for any mockgal-compatible sample from a run
+manifest. Dataset-agnostic: the manifest's `model_file` decides which sample
+(Huang2013, CS4G/s4g_mock, etc.) is rendered; the `--output` flag is the
+dataset's root folder. Per-galaxy FITS files land at
+`{output}/{galaxy}/{galaxy}_{config}.fits`, alongside a `{galaxy}_mosaic.png`
+QA mosaic. Root-level `run_manifest_original.yaml`, `run_manifest_resolved.yaml`,
+and `run_metadata.json` record the run for reproducibility.
 
 Usage:
-    python inputs/huang2013/scripts/generate_huang2013_mocks.py \
-        --run-manifest inputs/huang2013/runs/huang2013_production_baseline.yaml \
-        --output output/huang2013_production/huang2013_production_baseline
-    python inputs/huang2013/scripts/generate_huang2013_mocks.py \
+    python scripts/generate_mocks.py \
         --run-manifest inputs/huang2013/runs/huang2013_hsc_i_wide.yaml \
-        --output output/huang2013_production/huang2013_hsc_i_wide \
-        --config-name z005_clean z020_hsc_i_wide
+        --output ~/Dropbox/work/data/huang2013
+
+    python scripts/generate_mocks.py \
+        --run-manifest inputs/cs4g/runs/cs4g_hsc_i_wide.yaml \
+        --output ~/Dropbox/work/data/s4g_mock
+
+    python scripts/generate_mocks.py \
+        --run-manifest inputs/cs4g/runs/cs4g_hsc_i_wide.yaml \
+        --output ~/Dropbox/work/data/s4g_mock \
+        --galaxies NGC1433 NGC0275 NGC1357 \
+        --config-name clean_z005 wide_z020
 """
 
 from __future__ import annotations
@@ -34,13 +41,10 @@ from typing import Any
 import numpy as np
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT))
 
 from mockgal import ImageConfig, MockGalaxy, MockImageGenerator, load_model_file, sanitize_filename, save_fits
-
-DEFAULT_MODEL_FILE = Path(__file__).resolve().parents[1] / "models" / "huang2013_models.yaml"
-DEFAULT_OUTPUT_ROOT = Path("output/huang2013_production")
 
 SCRIPT_DEFAULTS: dict[str, Any] = {
     "pixel_scale": 0.168,
@@ -94,7 +98,7 @@ class ResolvedRunManifest:
     run_name: str
     description: str | None
     model_file: Path
-    output_root: Path
+    output_root: Path | None   # informational only; actual dataset root is --output
     defaults: dict[str, Any]
     rows: list[ResolvedRunRow]
     source_manifest: Path
@@ -199,7 +203,10 @@ def resolve_run_manifest(manifest_path: Path) -> ResolvedRunManifest:
     defaults.update(manifest_defaults)
 
     model_file = Path(manifest["model_file"])
-    output_root = Path(manifest.get("output_root", DEFAULT_OUTPUT_ROOT))
+    # `output_root` in the manifest is informational only (recorded in metadata);
+    # the actual dataset root comes from --output on the CLI.
+    output_root_value = manifest.get("output_root")
+    output_root = Path(output_root_value) if output_root_value else None
     rows: list[ResolvedRunRow] = []
     seen_names: set[str] = set()
 
@@ -290,7 +297,7 @@ def serialize_resolved_manifest(manifest: ResolvedRunManifest, rows: list[Resolv
         "run_name": manifest.run_name,
         "description": manifest.description,
         "model_file": str(manifest.model_file),
-        "output_root": str(manifest.output_root),
+        "output_root": str(manifest.output_root) if manifest.output_root else None,
         "defaults": manifest.defaults,
         "configs": [
             {
@@ -332,17 +339,13 @@ def write_run_metadata(
         "run_name": manifest.run_name,
         "description": manifest.description,
         "model_file": str(manifest.model_file),
-        "output_root": str(manifest.output_root),
+        "output_root": str(manifest.output_root) if manifest.output_root else None,
         "selected_config_names": selected_config_names,
         "selected_galaxy_names": selected_galaxy_names,
         "galaxy_count": len(galaxies),
         "config_count": len(rows),
         "expected_image_count": len(galaxies) * len(rows),
         "warnings": warnings,
-        "libprofit_path_note": (
-            "Set LIBPROFIT_PATH=/Users/shuang/Dropbox/work/project/otters/isophote_test/libprofit/mbp "
-            "manually in this session before libprofit-backed validation runs."
-        ),
         "resolved_rows": [
             {
                 "name": row.name,
@@ -433,7 +436,7 @@ def process_galaxy(
     output_base: Path,
 ) -> None:
     safe_galaxy_name = sanitize_filename(galaxy.name)
-    galaxy_dir = output_base / "huang2013" / safe_galaxy_name
+    galaxy_dir = output_base / safe_galaxy_name
     galaxy_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"\nProcessing {galaxy.name}...")
@@ -461,7 +464,7 @@ def process_galaxy(
 
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Generate systematic Huang2013 mock images from a run manifest",
+        description="Generate systematic mock galaxy images from a run manifest",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
@@ -592,7 +595,7 @@ def main() -> int:
     elapsed = time.time() - start_time
     print("\n" + "=" * 70)
     print(f"Complete! Processed {len(galaxies)} galaxies in {elapsed:.1f} seconds")
-    print(f"Output saved to: {output_base / 'huang2013'}")
+    print(f"Output saved to: {output_base}")
     print(f"Total images generated: {len(galaxies) * len(rows)}")
     print("=" * 70)
     return 0

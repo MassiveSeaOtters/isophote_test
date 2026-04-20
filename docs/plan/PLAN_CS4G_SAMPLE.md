@@ -220,6 +220,85 @@ Sersic/expdisk path.
   characterized in the GALFIT-vs-libprofit Ferrer empirical test
   (~1% flux near r_out, numerical-only).
 
+### Phase 9 — Production render in HSC i-band
+
+**Goal**: produce 198-galaxy CS4G mocks at HSC-i survey settings, in
+the same per-galaxy folder layout as `~/Dropbox/work/data/huang2013/`
+so the downstream isophote-fitting benchmark pipeline can consume
+either dataset uniformly.
+
+#### Output contract (must match huang2013)
+
+Every mock dataset in `~/Dropbox/work/data/{dataset}/` looks like:
+
+```
+{dataset}/
+├── run_manifest_original.yaml      # verbatim input manifest
+├── run_manifest_resolved.yaml      # defaults merged into each configs row
+├── run_metadata.json               # timestamp, git branch, resolved rows
+└── {galaxy}/
+    ├── {galaxy}_clean_z005.fits    # single noise-light reference
+    ├── {galaxy}_wide_z{005,020,035,050}.fits    # HSC wide depth × 4 redshifts
+    ├── {galaxy}_deep_z{005,020,035,050}.fits    # HSC dud depth × 4 redshifts
+    └── {galaxy}_mosaic.png         # QA mosaic
+```
+
+For CS4G the target dataset dir is `~/Dropbox/work/data/s4g_mock/`.
+
+#### Image sizing — `size_factor=4`
+
+- **Huang2013** sets `re_overall` per galaxy (Kron-like catalog Re) and
+  renders at `size_factor=6` → image half-side = 6 × `re_overall_pix`.
+- **CS4G** models do not set `re_overall`; mockgal falls back to
+  `max(component angular extent)`, which for every CS4G galaxy is the
+  extended disk's Sersic-equivalent Re (disk Re ≫ bulge Re; Ferrer
+  r_out is hard-truncated).
+- At `size_factor=4 × max_Re`, flux completeness is:
+  - Disk (n=1): 98.6%
+  - Bulge (n=1–4, Re ≪ disk Re): ~100%
+  - Ferrer bar: 100% (truncated inside the image)
+- `size_factor=4` exceeds Huang2013's effective ~88% flux completeness
+  for n=4 de Vaucouleurs profiles. Disk-space impact: ~44% of
+  Huang2013's per-galaxy pixel area (56% savings).
+- `max_image_size=4001` cap still applies as a safety rail.
+
+#### Manifests
+
+Two YAMLs under `inputs/cs4g/runs/`, mirroring the Huang2013 structure:
+
+- `cs4g_hsc_i_wide.yaml` → 5 configs: `clean_z005`, `wide_z{005,020,035,050}`.
+- `cs4g_hsc_i_dud.yaml` → 4 configs: `deep_z{005,020,035,050}`.
+
+`defaults:` block mirrors Huang2013 HSC-i conventions exactly
+(pixel_scale=0.168, zeropoint=27.0, psf_fwhm=0.7, randomize_noise_seed=
+true), except `size_factor: 4.0` instead of `6.0` and `model_file`
+pointing at the CS4G sample YAML.
+
+Per-config `sky_sb_limit` values reuse the calibrated HSC-i depths
+from `inputs/huang2013/configs/huang2013_hsc_i_calibration.yaml`:
+28.5 (clean), 24.62 (wide), 25.70 (dud).
+
+#### Milestones (C-prefix to avoid colliding with mockgal-library P9.x)
+
+- **C9.1**: Rename `inputs/huang2013/scripts/generate_huang2013_mocks.py`
+  → `scripts/generate_mocks.py` at repo root. Decouple from Huang2013-
+  specific paths. Update `huang2013_full.sh` / `huang2013_test.sh`
+  and any tests. Full suite must stay green.
+- **C9.2**: Write the two CS4G production manifests above.
+- **C9.3**: Smoke render NGC1433 / NGC0275 / NGC1357 through both
+  manifests. Verify output layout matches Huang2013's byte-for-byte
+  structurally (same files per galaxy, same root metadata files).
+  Inspect one mosaic PNG visually.
+- **C9.4**: Full batch render (after user sign-off on C9.3):
+  198 × 2 manifests = 1782 FITS + 198 mosaic PNGs → `~/Dropbox/work/data/s4g_mock/`.
+  Add `s4g_mock_full.sh` + `s4g_mock_test.sh` at repo root.
+  Capture rendering timings.
+- **C9.5**: Document the mock-dataset folder contract in `docs/SPEC.md`
+  so Phase 10's isophote-fitting pipeline can consume any dataset
+  matching the contract.
+
+Phase 9 ends once the mocks are on disk and the contract is documented.
+
 ## Risks & open issues
 
 - **Color extrapolation**: the M_i predictor is calibrated on dwarfs but

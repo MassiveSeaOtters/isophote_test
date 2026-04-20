@@ -10,7 +10,7 @@ Preferred canonical paths:
 - `inputs/huang2013/configs/huang2013_test_config.yaml`
 - `inputs/huang2013/catalog/huang2013_cgs_model.txt`
 - `inputs/huang2013/scripts/convert_huang2013.py`
-- `inputs/huang2013/scripts/generate_huang2013_mocks.py`
+- `scripts/generate_mocks.py` (dataset-agnostic; was `inputs/huang2013/scripts/generate_huang2013_mocks.py` before the Phase 9 rename+lift)
 - `inputs/examples/models/example_models.yaml`
 - `inputs/examples/configs/example_image_config.yaml`
 - `inputs/demos/*.py`
