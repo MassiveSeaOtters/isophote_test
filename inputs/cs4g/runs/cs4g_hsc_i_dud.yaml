@@ -1,7 +1,7 @@
 run_name: cs4g_hsc_i_dud
-description: CS4G production-oriented run set rendering the 198-galaxy S4G sub-sample at HSC i-band dud-depth survey settings. Emits four deep-depth redshift snapshots per galaxy. Mirrors the Huang2013 HSC-i dud manifest's defaults and config structure so downstream benchmark tools can consume either dataset uniformly.
+description: CS4G production-oriented run set rendering the size-aware 300-galaxy S4G sub-sample at HSC i-band dud-depth survey settings. Emits two deep-depth redshift snapshots per galaxy.
 model_file: inputs/cs4g/models/cs4g_sample_models.yaml
-output_root: ~/Dropbox/work/data/s4g_mock
+output_root: /Volumes/galaxy/isophote/s4g_mock
 
 # size_factor=4.0: see cs4g_hsc_i_wide.yaml and PLAN_CS4G_SAMPLE.md Phase 9.
 defaults:
@@ -37,20 +37,8 @@ configs:
     noise_enabled: true
     sky_sb_limit: 25.697653749397546
 
-  - name: deep_z020
-    redshift: 0.20
-    size_factor: 4.0
-    noise_enabled: true
-    sky_sb_limit: 25.697653749397546
-
-  - name: deep_z035
-    redshift: 0.35
-    size_factor: 4.0
-    noise_enabled: true
-    sky_sb_limit: 25.697653749397546
-
-  - name: deep_z050
-    redshift: 0.50
+  - name: deep_z010
+    redshift: 0.10
     size_factor: 4.0
     noise_enabled: true
     sky_sb_limit: 25.697653749397546

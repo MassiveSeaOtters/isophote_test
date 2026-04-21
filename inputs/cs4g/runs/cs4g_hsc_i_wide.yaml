@@ -1,7 +1,7 @@
 run_name: cs4g_hsc_i_wide
-description: CS4G production-oriented run set rendering the 198-galaxy S4G sub-sample at HSC i-band wide-depth survey settings. Emits one deep clean reference plus four wide-depth redshift snapshots per galaxy. Mirrors the Huang2013 HSC-i wide manifest's defaults and config structure so downstream benchmark tools can consume either dataset uniformly.
+description: CS4G production-oriented run set rendering the size-aware 300-galaxy S4G sub-sample at HSC i-band wide-depth survey settings. Emits one deep clean reference plus two wide-depth redshift snapshots per galaxy.
 model_file: inputs/cs4g/models/cs4g_sample_models.yaml
-output_root: ~/Dropbox/work/data/s4g_mock
+output_root: /Volumes/galaxy/isophote/s4g_mock
 
 # size_factor=4.0 (vs Huang2013's 6.0): the CS4G sample's extended disk
 # (n=1 Sersic) is always the max-Re component, so 4 * Re_disk captures
@@ -46,20 +46,8 @@ configs:
     noise_enabled: true
     sky_sb_limit: 24.62395438263279
 
-  - name: wide_z020
-    redshift: 0.20
-    size_factor: 4.0
-    noise_enabled: true
-    sky_sb_limit: 24.62395438263279
-
-  - name: wide_z035
-    redshift: 0.35
-    size_factor: 4.0
-    noise_enabled: true
-    sky_sb_limit: 24.62395438263279
-
-  - name: wide_z050
-    redshift: 0.50
+  - name: wide_z010
+    redshift: 0.10
     size_factor: 4.0
     noise_enabled: true
     sky_sb_limit: 24.62395438263279

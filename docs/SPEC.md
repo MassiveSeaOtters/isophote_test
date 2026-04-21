@@ -40,12 +40,12 @@ must follow.
 - `{galaxy}` is the sanitised galaxy name from the model file (spaces removed
   via `mockgal.sanitize_filename`). Example: `"ESO 185-G054"` → `ESO185-G054`.
 - `{config_name}` is the `name:` field of a row in the manifest's `configs:`
-  list. The shared Huang2013+CS4G convention is `{depth}_z{redshift*100}`:
-  - `clean_z005` — deep reference (single row, `sky_sb_limit=28.5`).
-  - `wide_z{005,020,035,050}` — HSC wide depth × 4 mock redshifts.
-  - `deep_z{005,020,035,050}` — HSC dud depth × 4 mock redshifts (in the
-    Huang2013 and CS4G manifests; the config-name prefix is `deep` even
-    though the manifest filename contains `dud`).
+  list. Config names are manifest-defined and may differ by sample:
+  - `clean_z005` — reference row at `z = 0.05` (`sky_sb_limit = 28.5`).
+  - Huang2013 currently uses `wide_z{005,020,035,050}` and
+    `deep_z{005,020,035,050}`.
+  - CS4G / `s4g_mock` currently uses `wide_z{005,010}` and
+    `deep_z{005,010}`.
 
 ### Multi-manifest datasets
 
@@ -124,9 +124,10 @@ The runner is dataset-agnostic: any manifest pointing at any
 
 ### Current conforming datasets
 
-- `~/Dropbox/work/data/huang2013/` — 93 galaxies × 9 configs. Produced by
-  `huang2013_full.sh` at the repo root.
-- `~/Dropbox/work/data/s4g_mock/` — 198 galaxies × 9 configs. Produced by
+- `~/Dropbox/work/data/huang2013/` — 93 galaxies, with config rows defined by
+  the Huang2013 manifests. Produced by `huang2013_full.sh` at the repo root.
+- `~/Dropbox/work/data/s4g_mock/` — CS4G/S4G production dataset root, with
+  config rows defined by the checked-in CS4G manifests. Produced by
   `s4g_mock_full.sh` at the repo root.
 
 Any new sample should (a) add an `inputs/{sample}/` directory with its

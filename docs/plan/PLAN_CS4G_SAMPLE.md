@@ -25,13 +25,14 @@ local `/galfit` skill.
 |----|----------|-------|
 | D1 | Late-type T-type cutoff | `cvrhs_t >= -3` (S0- and later) |
 | D2 | Edge-on cutoff | `Incl < 70 deg` |
-| D3 | Final sample size | aim for 200, smaller acceptable |
+| D3 | Final sample size | 300 |
 | D4 | Confirm `mabs3` band | i-band AB (3 lines of evidence; see `docs/lessons.md`) |
 | D5 | M_i derivation | predicted for everyone (real `mabs3` is dwarf-only) |
 | D6 | Color predictor | per-galaxy from `(B - 3.6μm)`, fallback constant |
 | D7 | Most-complex selection | filename heuristic (no parse-then-count) |
 | D8 | Local mirror | yes, under `inputs/cs4g/p4/{name}/` |
 | D9 | Output band | i-band only |
+| D10 | Size-aware production floor | rendered image size at `z=0.1` must be `> 75 x 75` pixels |
 
 ## Joint cuts as of plan time
 
@@ -105,10 +106,18 @@ The 366 calibrators are dwarfs (DG sub-sample). For S4G spirals the
 
 ### Phase 6 — Downsample (`inputs/cs4g/downsample.py`)
 
-- Stratify by `complexity_rank`: prefer rank 3 > rank 2 > rank 1.
-- Within each stratum, KS-match `logMstar` distribution to the parent
-  candidate sample.
-- Target N = 200, fall back to whatever rank-3+rank-2 yields if smaller.
+- Keep only galaxies with at least 2 convertible components.
+- Compute the production image size at `z=0.1` using the same auto-sizing
+  contract as `mockgal`: largest component extent, `size_factor = 4`,
+  `pixel_scale = 0.168`, odd-size centering, `MIN_IMAGE_EXTENT_PIX = 51`.
+- Require `size_pixels_z010 > 75`.
+- Rank the surviving galaxies by:
+  1. `complexity_rank` (prefer rank 3),
+  2. `n_components` (prefer 4 > 3 > 2),
+  3. rendered size at `z=0.1` (prefer larger),
+  4. `logMstar` (only as a deterministic tie-break, not a matching target),
+  5. name.
+- Target N = 300.
 - Output: `inputs/cs4g/cs4g_sample.csv`.
 
 ### Phase 7 — MockGal manifest (`inputs/cs4g/runs/cs4g_test.yaml`)
@@ -238,8 +247,8 @@ Every mock dataset in `~/Dropbox/work/data/{dataset}/` looks like:
 ├── run_metadata.json               # timestamp, git branch, resolved rows
 └── {galaxy}/
     ├── {galaxy}_clean_z005.fits    # single noise-light reference
-    ├── {galaxy}_wide_z{005,020,035,050}.fits    # HSC wide depth × 4 redshifts
-    ├── {galaxy}_deep_z{005,020,035,050}.fits    # HSC dud depth × 4 redshifts
+    ├── {galaxy}_wide_z{005,010}.fits    # HSC wide depth × 2 redshifts
+    ├── {galaxy}_deep_z{005,010}.fits    # HSC dud depth × 2 redshifts
     └── {galaxy}_mosaic.png         # QA mosaic
 ```
 
@@ -266,8 +275,8 @@ For CS4G the target dataset dir is `~/Dropbox/work/data/s4g_mock/`.
 
 Two YAMLs under `inputs/cs4g/runs/`, mirroring the Huang2013 structure:
 
-- `cs4g_hsc_i_wide.yaml` → 5 configs: `clean_z005`, `wide_z{005,020,035,050}`.
-- `cs4g_hsc_i_dud.yaml` → 4 configs: `deep_z{005,020,035,050}`.
+- `cs4g_hsc_i_wide.yaml` → 3 configs: `clean_z005`, `wide_z005`, `wide_z010`.
+- `cs4g_hsc_i_dud.yaml` → 2 configs: `deep_z005`, `deep_z010`.
 
 `defaults:` block mirrors Huang2013 HSC-i conventions exactly
 (pixel_scale=0.168, zeropoint=27.0, psf_fwhm=0.7, randomize_noise_seed=

@@ -65,7 +65,7 @@ def main() -> int:
         "metadata": {
             "source": "Salo+2015 S4G P4 GALFIT decompositions (IRSA cs4gcat x Comeron+2025)",
             "description": (
-                "Multi-component mockgal models for a stratified 198-galaxy "
+                f"Multi-component mockgal models for a size-aware {len(galaxies)}-galaxy "
                 "sub-sample of CS4G late-type disks. Sizes in kpc, magnitudes "
                 "in absolute i-band AB (predicted from IRAC1 via Strategy D)."
             ),
@@ -75,7 +75,10 @@ def main() -> int:
             ),
             "assumed_band": "SDSS i-band AB (predicted)",
             "n_galaxies": len(galaxies),
-            "sample_selection": "stratified logMstar, prefer complex; see docs/plan/PLAN_CS4G_SAMPLE.md",
+            "sample_selection": (
+                "size-aware at z=0.1 (>75 pixels), prefer complex models; "
+                "see docs/plan/PLAN_CS4G_SAMPLE.md"
+            ),
             "component_types": {
                 "sersic": "bulge or disk (expdisk converted to Sersic n=1, R_e=1.6783 R_s)",
                 "ferrer": "Salo+2015 bar profile; alpha=2, beta=0 typical",

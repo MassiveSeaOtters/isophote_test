@@ -33,6 +33,7 @@
 - For near-ideal Huang2013 reference images, prefer very low noise such as `sky_sb_limit = 29.0` over perfectly noise-free outputs.
 - The canonical Huang2013 production path should be manifest-driven: one YAML file per run family, one row per mock configuration, with explicit numeric values.
 - Per-galaxy QA mosaics are useful enough to keep in the canonical Huang2013 generator because they provide quick visual validation without opening four FITS files individually.
+- For the CS4G production sample, enforce apparent size using the same auto-size contract the runner uses in production, not an external proxy. The current floor is `size_pixels > 75` at `z = 0.1` with `size_factor = 4.0` and `pixel_scale = 0.168`.
 
 ## Filename And Output Conventions
 
