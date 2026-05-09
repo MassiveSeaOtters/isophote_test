@@ -55,6 +55,7 @@
 | C10.1 | C10 | Rebuild the CS4G sample as a size-aware 300-galaxy selection | Done | `inputs/cs4g/scripts/downsample.py` now filters on the production auto-size contract at `z=0.1` (`size_factor=4`, `pixel_scale=0.168`) and requires `size_pixels > 75`, then ranks by complexity and rendered size instead of KS-matching `logMstar`. Regenerated `cs4g_sample.csv`, `cs4g_sample_summary.json`, and `models/cs4g_sample_models.yaml` to 300 galaxies. |
 | C10.2 | C10 | Reduce the CS4G HSC-i scenario grid to z=0.05 and z=0.10 | Done | Updated `inputs/cs4g/runs/cs4g_hsc_i_wide.yaml` to `clean_z005`, `wide_z005`, `wide_z010` and `inputs/cs4g/runs/cs4g_hsc_i_dud.yaml` to `deep_z005`, `deep_z010`. |
 | C10.3 | C10 | Retarget the CS4G production output root to `/Volumes/galaxy/isophote/s4g_mock` | Done | Updated the CS4G manifests and root wrapper scripts, then completed the smoke run and full 300-galaxy production batch on that volume. |
+| D11.1 | D11 | Document available mock data and isophote-test artifacts | Done | Added `docs/DATA_STATUS.md` as a durable record of checked-in model assets, external production roots, render inventories, QA outputs, and downstream `isoster` / `photutils` / `autoprof` campaign products. |
 
 ## Review
 
@@ -73,3 +74,4 @@
 - Pixel-perfect GALFIT renders are available via `mockgal_galfit.py`, which wraps the GALFIT binary in model-only mode and shares the bundled `/galfit` skill's writer. Use it as a reference renderer when validating mockgal's libprofit/astropy paths against the original GALFIT integrators.
 - The CS4G production sample is now explicitly size-aware: galaxies must render larger than `75 x 75` pixels at `z=0.1` under the production HSC-i defaults, and the selection now prefers higher component-count / higher-complexity systems over `logMstar`-matching once that size floor is enforced.
 - The CS4G HSC-i production grid now uses only two mock redshifts, `z=0.05` and `z=0.10`, plus the `clean_z005` truth row.
+- `docs/DATA_STATUS.md` now records the current Huang2013 and S4G mock-data roots, checked-in model/manifest assets, validation QA artifacts, and downstream isophote-analysis campaign outputs for future sessions.
