@@ -56,6 +56,7 @@
 | C10.2 | C10 | Reduce the CS4G HSC-i scenario grid to z=0.05 and z=0.10 | Done | Updated `inputs/cs4g/runs/cs4g_hsc_i_wide.yaml` to `clean_z005`, `wide_z005`, `wide_z010` and `inputs/cs4g/runs/cs4g_hsc_i_dud.yaml` to `deep_z005`, `deep_z010`. |
 | C10.3 | C10 | Retarget the CS4G production output root to `/Volumes/galaxy/isophote/s4g_mock` | Done | Updated the CS4G manifests and root wrapper scripts, then completed the smoke run and full 300-galaxy production batch on that volume. |
 | D11.1 | D11 | Document available mock data and isophote-test artifacts | Done | Added `docs/DATA_STATUS.md` as a durable record of checked-in model assets, external production roots, render inventories, QA outputs, and downstream `isoster` / `photutils` / `autoprof` campaign products. |
+| Q12.1 | Q12 | Plan and implement the v1.1 QA/evaluation refresh for mock campaigns | In Progress | Plan added under `docs/plan/`. Initial implementation in the sibling `isoster` repo adds `refresh_model_evaluation.py`, focused tests, dry-run enumeration, write-mode metric refresh, and optional photutils harmonic model rebuilding. |
 
 ## Review
 
@@ -75,3 +76,4 @@
 - The CS4G production sample is now explicitly size-aware: galaxies must render larger than `75 x 75` pixels at `z=0.1` under the production HSC-i defaults, and the selection now prefers higher component-count / higher-complexity systems over `logMstar`-matching once that size floor is enforced.
 - The CS4G HSC-i production grid now uses only two mock redshifts, `z=0.05` and `z=0.10`, plus the `clean_z005` truth row.
 - `docs/DATA_STATUS.md` now records the current Huang2013 and S4G mock-data roots, checked-in model/manifest assets, validation QA artifacts, and downstream isophote-analysis campaign outputs for future sessions.
+- QA/evaluation refresh work should end each task or session with the proposed next step so the campaign update remains easy to resume.
