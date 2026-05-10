@@ -24,28 +24,30 @@ defaults:
   noise_seed: 42
   sky_sb_limit: null
   gain: null
-  randomize_noise_seed: false
+  randomize_noise_seed: true
   engine: auto
-  profit_cli_path: null
+  profit_cli_path: /Users/shuang/Dropbox/work/project/otters/isophote_test/libprofit/mbp
 
 configs:
-  - name: z005_clean
-    redshift: 0.05
-    size_factor: 6.0
-
-  - name: z005_hsc_i_dud
+  - name: deep_z005
     redshift: 0.05
     size_factor: 6.0
     noise_enabled: true
     sky_sb_limit: 25.697653749397546
 
-  - name: z020_hsc_i_dud
+  - name: deep_z020
     redshift: 0.20
     size_factor: 6.0
     noise_enabled: true
     sky_sb_limit: 25.697653749397546
 
-  - name: z050_hsc_i_dud
+  - name: deep_z035
+    redshift: 0.35
+    size_factor: 6.0
+    noise_enabled: true
+    sky_sb_limit: 25.697653749397546
+
+  - name: deep_z050 
     redshift: 0.50
     size_factor: 6.0
     noise_enabled: true

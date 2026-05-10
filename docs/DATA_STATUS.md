@@ -5,6 +5,9 @@ for this repository as of 2026-05-09. It is intended as a starting point for
 future development sessions and for users who need to know what data exist,
 where they live, and what has already been validated.
 
+For the completed 2026-05-10 exhausted-campaign QA/evaluation refresh, see
+`docs/QA_EVALUATION_REFRESH_2026-05-10.md`.
+
 ## Repository Role
 
 This repository stores the mock-galaxy generation code, model definitions,

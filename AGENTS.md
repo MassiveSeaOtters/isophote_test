@@ -19,6 +19,7 @@ This repository generates mock galaxy images for isophote-fitting tests, with th
 - Use `snake_case` naming in Python and avoid camelCase.
 - For non-trivial work, update `docs/todo.md` and the relevant plan file under `docs/plan/`.
 - Agent-written code changes must include tests or an explicit explanation of why tests were not added.
+- End each task or session with the proposed next step.
 
 ## Huang2013 Execution Safety
 
