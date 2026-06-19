@@ -446,6 +446,7 @@ def process_galaxy(
             name=galaxy.name,
             redshift=row.redshift,
             components=galaxy.components,
+            re_overall=galaxy.re_overall,
         )
         config = build_image_config(row.name, row.config_values)
         generator = MockImageGenerator(config)

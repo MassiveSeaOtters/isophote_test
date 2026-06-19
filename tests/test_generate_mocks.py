@@ -206,3 +206,36 @@ def test_build_image_config_uses_descriptive_name() -> None:
 
     assert config.name == "z020_baseline_noise"
     assert config.sky_sb_limit == pytest.approx(24.5)
+
+
+def test_process_galaxy_preserves_overall_re_for_redshift_rows(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    captured_galaxies = []
+
+    class FakeGenerator:
+        def __init__(self, config):
+            self.config = config
+
+        def generate(self, galaxy):
+            captured_galaxies.append(galaxy)
+            return generate_mocks.np.zeros((3, 3)), {"name": galaxy.name}
+
+    monkeypatch.setattr(generate_mocks, "MockImageGenerator", FakeGenerator)
+    monkeypatch.setattr(generate_mocks, "save_fits", lambda image, metadata, path: path.write_text("fits", encoding="utf-8"))
+    monkeypatch.setattr(generate_mocks, "create_mosaic", lambda galaxy_name, galaxy_dir, rows: None)
+
+    galaxy = generate_mocks.MockGalaxy(
+        name="test galaxy",
+        redshift=0.01,
+        components=[object()],
+        re_overall=12.3,
+    )
+    row = generate_mocks.ResolvedRunRow(
+        name="wide_z020",
+        redshift=0.2,
+        config_values={**generate_mocks.SCRIPT_DEFAULTS, "size_factor": 6.0},
+    )
+
+    generate_mocks.process_galaxy(galaxy, [row], tmp_path)
+
+    assert captured_galaxies[0].redshift == pytest.approx(0.2)
+    assert captured_galaxies[0].re_overall == pytest.approx(12.3)
