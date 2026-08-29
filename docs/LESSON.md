@@ -19,6 +19,10 @@
 - Sky should be added internally for Poisson statistics and subtracted before writing the final mock image. Leaving sky in the output breaks the intended sky-free mock convention.
 - `sky_sb_value` and `sky_enabled` should remain decoupled. The sky value can be needed for noise modeling even when no sky background should survive in the saved image.
 - Randomized noise seeds should be opt-in so science mocks can vary while regression tests remain reproducible.
+- A single fixed seed reused for every galaxy is reproducible but repeats the
+  same pixel-noise pattern. Publication batches should opt into a stable seed
+  derived from the base seed, galaxy name, and scenario name, and record the
+  realized value in both FITS and run metadata.
 - For HSC sky-region calibration, request only the image and variance planes. The mask and PSF products are not needed for the blank-sky workflow.
 - For HSC `coadd/bg` calibration, center each cutout on its sigma-clipped local median before pooling pixels. Use the pooled centered RMS as the primary mapping into `sky_sb_limit`.
 - Use original per-cutout medians only as a secondary summary for exploratory `sky_sb_value` reporting. Coadd-derived `gain` estimates remain too unstable to treat as a detector parameter.

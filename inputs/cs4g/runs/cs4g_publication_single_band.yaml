@@ -1,0 +1,38 @@
+run_name: cs4g_publication_single_band
+description: CS4G publication validation with genuinely noiseless and deterministic HSC i-band wide/deep images.
+model_file: inputs/cs4g/models/cs4g_sample_models.yaml
+output_root: /Volumes/galaxy/isophote/publication_single_band_round1_2026_08_28/mock_data/s4g
+
+defaults:
+  pixel_scale: 0.168
+  zeropoint: 27.0
+  size_pixels: null
+  max_image_size: 4001
+  psf_enabled: true
+  psf_type: gaussian
+  psf_fwhm: 0.7
+  psf_moffat_beta: 4.765
+  psf_file: null
+  sky_enabled: false
+  sky_type: flat
+  sky_level: 0.0
+  sky_coeffs: [0.0]
+  sky_sb_value: null
+  noise_enabled: false
+  noise_sigma: null
+  noise_snr: null
+  noise_seed: 20260829
+  sky_sb_limit: null
+  gain: null
+  randomize_noise_seed: false
+  derive_noise_seed_per_galaxy: true
+  engine: libprofit
+  profit_cli_path: null
+
+configs:
+  - {name: noiseless_z005, redshift: 0.05, size_factor: 4.0}
+  - {name: wide_z005, redshift: 0.05, size_factor: 4.0, noise_enabled: true, sky_sb_limit: 24.62395438263279}
+  - {name: deep_z005, redshift: 0.05, size_factor: 4.0, noise_enabled: true, sky_sb_limit: 25.697653749397546}
+  - {name: noiseless_z010, redshift: 0.10, size_factor: 4.0}
+  - {name: wide_z010, redshift: 0.10, size_factor: 4.0, noise_enabled: true, sky_sb_limit: 24.62395438263279}
+  - {name: deep_z010, redshift: 0.10, size_factor: 4.0, noise_enabled: true, sky_sb_limit: 25.697653749397546}
