@@ -19,6 +19,7 @@ inputs/
 │   │   ├── README.md
 │   │   ├── huang2013_hsc_i_dud.yaml
 │   │   ├── huang2013_hsc_i_wide.yaml
+│   │   ├── huang2013_publication_single_band.yaml
 │   │   └── huang2013_production_baseline.yaml
 │   └── scripts/
 │       ├── convert_huang2013.py
@@ -83,6 +84,8 @@ Current generator settings:
 - One QA mosaic PNG per galaxy
 - Optional HSC `i`-band `wide` and `dud` depth references live in `inputs/huang2013/configs/huang2013_hsc_i_calibration.yaml`
 - Production runs are now defined by manifest files under `inputs/huang2013/runs/`
+- The publication manifest adds genuinely noiseless images and deterministic,
+  distinct per-galaxy noise seeds without changing historical manifests.
 
 ## Examples And Demos
 
@@ -103,6 +106,7 @@ Current generator settings:
 | `inputs/huang2013/runs/huang2013_production_baseline.yaml` | YAML manifest | Baseline Huang2013 production run set | No |
 | `inputs/huang2013/runs/huang2013_hsc_i_wide.yaml` | YAML manifest | HSC `i`-band `wide` Huang2013 production run set | No |
 | `inputs/huang2013/runs/huang2013_hsc_i_dud.yaml` | YAML manifest | HSC `i`-band `dud` Huang2013 production run set | No |
+| `inputs/huang2013/runs/huang2013_publication_single_band.yaml` | YAML manifest | Publication noiseless/wide/deep single-band run set | No |
 | `inputs/huang2013/scripts/convert_huang2013.py` | Python script | Convert source catalog to YAML or JSON | No |
 | `inputs/huang2013/scripts/generate_huang2013_mocks.py` | Python script | Generate systematic Huang2013 mocks | No |
 | `inputs/examples/models/example_models.yaml` | YAML model file | Small example galaxies | No |

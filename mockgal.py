@@ -59,7 +59,6 @@ except ImportError:
 # Optional matplotlib support
 try:
     import matplotlib.pyplot as plt
-    from matplotlib.colors import PowerNorm
     from scipy.ndimage import gaussian_filter
     HAS_MATPLOTLIB = True
 except ImportError:
@@ -1553,7 +1552,6 @@ def parse_huang2013(filepath: str) -> Dict[str, List[SersicComponent]]:
     The VMag column is already in absolute magnitudes, not apparent.
     Default redshift is 0.01 for all galaxies.
     """
-    HUANG_REDSHIFT = 0.01
     galaxies = {}
 
     with open(filepath, 'r') as f:
@@ -1768,6 +1766,12 @@ def save_fits(image: np.ndarray, metadata: dict, filepath: Union[str, Path]) -> 
     # Sky and noise
     header['SKY'] = metadata.get('sky_enabled', False)
     header['NOISE'] = metadata.get('noise_enabled', False)
+    if metadata.get('noise_seed') is not None:
+        header['NOISESED'] = (metadata['noise_seed'], 'Realized random seed')
+    if metadata.get('noise_seed_base') is not None:
+        header['BASESEED'] = (metadata['noise_seed_base'], 'Manifest base seed')
+    if metadata.get('noise_seed_mode') is not None:
+        header['SEEDMODE'] = (metadata['noise_seed_mode'], 'Noise seed mode')
     if metadata.get('sky_sb_value') is not None:
         header['SKY_SBV'] = (metadata.get('sky_sb_value', 0.0), 'mag/arcsec^2')
     if metadata.get('sky_sb_limit') is not None:
@@ -1951,7 +1955,7 @@ def visualize_galaxy(
     levels = np.linspace(vmin, vmax, n_contours)
 
     # Plot contours
-    contours = ax.contour(
+    ax.contour(
         smoothed_scaled,
         levels=levels,
         colors='white',

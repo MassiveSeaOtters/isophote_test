@@ -159,7 +159,13 @@ def test_write_resolved_manifest_and_metadata_record_selected_rows(tmp_path: Pat
         output_base=output_dir,
         manifest=manifest,
         rows=selected_rows,
-        galaxies=[],
+        galaxies=[
+            generate_mocks.MockGalaxy(
+                name="test_galaxy",
+                redshift=0.01,
+                components=[object()],
+            )
+        ],
         selected_galaxy_names=None,
         selected_config_names=["z050_noise"],
         warnings=[],
@@ -173,6 +179,17 @@ def test_write_resolved_manifest_and_metadata_record_selected_rows(tmp_path: Pat
     assert metadata_payload["selected_config_names"] == ["z050_noise"]
     assert metadata_payload["resolved_rows"][0]["name"] == "z050_noise"
     assert metadata_payload["resolved_rows"][0]["size_factor"] == pytest.approx(6.0)
+    assert metadata_payload["git_commit"]
+    assert isinstance(metadata_payload["git_dirty"], bool)
+    assert metadata_payload["realized_noise_seeds"] == [
+        {
+            "galaxy_name": "test_galaxy",
+            "config_name": "z050_noise",
+            "base_seed": 42,
+            "realized_seed": 42,
+            "mode": "fixed",
+        }
+    ]
 
 
 def test_resolve_run_manifest_requires_row_level_size_factor(tmp_path: Path) -> None:
@@ -206,6 +223,29 @@ def test_build_image_config_uses_descriptive_name() -> None:
 
     assert config.name == "z020_baseline_noise"
     assert config.sky_sb_limit == pytest.approx(24.5)
+
+
+def test_noise_seed_derivation_is_stable_distinct_and_opt_in() -> None:
+    values = {
+        **generate_mocks.SCRIPT_DEFAULTS,
+        "noise_enabled": True,
+        "noise_sigma": 1.0,
+        "noise_seed": 17,
+        "derive_noise_seed_per_galaxy": True,
+    }
+    row = generate_mocks.ResolvedRunRow("wide_z005", 0.05, values)
+
+    first = generate_mocks.resolve_noise_seed("galaxy_a", row)
+    assert first == generate_mocks.resolve_noise_seed("galaxy_a", row)
+    assert first != generate_mocks.resolve_noise_seed("galaxy_b", row)
+
+    fixed_row = generate_mocks.ResolvedRunRow(
+        "wide_z005",
+        0.05,
+        {**values, "derive_noise_seed_per_galaxy": False},
+    )
+    assert generate_mocks.resolve_noise_seed("galaxy_a", fixed_row) == 17
+    assert generate_mocks.resolve_noise_seed("galaxy_b", fixed_row) == 17
 
 
 def test_process_galaxy_preserves_overall_re_for_redshift_rows(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

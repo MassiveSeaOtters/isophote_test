@@ -74,6 +74,9 @@ Every `{galaxy}_{config}.fits` file carries these keywords (written by
 - `PIXSCALE` (arcsec / pix)
 - `ENGINE` (`libprofit`, `astropy`, or `auto`)
 - `NOISE` (bool; true when `noise_enabled: true`)
+- `NOISESED` (realized seed; required for deterministic noisy publication rows)
+- `BASESEED` (manifest base seed; required when `NOISESED` is derived)
+- `SEEDMODE` (`fixed`, `per_galaxy_sha256`, or `random_entropy`)
 
 Other header fields (zeropoint, PSF FWHM, noise seed, sky SB limit, etc.)
 may or may not be present depending on the ImageConfig that produced the
@@ -90,6 +93,8 @@ can rely on:
   "timestamp_utc":        "ISO-8601 string",
   "script_path":          "absolute path to scripts/generate_mocks.py",
   "git_branch":           "branch name or null",
+  "git_commit":           "40-character commit or null",
+  "git_dirty":            true, false, or null,
   "source_manifest":      "relative path to inputs/.../runs/*.yaml",
   "run_name":             "e.g. cs4g_hsc_i_wide",
   "description":          "free text",
@@ -103,6 +108,10 @@ can rely on:
   "warnings":              ["..."],
   "resolved_rows": [
     {"name": "...", "redshift": float, "pixel_scale": float, ... full ImageConfig}
+  ],
+  "realized_noise_seeds": [
+    {"galaxy_name": "...", "config_name": "...", "base_seed": int,
+     "realized_seed": int, "mode": "per_galaxy_sha256"}
   ]
 }
 ```

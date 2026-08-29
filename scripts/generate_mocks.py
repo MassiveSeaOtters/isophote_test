@@ -27,6 +27,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import shutil
@@ -44,7 +45,14 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT))
 
-from mockgal import ImageConfig, MockGalaxy, MockImageGenerator, load_model_file, sanitize_filename, save_fits
+from mockgal import (  # noqa: E402
+    ImageConfig,
+    MockGalaxy,
+    MockImageGenerator,
+    load_model_file,
+    sanitize_filename,
+    save_fits,
+)
 
 SCRIPT_DEFAULTS: dict[str, Any] = {
     "pixel_scale": 0.168,
@@ -69,6 +77,7 @@ SCRIPT_DEFAULTS: dict[str, Any] = {
     "sky_sb_limit": None,
     "gain": None,
     "randomize_noise_seed": False,
+    "derive_noise_seed_per_galaxy": False,
     "engine": "auto",
     "profit_cli_path": None,
 }
@@ -179,6 +188,23 @@ def build_image_config(config_name: str, config_values: dict[str, Any]) -> Image
     )
 
 
+def resolve_noise_seed(galaxy_name: str, row: ResolvedRunRow) -> int | None:
+    """Resolve the realized seed while preserving historical fixed-seed runs."""
+    values = row.config_values
+    if not values.get("noise_enabled") or values.get("randomize_noise_seed"):
+        return None
+    base_seed = values.get("noise_seed")
+    if not values.get("derive_noise_seed_per_galaxy"):
+        return base_seed
+    if base_seed is None:
+        raise ValueError(
+            f"Config '{row.name}' requires noise_seed when "
+            "derive_noise_seed_per_galaxy=true"
+        )
+    key = f"{base_seed}\0{galaxy_name}\0{row.name}".encode()
+    return int.from_bytes(hashlib.sha256(key).digest()[:8], "big") & ((1 << 63) - 1)
+
+
 def resolve_run_manifest(manifest_path: Path) -> ResolvedRunManifest:
     raw_data = load_yaml_file(manifest_path)
     if raw_data is None:
@@ -286,6 +312,35 @@ def get_git_branch() -> str | None:
     return branch or None
 
 
+def get_git_commit() -> str | None:
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+    commit = result.stdout.strip()
+    return commit or None
+
+
+def git_is_dirty() -> bool | None:
+    try:
+        result = subprocess.run(
+            ["git", "status", "--porcelain"],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+    return bool(result.stdout.strip())
+
+
 def copy_original_manifest(source_path: Path, output_base: Path) -> Path:
     destination = output_base / "run_manifest_original.yaml"
     shutil.copy2(source_path, destination)
@@ -335,6 +390,8 @@ def write_run_metadata(
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
         "script_path": str(Path(__file__).resolve()),
         "git_branch": get_git_branch(),
+        "git_commit": get_git_commit(),
+        "git_dirty": git_is_dirty(),
         "source_manifest": str(manifest.source_manifest),
         "run_name": manifest.run_name,
         "description": manifest.description,
@@ -353,6 +410,24 @@ def write_run_metadata(
                 **row.config_values,
             }
             for row in rows
+        ],
+        "realized_noise_seeds": [
+            {
+                "galaxy_name": galaxy.name,
+                "config_name": row.name,
+                "base_seed": row.config_values.get("noise_seed"),
+                "realized_seed": resolve_noise_seed(galaxy.name, row),
+                "mode": (
+                    "random_entropy"
+                    if row.config_values.get("randomize_noise_seed")
+                    else "per_galaxy_sha256"
+                    if row.config_values.get("derive_noise_seed_per_galaxy")
+                    else "fixed"
+                ),
+            }
+            for galaxy in galaxies
+            for row in rows
+            if row.config_values.get("noise_enabled")
         ],
     }
     metadata_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
@@ -448,9 +523,30 @@ def process_galaxy(
             components=galaxy.components,
             re_overall=galaxy.re_overall,
         )
-        config = build_image_config(row.name, row.config_values)
+        config_values = dict(row.config_values)
+        realized_seed = resolve_noise_seed(galaxy.name, row)
+        if config_values.get("derive_noise_seed_per_galaxy"):
+            config_values["noise_seed"] = realized_seed
+        config = build_image_config(row.name, config_values)
         generator = MockImageGenerator(config)
         image, metadata = generator.generate(galaxy_at_z)
+        requested_engine = row.config_values.get("engine", "auto")
+        if requested_engine != "auto" and metadata.get("engine") != requested_engine:
+            raise RuntimeError(
+                f"Config '{row.name}' required engine={requested_engine}, "
+                f"but MockGal realized engine={metadata.get('engine')}"
+            )
+        metadata.update(
+            noise_seed=realized_seed,
+            noise_seed_base=row.config_values.get("noise_seed"),
+            noise_seed_mode=(
+                "random_entropy"
+                if row.config_values.get("randomize_noise_seed")
+                else "per_galaxy_sha256"
+                if row.config_values.get("derive_noise_seed_per_galaxy")
+                else "fixed"
+            ),
+        )
         output_path = galaxy_dir / f"{safe_galaxy_name}_{row.name}.fits"
         save_fits(image, metadata, output_path)
         print(

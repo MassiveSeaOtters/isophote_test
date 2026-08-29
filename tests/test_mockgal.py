@@ -4,7 +4,6 @@ Unit tests for mockgal.py
 Run with: pytest tests/test_mockgal.py -v
 """
 
-import json
 import os
 import subprocess
 import sys
@@ -18,11 +17,8 @@ from scipy.ndimage import convolve as ndi_convolve
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 import mockgal as mockgal_module
-
-import mockgal as mockgal_module
 from mockgal import (
     DEFAULT_PIXEL_SCALE,
-    DEFAULT_REDSHIFT,
     DEFAULT_ZEROPOINT,
     HAS_MATPLOTLIB,
     MAX_SERSIC_INDEX,
@@ -1099,6 +1095,28 @@ class TestOutput:
             header = hdul[0].header
             assert header['OBJECT'] == simple_galaxy.name
             assert header['NCOMP'] == 1
+
+    def test_save_fits_records_noise_seed_provenance(self, tmp_path):
+        image = np.zeros((3, 3))
+        outpath = tmp_path / "noise_seed.fits"
+        save_fits(
+            image,
+            {
+                "noise_enabled": True,
+                "noise_seed": 1234,
+                "noise_seed_base": 42,
+                "noise_seed_mode": "per_galaxy_sha256",
+            },
+            outpath,
+        )
+
+        from astropy.io import fits
+
+        with fits.open(outpath) as hdul:
+            header = hdul[0].header
+            assert header["NOISESED"] == 1234
+            assert header["BASESEED"] == 42
+            assert header["SEEDMODE"] == "per_galaxy_sha256"
 
     def test_output_png_without_fits(self, simple_galaxy, default_config, tmp_path):
         """Test generating PNG directly without saving FITS."""

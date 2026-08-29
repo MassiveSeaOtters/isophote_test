@@ -57,6 +57,7 @@
 | C10.3 | C10 | Retarget the CS4G production output root to `/Volumes/galaxy/isophote/s4g_mock` | Done | Updated the CS4G manifests and root wrapper scripts, then completed the smoke run and full 300-galaxy production batch on that volume. |
 | D11.1 | D11 | Document available mock data and isophote-test artifacts | Done | Added `docs/DATA_STATUS.md` as a durable record of checked-in model assets, external production roots, render inventories, QA outputs, and downstream `isoster` / `photutils` / `autoprof` campaign products. |
 | Q12.1 | Q12 | Plan and implement the v1.1 QA/evaluation refresh for mock campaigns | In Progress | Plan added under `docs/plan/`. Initial implementation in the sibling `isoster` repo adds `refresh_model_evaluation.py`, focused tests, dry-run enumeration, write-mode metric refresh, and optional photutils harmonic model rebuilding. |
+| P13.1 | P13 | Prepare deterministic single-band publication mocks | Done | Added opt-in per-galaxy seed derivation, FITS/run provenance, and new noiseless/wide/deep Huang2013 and CS4G manifests. Two-galaxy libprofit smoke runs passed, including a byte-identical regeneration check. |
 
 ## Review
 
@@ -77,3 +78,4 @@
 - The CS4G HSC-i production grid now uses only two mock redshifts, `z=0.05` and `z=0.10`, plus the `clean_z005` truth row.
 - `docs/DATA_STATUS.md` now records the current Huang2013 and S4G mock-data roots, checked-in model/manifest assets, validation QA artifacts, and downstream isophote-analysis campaign outputs for future sessions.
 - QA/evaluation refresh work should end each task or session with the proposed next step so the campaign update remains easy to resume.
+- Publication mock generation now has deterministic but distinct noise per galaxy and scenario. The two-dataset smoke run verified 30 finite libprofit FITS images, and a separate regeneration reproduced one FITS file byte-for-byte.
